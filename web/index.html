@@ -299,6 +299,9 @@ body::before{background:var(--teal)}
 .lvar .dl button{font:inherit;font-size:.72rem;font-weight:700;letter-spacing:.06em;border-radius:999px;padding:7px 12px;cursor:pointer;border:1px solid currentColor;background:transparent;color:inherit;display:inline-flex;align-items:center;gap:6px;transition:.2s}
 .lvar .dl button:hover{background:var(--mint);border-color:var(--mint);color:var(--night)}
 .lvar .dl button[disabled]{opacity:.5;cursor:progress}
+.pack-dl{align-self:flex-start;margin-top:12px;display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:.85rem;font-weight:600;border-radius:999px;padding:10px 18px;cursor:pointer;border:0;background:var(--teal);color:#fff;transition:.2s}
+.pack-dl:hover{background:var(--mint);color:var(--night)}
+.pack-dl[disabled]{opacity:.6;cursor:progress}
 .mistakes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:30px}
 .mis{display:flex;flex-direction:column;gap:12px}
 .mis .demo{aspect-ratio:4/3;border-radius:18px;background:var(--soft);display:grid;place-items:center;position:relative;overflow:hidden}
@@ -734,6 +737,7 @@ body::before{background:var(--teal)}
     <header class="phead"><p class="eyebrow">Visual identity</p><h1>Iconography</h1><p class="lede">Hand-drawn simplicity. Select an icon to copy its SVG.</p><span class="ref">Brand book pp. 58–60</span></header>
     <section class="sec" id="i-set"><h2>The icon set</h2><p class="intro">A simple, hand-drawn one-line style with a consistent stroke width and a playful, informal character. Brand colours are allowed depending on placement and background.</p>
       <div class="icon-colour" role="group" aria-label="Preview icon colour"><span class="muted" style="font-size:.85rem;margin-right:6px">Preview colour</span><button type="button" style="background:var(--teal)" data-c="#007D8F" aria-label="Teal" aria-pressed="true"></button><button type="button" style="background:var(--deep)" data-c="#006878" aria-label="Deep teal" aria-pressed="false"></button><button type="button" style="background:#333" data-c="#333333" aria-label="Charcoal" aria-pressed="false"></button><button type="button" style="background:var(--ngreen)" data-c="#4F925F" aria-label="Natural green" aria-pressed="false"></button></div>
+      <div style="margin-top:18px"><button type="button" class="pack-dl" data-pack hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m-5-5l5 5 5-5M5 20h14"/></svg>Download icon pack (ZIP)</button></div>
       <div class="icons" id="icons">
         <button class="ic" type="button" data-src="references/icons/muscles-moving.svg"><span class="g"></span>Muscles that keep you moving</button>
         <button class="ic" type="button" data-src="references/icons/immune-system.svg"><span class="g"></span>A strong immune system</button>
@@ -782,7 +786,7 @@ body::before{background:var(--teal)}
       <div class="asset rv" style="--d:.06s"><div class="th"><img src="references/photos/tennis-reach.webp" alt="" loading="lazy"></div><div class="bd"><h3>Photography</h3><p>17 campaign and product images.</p><span class="tag">Licensed · internal use</span></div></div>
       <div class="asset rv" style="--d:.12s"><div class="th" style="background:var(--warm);font-family:var(--f-head);font-size:4rem;color:var(--teal)">Aa<span class="acc" style="color:var(--mint);font-size:.7em">yes</span></div><div class="bd"><h3>Typefaces</h3><p>Magister, Stratos, Jaqartall.</p><span class="tag">Licensed · not for distribution</span></div></div>
       <div class="asset rv"><div class="th" style="background:var(--tint)"><span class="leafx" style="width:46%"></span></div><div class="bd"><h3>Graphic elements</h3><p>Leaf shape, keyline, text containers.</p></div></div>
-      <div class="asset rv" style="--d:.06s"><div class="th" style="background:#EEF7F7"><img src="references/icons/muscles-moving.svg" alt="" style="width:34%;height:auto;object-fit:contain"></div><div class="bd"><h3>Icons</h3><p>20 one-line icons, SVG.</p></div></div>
+      <div class="asset rv" style="--d:.06s"><div class="th" style="background:#EEF7F7"><img src="references/icons/muscles-moving.svg" alt="" style="width:34%;height:auto;object-fit:contain"></div><div class="bd"><h3>Icons</h3><p>20 one-line icons, SVG.</p><button type="button" class="pack-dl" data-pack hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m-5-5l5 5 5-5M5 20h14"/></svg>Download icon pack (ZIP)</button></div></div>
       <div class="asset rv" style="--d:.12s"><div class="th" style="background:var(--teal);color:#fff;font-family:var(--f-head);font-size:2rem">Brand book</div><div class="bd"><h3>Brand book 2026</h3><p>61 pages, the full guidelines.</p></div></div>
     </div></section>
   </article><aside class="toc"></aside></div>
@@ -955,6 +959,34 @@ body::before{background:var(--teal)}
         dataP.then(function(data){return dl.save({filename:base+'.'+k,data:data})})
           .then(function(r){if(r&&r.status==='saved')toast('Saved '+base+'.'+k)})
           .catch(function(err){var c=err&&err.code;if(c==='declined')return;if(c==='rate_limited')toast('A save is already open. Try again in a moment');else if(c==='host_unavailable')toast('Open the page in a browser to save files');else toast('Download isn’t available here')})
+          .then(function(){b.disabled=false})});
+    });
+  });
+
+
+
+  /* build the icon ZIP in the browser */
+  var ICON_FILES=['antioxidant','blood-clotting','cartilage','energy','face','healthy-heart','immune-system','joint-comfort','mail','memory','mood','muscles-joints','muscles-moving','muscles','nervous-system','nordic-science','phone','skin','teeth','trusted-users'];
+  var CRC=(function(){var t=[];for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+  function crc32(b){var c=0xFFFFFFFF;for(var i=0;i<b.length;i++)c=CRC[(c^b[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0}
+  function makeZip(files){var enc=new TextEncoder(),parts=[],central=[],off=0;
+    files.forEach(function(f){var name=enc.encode(f.name),data=enc.encode(f.text),crc=crc32(data);
+      var h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(8,0,true);h.setUint32(14,crc,true);h.setUint32(18,data.length,true);h.setUint32(22,data.length,true);h.setUint16(26,name.length,true);
+      parts.push(new Uint8Array(h.buffer),name,data);
+      var c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint32(16,crc,true);c.setUint32(20,data.length,true);c.setUint32(24,data.length,true);c.setUint16(28,name.length,true);c.setUint32(42,off,true);
+      central.push(new Uint8Array(c.buffer),name);off+=30+name.length+data.length});
+    var csize=central.reduce(function(a,b){return a+b.length},0),e=new DataView(new ArrayBuffer(22));
+    e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,csize,true);e.setUint32(16,off,true);
+    return new Blob(parts.concat(central,[new Uint8Array(e.buffer)]),{type:'application/zip'})}
+  function buildPack(){return Promise.all(ICON_FILES.map(function(n){return fetch('references/icons/'+n+'.svg').then(function(r){if(!r.ok)throw{code:'unavailable'};return r.text()}).then(function(t){return{name:'vitaepro-icons/'+n+'.svg',text:t}})})).then(makeZip)}
+  /* icon pack download */
+  dlP.then(function(dl){if(!dl)return;
+    $$('[data-pack]').forEach(function(b){b.hidden=false;
+      b.addEventListener('click',function(){b.disabled=true;
+        buildPack()
+          .then(function(blob){return dl.save({filename:'vitaepro-icons.zip',data:blob})})
+          .then(function(r){if(r&&r.status==='saved')toast('Saved vitaepro-icons.zip')})
+          .catch(function(err){var c=err&&err.code;if(c==='declined')return;if(c==='rate_limited')toast('A save is already open. Try again in a moment');else if(c==='host_unavailable')toast('Open the page in a browser to save files');else toast('Download isn\u2019t available here')})
           .then(function(){b.disabled=false})});
     });
   });
