@@ -233,7 +233,7 @@ body::before{background:var(--teal)}
 @media (max-width:860px){.enemy .sticky{grid-template-columns:1fr;align-content:center;gap:10px;padding-top:var(--barH)}.orb-wrap{width:min(56vw,30vh)}.stages{margin-top:8px}.stages li{padding:9px 0}.stages h3{font-size:1.1rem}.enemy .h-l{font-size:1.8rem}}
 .payoff{height:220vh}
 .payoff .frame{position:absolute;inset:0;clip-path:inset(calc((1 - var(--p,0)) * 22%) calc((1 - var(--p,0)) * 26%) round calc((1 - var(--p,0)) * 120px))}
-.payoff .frame img{width:100%;height:100%;object-fit:cover;transform:scale(calc(1.25 - var(--p,0) * .25))}
+.payoff .frame img{width:100%;height:100%;object-fit:cover;object-position:62% 18%;transform-origin:62% 22%;transform:scale(calc(1.25 - var(--p,0) * .25))}
 .payoff .frame::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,50,58,.82),rgba(0,50,58,.1) 70%)}
 .payoff .txt{position:absolute;left:0;right:0;bottom:12vh;z-index:2;color:#fff;opacity:calc((var(--p,0) - .55) * 3);transform:translateY(calc((1 - var(--p,0)) * 60px))}
 .payoff .txt .acc{color:var(--mint);font-size:1.25em}
