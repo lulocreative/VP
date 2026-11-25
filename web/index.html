@@ -66,6 +66,19 @@ h1,h2,h3{font-family:var(--f-head);font-weight:400;letter-spacing:-.02em;text-wr
 .on-hero .top .brand .w{opacity:1}.on-hero .top .brand .c{opacity:0}
 .on-hero .top .sep,.on-hero .top .title,.on-hero .top .tools,.on-hero .bar-p{opacity:0;pointer-events:none}
 .top .sep,.top .title,.top .tools{transition:opacity .35s}
+/* turquoise main bar */
+.top{background:var(--teal);border-bottom-color:var(--teal);color:#fff;backdrop-filter:none}
+.top .brand .w{opacity:1}.top .brand .c{opacity:0}
+.top .sep{background:rgba(255,255,255,.35)}
+.top .search input{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3);color:#fff}
+.top .search input::placeholder{color:rgba(255,255,255,.8)}
+.top .search input:focus{outline:2px solid var(--mint);background:rgba(255,255,255,.2)}
+.top .search svg{color:#fff}
+.top .btn-ic{background:transparent;border-color:rgba(255,255,255,.4);color:#fff}
+.top .btn-ic:hover{background:var(--mint);border-color:var(--mint);color:var(--night)}
+.bar-p{background:var(--mint)}
+body::before{background:var(--teal)}
+.on-hero .top{background:transparent;border-color:transparent}
 @media (max-width:760px){.top .title,.top .sep,.search{display:none}}
 
 /* ───────── portal layout ───────── */
