@@ -147,8 +147,10 @@ body::before{background:var(--teal)}
 .hero h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
 .hero h1 .ln>span{display:inline-block}
 .has-motion .hero h1 .ln>span{animation:rise 1.3s var(--ease) both;animation-delay:var(--d,.2s)}
-.hero h1 .stiff{color:var(--mint);font-size:1.16em;margin-left:.04em;display:inline-block;transform:rotate(-4deg)}
-.has-motion .hero h1 .stiff{clip-path:inset(0 100% 0 0);animation:write 1.3s cubic-bezier(.6,0,.2,1) 1.05s forwards}
+.hero h1 .ln:last-child{overflow:visible;padding:.04em 0 .12em}
+.has-motion .hero h1 .ln:last-child>span{animation:none}
+.hero h1 .stiff{color:var(--mint);font-size:1.16em;line-height:1.05;margin-left:.04em;padding:.06em .18em .14em .06em;display:inline-block;transform:rotate(-4deg)}
+.has-motion .hero h1 .stiff{clip-path:inset(-20% 100% -30% -10%);animation:write 1.3s cubic-bezier(.6,0,.2,1) 1.05s forwards}
 .hero .meta{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-top:28px}
 .hero .meta p{margin:0;max-width:42ch;font-size:1.05rem;color:rgba(255,255,255,.88)}
 .has-motion .hero .meta{animation:fade 1s ease 1.6s both}
@@ -156,7 +158,7 @@ body::before{background:var(--teal)}
 .cue i{width:1.5px;height:44px;background:rgba(255,255,255,.35);position:relative;overflow:hidden}
 .cue i::after{content:"";position:absolute;left:0;top:-40%;width:100%;height:40%;background:var(--mint);animation:drip 1.8s ease-in-out infinite}
 @keyframes rise{from{transform:translateY(105%)}to{transform:none}}
-@keyframes write{to{clip-path:inset(0 0 0 0)}}
+@keyframes write{to{clip-path:inset(-20% -10% -30% -10%)}}
 @keyframes fade{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 @keyframes kb{from{transform:scale(1.18)}to{transform:scale(1.04)}}
 @keyframes drip{to{top:110%}}
