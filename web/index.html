@@ -289,6 +289,11 @@ body::before{background:var(--teal)}
 .lvar{border-radius:22px;aspect-ratio:16/9;display:grid;place-items:center;padding:0 16%;position:relative;transition:transform .5s var(--ease)}
 .lvar:hover{transform:translateY(-6px)}
 .lvar span{position:absolute;left:18px;bottom:14px;font-size:.78rem;font-weight:600}
+.lvar .dl{position:absolute;right:14px;bottom:12px;display:flex;gap:6px}
+.lvar .dl[hidden]{display:none}
+.lvar .dl button{font:inherit;font-size:.72rem;font-weight:700;letter-spacing:.06em;border-radius:999px;padding:7px 12px;cursor:pointer;border:1px solid currentColor;background:transparent;color:inherit;display:inline-flex;align-items:center;gap:6px;transition:.2s}
+.lvar .dl button:hover{background:var(--mint);border-color:var(--mint);color:var(--night)}
+.lvar .dl button[disabled]{opacity:.5;cursor:progress}
 .mistakes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:30px}
 .mis{display:flex;flex-direction:column;gap:12px}
 .mis .demo{aspect-ratio:4/3;border-radius:18px;background:var(--soft);display:grid;place-items:center;position:relative;overflow:hidden}
@@ -932,6 +937,27 @@ body::before{background:var(--teal)}
     });
   }
   $$('.icon-colour button').forEach(function(btn){btn.addEventListener('click',function(){iconColour=btn.dataset.c;$$('.icon-colour button').forEach(function(x){x.setAttribute('aria-pressed',x===btn)});$$('.ic .g').forEach(function(g){g.style.color=iconColour})})});
+
+
+  /* wordmark downloads */
+  var dlP=window.claude&&window.claude.use?window.claude.use('downloads'):Promise.resolve(null);
+  var DLICON='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m-5-5l5 5 5-5M5 20h14"/></svg>';
+  $$('.lvar').forEach(function(card){
+    var src=$('img',card).getAttribute('src'),base=src.split('/').pop().replace('.svg',''),label=$('span',card).textContent.split(' ·')[0];
+    var box=document.createElement('div');box.className='dl';box.hidden=true;
+    box.innerHTML='<button type="button" data-k="svg" aria-label="Download '+label+' wordmark as SVG">'+DLICON+'SVG</button><button type="button" data-k="png" aria-label="Download '+label+' wordmark as PNG">'+DLICON+'PNG</button>';
+    card.appendChild(box);
+    var svgText=null;fetch(src).then(function(r){return r.text()}).then(function(t){svgText=t}).catch(function(){});
+    function toPng(){return new Promise(function(res,rej){var img=new Image();img.onload=function(){var w=2400,h=Math.round(w*150/669),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);c.toBlob(function(b){b?res(b):rej({code:'unavailable'})},'image/png')};img.onerror=function(){rej({code:'unavailable'})};img.src=URL.createObjectURL(new Blob([svgText],{type:'image/svg+xml'}))})}
+    dlP.then(function(dl){if(!dl)return;box.hidden=false;
+      box.addEventListener('click',function(e){var b=e.target.closest('button');if(!b||!svgText)return;var k=b.dataset.k;b.disabled=true;
+        var dataP=k==='svg'?Promise.resolve(svgText):toPng();
+        dataP.then(function(data){return dl.save({filename:base+'.'+k,data:data})})
+          .then(function(r){if(r&&r.status==='saved')toast('Saved '+base+'.'+k)})
+          .catch(function(err){var c=err&&err.code;if(c==='declined')return;if(c==='rate_limited')toast('A save is already open. Try again in a moment');else if(c==='host_unavailable')toast('Open the page in a browser to save files');else toast('Download isn’t available here')})
+          .then(function(){b.disabled=false})});
+    });
+  });
 
   route();requestAnimationFrame(frame);
 })();
