@@ -4,590 +4,906 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&display=swap">
 <style>
-/* Layout: full-screen scroll-snapped deck in the brand book's own rhythm — white content chapters with a hairline + small caps label, teal divider chapters, real photography bleeding to one edge. */
+/* Layout: a brand-guidelines portal. "Overview" is a full-bleed editorial scroll (hero photo, pinned scenes, parallax). Every other view is a guideline page: top bar, icon rail + section list on the left, content in the middle, "On this page" on the right. */
 @font-face{font-family:"Magister";src:url("fonts/R41Magister-Regular.otf") format("opentype");font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:"Magister";src:url("fonts/R41Magister-Italic.otf") format("opentype");font-weight:400;font-style:italic;font-display:swap}
 @font-face{font-family:"Magister";src:url("fonts/R41Magister-Bold.otf") format("opentype");font-weight:700;font-style:normal;font-display:swap}
 @font-face{font-family:"Jaqartall";src:url("fonts/Jaqartall.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap}
 :root{
-  --teal:#007D8F; --deep:#006878; --aqua:#B2DCDD; --white:#FFFFFF;
-  --green:#D2F1C4; --cream:#F6EAD8; --ngreen:#4F925F; --brown:#633B37; --taupe:#AB8E77;
-  --tint:#F4FBF0; --warm:#FFFAF4; --lime:#D2EE00; --mint:#00FFB7;
-  --ink:#16302F; --ink-2:#4A5D5D; --rule:#CFCFCF; --paper:#FFFFFF; --panel:#F7F7F5;
+  --teal:#007D8F;--deep:#006878;--aqua:#B2DCDD;--white:#FFFFFF;
+  --green:#D2F1C4;--cream:#F6EAD8;--ngreen:#4F925F;--brown:#633B37;--taupe:#AB8E77;
+  --tint:#F4FBF0;--warm:#FFFAF4;--lime:#D2EE00;--mint:#00FFB7;
+  --ink:#122B2C;--ink-2:#4C6060;--rule:rgba(18,43,44,.12);--night:#0B2A30;--soft:#F5F8F7;
   --f-head:"Magister",Georgia,"Times New Roman",serif;
   --f-body:"Stratos","Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-acc:"Jaqartall","Brush Script MT",cursive;
-  --gL:max(16px,env(safe-area-inset-left,0px)); --gR:max(16px,env(safe-area-inset-right,0px));
+  --gL:max(20px,env(safe-area-inset-left,0px));--gR:max(20px,env(safe-area-inset-right,0px));
+  --ease:cubic-bezier(.2,.8,.2,1);--barH:68px;
   color-scheme:light;
 }
-html,body{height:100%}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--paper)}
-:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:4px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--white);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:90;background:var(--white)}
 img{display:block;max-width:100%}
-.acc{font-family:var(--f-acc);font-style:normal;font-weight:400;letter-spacing:0}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:4px}
+.acc{font-family:var(--f-acc);font-weight:400;font-style:normal;letter-spacing:0}
+h1,h2,h3{font-family:var(--f-head);font-weight:400;letter-spacing:-.02em;text-wrap:balance;margin:0;line-height:1.04}
+.eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:.72rem;font-weight:700;font-stretch:70%;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin:0 0 20px}
+.eyebrow::before{content:"";width:26px;height:1.5px;background:currentColor}
+.dark .eyebrow{color:var(--mint)}
+.muted{color:var(--ink-2)}
+[hidden]{display:none!important}
 
-/* bar */
-.bar{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
-  padding-block:16px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px));pointer-events:none}
-.bar>*{pointer-events:auto}
-.bar .logo{height:26px;width:auto;position:relative}
-.bar .logo img{height:26px;width:auto;transition:opacity .3s}
-.bar .logo img + img{position:absolute;inset:0;opacity:0}
-[data-tone="teal"] .bar .logo img:first-child{opacity:0}
-[data-tone="teal"] .bar .logo img + img{opacity:1}
-.actions{display:flex;gap:8px;align-items:center}
-.counter{font-size:.75rem;letter-spacing:.14em;font-variant-numeric:tabular-nums;margin-right:6px;color:var(--teal);font-weight:600;font-stretch:80%}
-[data-tone="teal"] .counter{color:var(--white)}
-.ib{width:40px;height:40px;display:grid;place-items:center;border-radius:999px;border:1px solid rgba(0,125,143,.35);background:rgba(255,255,255,.85);color:var(--teal);cursor:pointer;backdrop-filter:blur(6px)}
-.ib:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
-[data-tone="teal"] .ib{background:rgba(0,104,120,.5);color:#fff;border-color:rgba(255,255,255,.4)}
-.progress{position:fixed;left:0;bottom:env(safe-area-inset-bottom,0px);height:3px;width:0;background:var(--teal);z-index:20;transition:width .3s ease}
-[data-tone="teal"] .progress{background:var(--mint)}
+/* reveal */
+.has-motion .rv{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform 1s var(--ease);transition-delay:var(--d,0s)}
+.has-motion .rv.in{opacity:1;transform:none}
+.has-motion .rv-mask{clip-path:inset(0 0 100% 0);transition:clip-path 1.2s var(--ease);transition-delay:var(--d,0s)}
+.has-motion .rv-mask.in{clip-path:inset(0 0 0 0)}
 
-/* deck + chapter grammar */
-.deck{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth}
-.step{min-height:100%;scroll-snap-align:start;position:relative;display:flex;align-items:center;box-sizing:border-box;overflow:hidden;
-  padding-block:88px 64px;padding-left:var(--gL);padding-right:var(--gR)}
-.step.teal{background:var(--teal);color:var(--white)}
-.in{width:100%;max-width:1240px;margin:0 auto}
-.in>*{min-width:0}
-.label{display:block;border-top:1px solid var(--rule);padding-top:12px;margin:0 0 28px;font-size:.7rem;font-weight:700;font-stretch:72%;letter-spacing:.06em;text-transform:uppercase;color:var(--teal)}
-.teal .label{border-color:rgba(255,255,255,.35);color:var(--white)}
-h1,h2,h3{font-family:var(--f-head);font-weight:400;letter-spacing:-.01em;text-wrap:balance;margin:0;line-height:1.08}
-h2{font-size:clamp(2rem,4.2vw,3.5rem)}
-h3{font-size:clamp(1.25rem,2vw,1.6rem)}
-.lead{font-size:1.05rem;max-width:58ch;color:var(--ink-2);margin:20px 0 0}
-.teal .lead{color:rgba(255,255,255,.88)}
-.small{font-size:.86rem;color:var(--ink-2);max-width:62ch}
-.k{font-size:.68rem;font-weight:700;font-stretch:72%;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin:0 0 6px;display:block}
-.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,5vw,72px);align-items:center}
-.split.w{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
-@media (max-width:860px){.split,.split.w{grid-template-columns:1fr}.step{padding-block:80px 56px}}
-.ph{border-radius:0;overflow:hidden;background:var(--aqua)}
-.ph img{width:100%;height:100%;object-fit:cover}
-.grid{display:grid;gap:12px}
-.card{padding:20px;min-height:120px;display:flex;flex-direction:column;justify-content:space-between;gap:10px}
-.card p{margin:0}
-.card .k{color:inherit;opacity:.85}
+/* ───────── top bar ───────── */
+.top{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;height:var(--barH);z-index:60;display:flex;align-items:center;gap:18px;
+  padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px));background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--rule);transition:background .4s,border-color .4s}
+.top .brand{display:block;position:relative;height:26px;width:116px;flex:none}
+.top .brand img{position:absolute;inset:0;height:26px;width:auto;transition:opacity .35s}
+.top .brand .w{opacity:0}
+.top .sep{width:1px;height:22px;background:var(--rule);flex:none}
+.top .title{font-size:.9rem;font-weight:600;white-space:nowrap;flex:none}
+.top .tools{margin-left:auto;display:flex;gap:10px;align-items:center}
+.search{position:relative}
+.search input{width:min(300px,34vw);height:42px;border-radius:12px;border:1px solid var(--rule);background:var(--soft);padding:0 14px 0 40px;font:inherit;font-size:.9rem;color:var(--ink)}
+.search input:focus{outline:2px solid var(--teal);outline-offset:0;background:#fff}
+.search svg{position:absolute;left:13px;top:12px;color:var(--ink-2)}
+.results{position:absolute;right:0;top:50px;width:min(420px,88vw);background:#fff;border:1px solid var(--rule);border-radius:16px;box-shadow:0 24px 60px -20px rgba(11,42,48,.3);padding:8px;max-height:60vh;overflow:auto}
+.results a{display:block;padding:10px 12px;border-radius:10px;color:var(--ink);text-decoration:none}
+.results a:hover,.results a.sel{background:var(--tint)}
+.results a small{display:block;color:var(--teal);font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.results .none{padding:12px;color:var(--ink-2);font-size:.9rem}
+.btn-ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;cursor:pointer;border:1px solid var(--rule);background:#fff;color:var(--teal);transition:.25s;flex:none}
+.btn-ic:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
+.bar-p{position:fixed;left:0;top:calc(env(safe-area-inset-top,0px) + var(--barH) - 2px);height:2px;width:100%;transform-origin:left;transform:scaleX(0);background:var(--teal);z-index:61}
+/* on the overview hero: only the logo */
+.on-hero .top{background:transparent;border-color:transparent;backdrop-filter:none}
+.on-hero .top .brand .w{opacity:1}.on-hero .top .brand .c{opacity:0}
+.on-hero .top .sep,.on-hero .top .title,.on-hero .top .tools,.on-hero .bar-p{opacity:0;pointer-events:none}
+.top .sep,.top .title,.top .tools{transition:opacity .35s}
+@media (max-width:760px){.top .title,.top .sep,.search{display:none}}
 
-/* cover */
-#cover{padding:0;align-items:stretch}
-.cover{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);width:100%;min-height:100%}
-.cover .copy{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:20px;padding-block:110px 70px;padding-left:var(--gL);padding-right:var(--gR)}
-.cover .copy img{width:min(200px,50%)}
-.cover h1{font-size:clamp(3.2rem,8vw,7.2rem);line-height:1;white-space:nowrap}
-.cover h1 .acc{color:var(--mint);font-size:1.12em;margin-left:.06em}
-.cover small{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;font-stretch:80%}
-.cover .ph{min-height:320px}
-@media (max-width:860px){.cover{grid-template-columns:1fr}.cover .ph{min-height:46vh;order:-1}.cover .copy{padding-block:40px 64px}}
+/* ───────── portal layout ───────── */
+.shell{display:grid;grid-template-columns:88px 220px minmax(0,1fr);padding-top:calc(var(--barH) + env(safe-area-inset-top,0px));min-height:100vh}
+.rail,.subnav{position:sticky;top:calc(var(--barH) + env(safe-area-inset-top,0px));height:calc(100vh - var(--barH) - env(safe-area-inset-top,0px));overflow-y:auto;border-right:1px solid var(--rule)}
+.rail{padding:16px 8px;display:flex;flex-direction:column;gap:4px;padding-left:max(8px,env(safe-area-inset-left,0px))}
+.rail a{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border-radius:12px;color:var(--ink-2);text-decoration:none;font-size:.72rem;font-weight:600;position:relative}
+.rail a:hover{background:var(--soft);color:var(--ink)}
+.rail a[aria-current="true"]{color:var(--teal);background:var(--tint)}
+.rail a[aria-current="true"]::before{content:"";position:absolute;left:-8px;top:10px;bottom:10px;width:3px;border-radius:3px;background:var(--teal)}
+.subnav{padding:20px 14px}
+.subnav h4{margin:4px 10px 12px;font-size:.78rem;font-weight:700;color:var(--teal);letter-spacing:.02em}
+.subnav a{display:block;padding:10px 12px;border-radius:10px;color:var(--ink);text-decoration:none;font-size:.92rem;border-left:2px solid transparent}
+.subnav a:hover{background:var(--soft)}
+.subnav a[aria-current="true"]{background:var(--tint);border-left-color:var(--teal);color:var(--teal);font-weight:600}
+.content{min-width:0}
+.page{display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:48px;padding:56px clamp(20px,4vw,64px) 120px;max-width:1380px;padding-right:max(clamp(20px,4vw,64px),env(safe-area-inset-right,0px))}
+.page>article{min-width:0}
+.toc{position:sticky;top:calc(var(--barH) + 40px);align-self:start;font-size:.86rem}
+.toc b{display:block;font-size:.8rem;margin-bottom:14px}
+.toc a{display:block;padding:7px 0 7px 14px;color:var(--ink-2);text-decoration:none;border-left:1.5px solid var(--rule);transition:.2s}
+.toc a:hover{color:var(--ink)}
+.toc a.on{color:var(--teal);border-left-color:var(--teal);font-weight:600}
+@media (max-width:1180px){.page{grid-template-columns:minmax(0,1fr)}.toc{display:none}}
+@media (max-width:980px){.shell{grid-template-columns:minmax(0,1fr)}.rail,.subnav{display:none}}
 
-/* chapter specifics */
-.shift{grid-template-columns:1fr 1fr}
-.shift .card{min-height:200px}
-.shift .card blockquote{margin:0;font-family:var(--f-head);font-size:clamp(1.3rem,2.4vw,1.9rem);line-height:1.15}
-.trio{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:36px;gap:24px}
-.trio p{margin:0;font-size:.9rem}
-.persona{grid-template-columns:repeat(3,minmax(0,1fr))}
-.persona .card{min-height:110px}
-.persona b{font-size:.8rem;font-weight:700;font-stretch:72%;letter-spacing:.06em}
-.persona p{font-size:.88rem}
-@media (max-width:640px){.persona{grid-template-columns:1fr 1fr}.trio{grid-template-columns:1fr}.shift{grid-template-columns:1fr}}
-.stages{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:40px}
-.stages .n{font-family:var(--f-head);font-size:1.6rem;color:var(--teal);line-height:1}
-.stages p{margin:4px 0 0;font-size:.9rem}
-@media (max-width:640px){.stages{grid-template-columns:1fr}}
-.rows{display:grid;margin-top:28px}
-.rows>div{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;padding:12px 0;border-top:1px solid #e3e3e3;font-size:.92rem}
-.rows>div:last-child{border-bottom:1px solid #e3e3e3}
-.rows b{font-size:.72rem;font-weight:700;font-stretch:72%;letter-spacing:.06em;color:var(--teal);text-transform:uppercase;padding-top:3px}
-@media (max-width:520px){.rows>div{grid-template-columns:1fr;gap:2px}}
-.examples{grid-template-columns:1fr 1fr;gap:0 28px;margin-top:28px}
-.examples>div{border-top:1px solid #e3e3e3;padding:14px 0}
-.examples q{font-family:var(--f-head);font-size:1.15rem}
-.two{grid-template-columns:1fr 1fr}
-.two .card{min-height:170px}
-.two .card h3{font-size:1.4rem}
-.dodont{grid-template-columns:1fr 1fr;margin-top:18px}
-.dodont .card{min-height:110px}
-@media (max-width:640px){.two,.dodont,.examples{grid-template-columns:1fr}}
+/* page anatomy */
+.phead{padding-bottom:36px;border-bottom:1px solid var(--rule);margin-bottom:12px}
+.phead h1{font-size:clamp(2.6rem,5.6vw,5rem)}
+.phead .lede{font-size:clamp(1.05rem,1.4vw,1.2rem);color:var(--ink-2);max-width:60ch;margin:18px 0 0}
+.ref{display:inline-block;margin-top:18px;font-size:.88rem;font-weight:600;color:var(--teal)}
+.sec{padding-block:56px;border-bottom:1px solid var(--rule);scroll-margin-top:calc(var(--barH) + 20px)}
+.sec:last-child{border-bottom:0}
+.sec>h2{font-size:clamp(2rem,3.6vw,3.2rem)}
+.sec>.intro{max-width:62ch;color:var(--ink-2);margin:14px 0 0;font-size:1.02rem}
+.split{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:clamp(24px,4vw,56px);align-items:center;margin-top:30px}
+.split.even{grid-template-columns:1fr 1fr}
+@media (max-width:860px){.split,.split.even{grid-template-columns:1fr}}
+.cards{display:grid;gap:12px;margin-top:30px}
+.c2{grid-template-columns:repeat(2,minmax(0,1fr))}.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:860px){.c3,.c4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.c2,.c3,.c4{grid-template-columns:1fr}}
+.card{border-radius:22px;padding:24px;background:var(--soft);display:flex;flex-direction:column;gap:10px}
+.card h3{font-size:1.45rem}
+.card p{margin:0;font-size:.95rem}
+.card .k{font-size:.7rem;font-weight:700;font-stretch:72%;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.do-dont{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+.dd{border-radius:22px;padding:22px 24px}
+.dd b{display:flex;align-items:center;gap:8px;font-size:.72rem;font-weight:700;font-stretch:72%;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.dd p{margin:0}
+.dd.y{background:var(--green);color:var(--deep)}.dd.n{background:var(--cream);color:var(--brown)}
+@media (max-width:620px){.do-dont{grid-template-columns:1fr}}
+.media{border-radius:24px;overflow:hidden;position:relative;background:var(--aqua)}
+.media img{width:100%;height:100%;object-fit:cover}
+.media.par-wrap img{position:absolute;inset:-10% 0;height:120%}
 
+/* ───────── overview (editorial) ───────── */
+.ov{padding-top:0}
+.hero{height:100vh;height:100svh;min-height:620px;position:relative;overflow:hidden;background:var(--night);color:#fff}
+.hero .bg{position:absolute;inset:-6% 0}
+.hero .bg img{width:100%;height:100%;object-fit:cover;object-position:62% 40%}
+.has-motion .hero .bg img{animation:kb 2.4s var(--ease) both}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,40,48,.45) 0%,rgba(0,40,48,0) 26%,rgba(0,40,48,0) 50%,rgba(0,45,54,.78) 100%);pointer-events:none}
+.hero .copy{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:0 var(--gR) clamp(40px,8vh,90px) var(--gL);max-width:1500px;margin:0 auto}
+.hero h1{font-size:clamp(3.8rem,13.5vw,14rem);line-height:.84;letter-spacing:-.04em}
+.hero h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
+.hero h1 .ln>span{display:inline-block}
+.has-motion .hero h1 .ln>span{animation:rise 1.3s var(--ease) both;animation-delay:var(--d,.2s)}
+.hero h1 .stiff{color:var(--mint);font-size:1.16em;margin-left:.04em;display:inline-block;transform:rotate(-4deg)}
+.has-motion .hero h1 .stiff{clip-path:inset(0 100% 0 0);animation:write 1.3s cubic-bezier(.6,0,.2,1) 1.05s forwards}
+.hero .meta{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-top:28px}
+.hero .meta p{margin:0;max-width:42ch;font-size:1.05rem;color:rgba(255,255,255,.88)}
+.has-motion .hero .meta{animation:fade 1s ease 1.6s both}
+.cue{display:inline-flex;align-items:center;gap:12px;font-size:.72rem;font-weight:700;font-stretch:72%;letter-spacing:.16em;text-transform:uppercase;color:#fff;text-decoration:none}
+.cue i{width:1.5px;height:44px;background:rgba(255,255,255,.35);position:relative;overflow:hidden}
+.cue i::after{content:"";position:absolute;left:0;top:-40%;width:100%;height:40%;background:var(--mint);animation:drip 1.8s ease-in-out infinite}
+@keyframes rise{from{transform:translateY(105%)}to{transform:none}}
+@keyframes write{to{clip-path:inset(0 0 0 0)}}
+@keyframes fade{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes kb{from{transform:scale(1.18)}to{transform:scale(1.04)}}
+@keyframes drip{to{top:110%}}
+.wrap{max-width:1320px;margin:0 auto;padding-left:var(--gL);padding-right:var(--gR)}
+.pad{padding-block:clamp(90px,14vh,170px)}
+.h-xl{font-size:clamp(2.8rem,7vw,6.6rem)}
+.h-l{font-size:clamp(2.2rem,4.8vw,4.4rem)}
+.lede{font-size:clamp(1.05rem,1.4vw,1.22rem);max-width:56ch;color:var(--ink-2);margin:22px 0 0}
+.dark{background:var(--night);color:#fff}.dark .lede{color:rgba(255,255,255,.78)}
+.marquee{overflow:hidden;background:var(--teal);color:#fff;padding-block:18px;white-space:nowrap}
+.marquee .track{display:inline-flex;gap:46px;font-family:var(--f-head);font-size:clamp(1.6rem,3.2vw,2.8rem);will-change:transform}
+.marquee .track span{display:inline-flex;align-items:center;gap:46px}
+.marquee .track span::after{content:"";width:14px;height:14px;border-radius:0 70% 0 70%;background:var(--mint)}
+.marquee .acc{color:var(--mint);font-size:1.2em}
+.manifesto .grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(30px,6vw,100px);align-items:center}
+.words{font-family:var(--f-head);font-size:clamp(1.9rem,3.5vw,3.2rem);line-height:1.15;letter-spacing:-.015em;margin:44px 0 0}
+.words .w{opacity:.14;transition:opacity .25s linear}.words .w.hl{color:var(--teal)}
+.stack{position:relative;height:min(78vh,720px)}
+.stack figure{position:absolute;margin:0;overflow:hidden;box-shadow:0 30px 60px -30px rgba(0,40,48,.45)}
+.stack figure img{width:100%;height:100%;object-fit:cover}
+.stack .a{width:72%;height:68%;right:0;top:0;border-radius:0 90px 0 90px}
+.stack .b{width:52%;height:46%;left:0;bottom:4%;border-radius:90px 0 90px 0}
+.stack .tag{position:absolute;right:6%;bottom:12%;z-index:3;background:var(--mint);color:var(--night);font-weight:600;font-size:.86rem;padding:10px 18px;border-radius:999px}
+@media (max-width:900px){.manifesto .grid{grid-template-columns:1fr}.stack{height:110vw;max-height:620px}}
+.pin{height:280vh}
+.pin>.sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.shift .sticky{display:grid;place-items:center;background:color-mix(in srgb,var(--aqua) calc(var(--p,0)*100%),#F3F4F2)}
+.shift .inner{position:relative;width:100%;text-align:center}
+.shift .q{font-family:var(--f-head);font-size:clamp(2.6rem,8vw,7.6rem);line-height:1;letter-spacing:-.03em;padding-inline:var(--gL)}
+.shift .before{position:relative;display:inline-block;opacity:calc(1 - (var(--p,0) - .35) * 3.2);transform:scale(calc(1 - var(--p,0)*.25))}
+.shift .before::after{content:"";position:absolute;left:-2%;right:-2%;top:54%;height:.08em;background:var(--teal);transform-origin:left;transform:scaleX(calc((var(--p,0) - .1) * 4))}
+.shift .after{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:24px;clip-path:inset(calc((1 - (var(--p,0) - .45) * 2.6) * 100%) 0 0 0)}
+.shift .after .q{color:var(--deep)}.shift .after .acc{color:var(--teal)}
+.shift .chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.shift .chips span{border:1.5px solid var(--deep);color:var(--deep);border-radius:999px;padding:8px 18px;font-size:.9rem;font-weight:500}
+.shift .lbl{position:absolute;top:calc(var(--barH) + 40px);left:0;right:0;text-align:center}
+.shift .foot{position:absolute;bottom:30px;left:0;right:0;text-align:center;font-size:.75rem;letter-spacing:.14em;font-weight:700;font-stretch:72%;text-transform:uppercase;color:var(--ink-2)}
+.plist{list-style:none;margin:50px 0 0;padding:0;border-top:1px solid rgba(255,255,255,.16)}
+.plist li{display:grid;grid-template-columns:70px minmax(0,1fr) minmax(0,1fr);align-items:center;gap:20px;padding:clamp(14px,2.2vh,26px) 0;border-bottom:1px solid rgba(255,255,255,.16)}
+.plist .n{font-size:.8rem;color:var(--mint);font-weight:600}
+.plist b{font-family:var(--f-head);font-weight:400;font-size:clamp(2.6rem,7.2vw,6.6rem);line-height:.95;letter-spacing:-.03em;transition:color .35s,transform .5s var(--ease);display:inline-block}
+.plist .d{color:rgba(255,255,255,.7);font-size:1.05rem;max-width:34ch}
+.plist li:hover b{color:var(--mint);transform:translateX(18px)}
+.peek{position:fixed;left:0;top:0;width:260px;height:320px;pointer-events:none;z-index:40;border-radius:0 80px 0 80px;overflow:hidden;opacity:0;transform:translate(-50%,-50%) scale(.6);transition:opacity .3s,transform .4s var(--ease)}
+.peek.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.peek img{width:100%;height:100%;object-fit:cover}
+@media (max-width:700px){.plist li{grid-template-columns:36px minmax(0,1fr)}.plist .d{grid-column:2}}
+@media (hover:none){.peek{display:none}}
+.enemy .sticky{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);align-items:center;gap:clamp(20px,5vw,80px);padding-left:var(--gL);padding-right:var(--gR);max-width:1320px;margin:0 auto}
+.orb-wrap{position:relative;aspect-ratio:1;width:min(100%,62vh);justify-self:center;display:grid;place-items:center}
+.ring{position:absolute;inset:0;border:1.5px dashed var(--aqua);border-radius:50%}
+.orb{width:calc((1 - var(--p,0) * .78) * 100%);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#33a4b3,var(--teal) 55%,var(--deep));display:grid;place-items:center;color:#fff;text-align:center}
+.orb span{font-family:var(--f-head);font-size:clamp(1rem,2vw,1.6rem);opacity:calc(1 - var(--p,0) * 1.6);padding:10%}
+.stages{list-style:none;margin:36px 0 0;padding:0}
+.stages li{display:grid;grid-template-columns:54px 1fr;gap:16px;padding:18px 0;border-top:1px solid var(--rule);opacity:.28;transition:opacity .5s,transform .6s var(--ease)}
+.stages li.on{opacity:1;transform:translateX(10px)}
+.stages .num{font-family:var(--f-head);font-size:2.2rem;color:var(--teal);line-height:1}
+.stages h3{font-size:1.4rem}.stages p{margin:4px 0 0;color:var(--ink-2)}
+@media (max-width:860px){.enemy .sticky{grid-template-columns:1fr;align-content:center;gap:10px;padding-top:var(--barH)}.orb-wrap{width:min(56vw,30vh)}.stages{margin-top:8px}.stages li{padding:9px 0}.stages h3{font-size:1.1rem}.enemy .h-l{font-size:1.8rem}}
+.payoff{height:220vh}
+.payoff .frame{position:absolute;inset:0;clip-path:inset(calc((1 - var(--p,0)) * 22%) calc((1 - var(--p,0)) * 26%) round calc((1 - var(--p,0)) * 120px))}
+.payoff .frame img{width:100%;height:100%;object-fit:cover;transform:scale(calc(1.25 - var(--p,0) * .25))}
+.payoff .frame::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,50,58,.82),rgba(0,50,58,.1) 70%)}
+.payoff .txt{position:absolute;left:0;right:0;bottom:12vh;z-index:2;color:#fff;opacity:calc((var(--p,0) - .55) * 3);transform:translateY(calc((1 - var(--p,0)) * 60px))}
+.payoff .txt .acc{color:var(--mint);font-size:1.25em}
+.reel{height:400vh;color:#fff;background:var(--night)}
+.reel .sticky{display:flex;flex-direction:column;justify-content:center}
+.reel .head{padding-left:var(--gL);padding-right:var(--gR);max-width:1320px;margin:0 auto;width:100%;display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
+.reel .head p{margin:0;max-width:40ch;color:rgba(255,255,255,.75)}
+.reel .track{display:flex;gap:22px;margin-top:40px;padding-left:max(var(--gL),calc((100vw - 1320px) / 2 + 20px));will-change:transform;transform:translateX(calc(var(--p,0) * var(--dist,0px) * -1))}
+.reel figure{margin:0;flex:none;height:min(56vh,540px);position:relative}
+.reel figure img{height:100%;width:auto;max-width:none;object-fit:cover;border-radius:6px}
+.reel figcaption{position:absolute;left:16px;bottom:14px;font-size:.78rem;letter-spacing:.06em;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.reel .note{flex:none;width:min(340px,76vw);height:min(56vh,540px);border-radius:0 80px 0 80px;padding:32px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;color:var(--night)}
+.reel .note h3{font-size:1.9rem}.reel .note p{margin:0;font-size:.95rem}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:5}
+.flash.go{animation:flash .7s ease-out}
+@keyframes flash{0%{opacity:.85}100%{opacity:0}}
+.explore{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:50px}
+.ex{position:relative;border-radius:28px;overflow:hidden;min-height:280px;display:flex;flex-direction:column;justify-content:flex-end;padding:26px;color:#fff;text-decoration:none;isolation:isolate}
+.ex img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform 1s var(--ease)}
+.ex::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,40,48,0) 30%,rgba(0,40,48,.8))}
+.ex:hover img{transform:scale(1.07)}
+.ex small{font-size:.72rem;font-weight:700;font-stretch:72%;letter-spacing:.14em;text-transform:uppercase;color:var(--mint)}
+.ex h3{font-size:clamp(1.6rem,2.6vw,2.2rem);margin-top:6px}
+.ex.solid{color:var(--ink)}.ex.solid::before{display:none}
+.ex.solid small{color:var(--teal)}
+.ex .arrow{position:absolute;right:22px;top:22px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);transition:transform .4s var(--ease),background .3s}
+.ex:hover .arrow{transform:rotate(-45deg);background:var(--mint);color:var(--night)}
+.ex.wide{grid-column:span 2}
+@media (max-width:860px){.explore{grid-template-columns:1fr}.ex.wide{grid-column:auto}}
+.close{background:var(--teal);color:#fff;overflow:hidden;text-align:center;padding-top:clamp(100px,16vh,180px)}
+.close .big{font-size:clamp(4rem,14vw,14rem);line-height:.9;letter-spacing:-.04em}
+.close .big .acc{color:var(--mint);font-size:1.15em}
+.close .logo{width:min(220px,50%);margin:0 auto 40px}
+.close p{max-width:52ch;margin:40px auto 0;color:rgba(255,255,255,.8);font-size:.92rem}
+.close .marquee{background:var(--deep);margin-top:clamp(70px,12vh,140px)}
+
+/* ───────── page widgets ───────── */
 /* logo */
-.lv{grid-template-columns:repeat(4,minmax(0,1fr));gap:0}
-.lv div{aspect-ratio:1;display:grid;place-items:center;padding:16%}
-.lv img{width:100%}
-.misuse{grid-template-columns:1fr 1fr;gap:0 28px;margin-top:28px}
-.misuse>div{border-top:1px solid #e3e3e3;padding:14px 0}
-.misuse p{margin:0;font-size:.88rem}
-@media (max-width:640px){.lv{grid-template-columns:1fr 1fr}.misuse{grid-template-columns:1fr}}
-.safe{position:relative;display:inline-block;padding:clamp(18px,3.4vw,40px);outline:1px solid rgba(0,125,143,.55);max-width:100%;box-sizing:border-box}
-.safe img{width:min(460px,62vw);outline:1px dashed rgba(0,125,143,.55)}
-.safe .x{position:absolute;font-family:var(--f-head);font-style:italic;color:var(--teal);font-size:.9rem}
-.safe .x.t{top:4px;left:50%}.safe .x.b{bottom:4px;left:50%}.safe .x.l{left:8px;top:45%}.safe .x.r{right:8px;top:45%}
-.mins{grid-template-columns:1fr 1fr;margin-top:32px;gap:24px}
-.mins .demo{border-top:1px solid #e3e3e3;border-bottom:1px solid #e3e3e3;padding:18px 0;display:grid;place-items:center}
-
+.stage{background:var(--teal);border-radius:24px;aspect-ratio:16/9;display:grid;place-items:center;position:relative;overflow:hidden}
+.stage .lg{position:relative;width:62%}
+.stage .lg svg,.stage .lg img{width:100%;height:auto;display:block;overflow:visible}
+.stage .cs{position:absolute;inset:-14% -5.5%;border:1.5px dashed var(--mint);opacity:0;transition:opacity .4s}
+.stage .cs::before{content:"";position:absolute;inset:14% 5.5%;border:1px solid rgba(255,255,255,.7)}
+.stage .cs i{position:absolute;width:5.5%;aspect-ratio:1;border-radius:50%;border:1.5px solid var(--mint);display:none}
+.stage.show .cs{opacity:1}
+.has-motion .stage .lt{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform 1s var(--ease)}
+.has-motion .stage .lf{opacity:0;transform:translate(-20px,-70px) rotate(-40deg);transition:opacity .8s,transform 1.4s cubic-bezier(.3,1.5,.5,1)}
+.stage.in .lt,.stage.in .lf{opacity:1;transform:none}
+.check{display:inline-flex;align-items:center;gap:12px;border:1px solid var(--rule);border-radius:12px;padding:10px 16px;font-weight:600;color:var(--teal);cursor:pointer;margin-top:20px;background:#fff;user-select:none}
+.check input{width:20px;height:20px;accent-color:var(--teal);margin:0}
+.lvars{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:30px}
+.lvar{border-radius:22px;aspect-ratio:16/9;display:grid;place-items:center;padding:0 16%;position:relative;transition:transform .5s var(--ease)}
+.lvar:hover{transform:translateY(-6px)}
+.lvar span{position:absolute;left:18px;bottom:14px;font-size:.78rem;font-weight:600}
+.mistakes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:30px}
+.mis{display:flex;flex-direction:column;gap:12px}
+.mis .demo{aspect-ratio:4/3;border-radius:18px;background:var(--soft);display:grid;place-items:center;position:relative;overflow:hidden}
+.mis .demo img{width:62%}
+.mis .demo::after{content:"";position:absolute;right:10px;top:10px;width:28px;height:28px;border-radius:50%;background:#D93F45 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M7 7l10 10M17 7L7 17'/%3E%3C/svg%3E") center/14px no-repeat}
+.mis b{font-size:.72rem;font-weight:700;font-stretch:72%;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.mis p{margin:0;font-size:.9rem;color:var(--ink-2)}
+.m1 img{outline:3px solid var(--teal);outline-offset:14px}
+.m2 img{transform:scaleX(1.45) skewX(-10deg)}
+.m3 .demo{background:var(--aqua)}.m3 img{opacity:.22}
+.m4 img{filter:drop-shadow(5px 6px 2px rgba(0,0,0,.5)) drop-shadow(0 0 10px #ff0)}
+@media (max-width:860px){.mistakes{grid-template-columns:repeat(2,minmax(0,1fr))}.lvars{grid-template-columns:1fr}}
+.specs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:24px}
+.spec{border:1px solid var(--rule);border-radius:22px;padding:22px}
+.spec b{display:block;font-family:var(--f-head);font-weight:400;font-size:clamp(1.8rem,3vw,2.4rem);line-height:1;color:var(--teal)}
+.spec span{font-size:.9rem;color:var(--ink-2)}
+@media (max-width:620px){.specs{grid-template-columns:1fr}}
+.cont-demo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:30px}
+.ad{position:relative;aspect-ratio:4/5;border-radius:10px;overflow:hidden;color:#fff;isolation:isolate}
+.ad>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1}
+.ad .kl{position:absolute;inset:5.5%;border:3px solid rgba(255,255,255,.95);border-radius:clamp(22px,3.4vw,40px);pointer-events:none}
+.ad .kl.g{border-color:var(--green)}
+.ad .wm{position:absolute;left:50%;bottom:calc(5.5% - 8px);transform:translateX(-50%);padding:0 10px;height:16px}
+.ad .wm img{height:16px;width:auto}
+.ad .hl{position:absolute;left:13%;bottom:15%;font-family:var(--f-head);font-size:clamp(1.3rem,2.2vw,2rem);line-height:.95;text-shadow:0 2px 16px rgba(0,0,0,.35)}
+.ad .hl .acc{color:var(--mint);font-size:1.2em}
+.ad .quote{position:absolute;left:12%;top:12%;font-family:var(--f-head);font-style:italic;font-size:clamp(1.1rem,1.8vw,1.6rem);line-height:1.05;max-width:7ch;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.ad .leaf{position:absolute;width:44%;aspect-ratio:1.35;border-radius:0 72% 0 72%;display:grid;place-items:center;text-align:center;line-height:1}
+.ad .leaf small{display:block;font-size:.64rem;font-weight:600}
+.ad .leaf b{font-family:var(--f-head);font-weight:400;font-size:clamp(1.8rem,3vw,2.6rem)}
+.ad .leaf sup{font-size:.45em}
+.ad .gift{position:absolute;left:10%;bottom:12%;display:flex;align-items:center;gap:8px;color:var(--lime)}
+.ad .gift .acc{font-size:1.8rem}
+.ad .gift span:last-child{background:var(--lime);color:var(--deep);border-radius:999px;padding:3px 10px;font-size:.68rem;font-weight:600}
+@media (max-width:760px){.cont-demo{grid-template-columns:1fr 1fr}.cont-demo .ad:last-child{grid-column:1/-1;aspect-ratio:16/10}}
 /* colour */
-.sw{border:0;font:inherit;text-align:left;cursor:pointer;padding:12px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;min-height:120px;color:var(--ink);transition:transform .2s ease}
-.sw:hover{transform:translateY(-3px)}
-.sw b{font-size:.82rem;font-weight:600}
-.sw code{font-family:var(--f-body);font-size:.72rem;font-weight:500;font-stretch:80%;letter-spacing:.04em;opacity:.9}
-.sw.dk{color:#fff}
-.pal{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.pal .sw{min-height:clamp(120px,22vh,200px)}
-.sup{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:10px}
-.accents{grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.accents .wrapc{display:grid;grid-template-columns:110px 1fr;gap:14px;padding:10px;align-items:stretch;color:#fff;font-size:.82rem}
-.accents .wrapc p{margin:0;align-self:center}
-.ratio{display:grid;grid-template-columns:6fr 3fr 1fr;margin-top:18px;height:58px}
-.ratio div{display:flex;align-items:center;padding:0 12px;font-family:var(--f-head);font-size:1.3rem;color:#fff}
-.ratio div:nth-child(2){color:var(--deep)}
-.ratio div:nth-child(3){background:linear-gradient(var(--lime) 50%,var(--mint) 50%);color:var(--deep);padding:0 6px;font-size:1rem}
-@media (max-width:760px){.pal{grid-template-columns:1fr 1fr}.sup{grid-template-columns:repeat(3,minmax(0,1fr))}.accents{grid-template-columns:1fr}}
-.toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:.88rem;opacity:0;transition:.25s ease;z-index:40;pointer-events:none}
+.sw-big{display:flex;height:min(56vh,460px);gap:6px;margin-top:30px}
+.sw{border:0;cursor:pointer;font:inherit;text-align:left;color:#fff;border-radius:22px;padding:20px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;transition:flex .6s var(--ease),transform .3s;min-width:0;overflow:hidden;flex:1}
+.sw-big .sw:hover,.sw-big .sw:focus-visible{flex:2.2}
+.sw b{font-size:1rem;font-weight:600;white-space:nowrap}
+.sw code{font-family:var(--f-body);font-size:.82rem;font-weight:500;opacity:.85;white-space:nowrap}
+.sw.lt{color:var(--ink)}
+.sw-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:30px}
+.sw-row .sw{min-height:150px}
+.sw-row .sw:hover{transform:translateY(-6px)}
+@media (max-width:760px){.sw-big{flex-direction:column;height:auto}.sw-big .sw{min-height:96px;flex:none}.sw-big .sw:hover{flex:none}.sw-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.acx{border-radius:22px;padding:20px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;color:#fff}
+.acx .dot{width:clamp(84px,10vw,120px);aspect-ratio:1.3;border-radius:0 70% 0 70%;border:0;cursor:pointer;font:inherit;font-size:.72rem;font-weight:600;color:var(--night);display:grid;place-items:end start;padding:12px}
+.acx h3{font-size:1.6rem;margin-bottom:4px}.acx p{margin:0}
+.hier{display:flex;height:72px;margin-top:30px;border-radius:999px;overflow:hidden}
+.hier div{display:flex;align-items:center;padding:0 22px;font-family:var(--f-head);font-size:1.4rem;color:#fff;flex-grow:var(--g);flex-basis:0}
+.has-motion .hier div{flex-grow:0;transition:flex-grow 1.4s var(--ease) var(--d,0s)}
+.has-motion .hier.in div{flex-grow:var(--g)}
+.contrast{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:30px}
+.contrast div{border-radius:18px;padding:22px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.contrast small{font-weight:500;font-size:.75rem;opacity:.8}
+@media (max-width:620px){.contrast{grid-template-columns:1fr}}
+.toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);background:var(--night);color:#fff;padding:12px 20px;border-radius:999px;font-size:.9rem;opacity:0;transition:.3s var(--ease);z-index:95;pointer-events:none}
 .toast.on{opacity:1;transform:translate(-50%,0)}
-
 /* type */
-.tspec{grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
-.tspec>div{border-top:1px solid #e3e3e3;padding:18px 18px 18px 0;display:flex;flex-direction:column;gap:12px}
-.tspec .mag{font-family:var(--f-head);font-size:clamp(1.6rem,2.8vw,2.3rem);line-height:1.1}
-.tspec .str{font-size:.95rem;max-width:36ch}
-.tspec .jaq{font-family:var(--f-acc);font-size:clamp(2.6rem,5vw,3.8rem);color:var(--teal);line-height:1}
-@media (max-width:760px){.tspec{grid-template-columns:1fr}}
-.pairing{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:26px;border-top:1px solid #e3e3e3;border-bottom:1px solid #e3e3e3}
-.pairing>div{padding:26px 14px;display:grid;place-items:center;text-align:center;color:var(--teal);border-left:1px solid #e3e3e3}
-.pairing>div:first-child{border-left:0}
-.pairing .h{font-family:var(--f-head);font-size:1.6rem;line-height:1.1}
-.pairing .h i{font-weight:700}
-.pairing .h .acc{font-size:1.5em}
-.pairing .pill{display:inline-flex;align-items:center;gap:8px}
-.pairing .pill .acc{font-size:2rem}
-.pairing .pill span:last-child{background:var(--teal);color:#fff;border-radius:999px;padding:4px 12px;font-size:.75rem}
-@media (max-width:640px){.pairing{grid-template-columns:1fr}.pairing>div{border-left:0;border-top:1px solid #e3e3e3}.pairing>div:first-child{border-top:0}}
-
-/* graphic assets */
-.leaf{background:var(--teal);color:#fff;border-radius:0 72% 0 72%;aspect-ratio:1.45;display:grid;place-items:center;text-align:center}
-.leaf small{display:block;font-size:.72rem}
-.leaf .p{font-family:var(--f-head);font-size:clamp(2.4rem,4vw,3.4rem);line-height:1}
-.leaf .p sup{font-size:.45em}
-.assets3{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:end}
-.assets3 .ph{aspect-ratio:3/4;position:relative}
-.assets3 .ph .leaf{position:absolute;left:-6%;top:-4%;width:46%;background:var(--teal)}
-.keyline-demo{position:relative;height:min(54vh,470px);min-height:300px;overflow:hidden}
-.keyline-demo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.keyline-demo .kl{position:absolute;inset:6%;border:4px solid rgba(255,255,255,.95);border-radius:clamp(22px,4vw,48px)}
-.keyline-demo .kl-wm{position:absolute;left:50%;bottom:calc(6% - 9px);transform:translateX(-50%);background:var(--teal);padding:0 10px}
-.keyline-demo .kl-wm img{height:16px;width:auto}
-.keyline-demo .hl{position:absolute;left:12%;bottom:15%;font-family:var(--f-head);color:#fff;font-size:clamp(1.3rem,2.4vw,1.9rem);line-height:1;text-shadow:0 2px 14px rgba(0,0,0,.35)}
-.keyline-demo .hl .acc{color:var(--mint)}
-.quote{position:absolute;left:8%;top:8%;font-family:var(--f-head);font-style:italic;color:#fff;font-size:clamp(1rem,1.8vw,1.35rem);line-height:1.1;max-width:8ch;text-shadow:0 2px 12px rgba(0,0,0,.4)}
-.pills{display:flex;flex-direction:column;gap:8px;margin-top:6px}
-.pills span{align-self:flex-start;border-radius:999px;background:var(--green);color:var(--deep);font-size:.8rem;padding:6px 14px}
-@media (max-width:760px){.assets3{grid-template-columns:1fr 1fr}.assets3>:last-child{grid-column:1/-1}}
-
-/* photography */
-.mosaic{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;height:min(64vh,560px)}
-.mosaic .ph:first-child{grid-row:1/3}
-.principles{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:22px}
-.principles .card{min-height:140px;font-size:.82rem}
-.principles .card:nth-child(1){background:var(--aqua)}.principles .card:nth-child(2){background:var(--cream)}.principles .card:nth-child(3){background:var(--green)}.principles .card:nth-child(4){background:var(--mint)}
-@media (max-width:760px){.mosaic{grid-template-columns:1fr 1fr;height:auto}.mosaic .ph{aspect-ratio:1}.mosaic .ph:first-child{grid-column:1/-1;grid-row:auto;aspect-ratio:4/3}.principles{grid-template-columns:1fr 1fr}}
-
+.specimen{border-radius:24px;background:var(--warm);padding:clamp(24px,4vw,48px);margin-top:30px;display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,60px);align-items:end}
+.specimen .aa{font-size:clamp(7rem,16vw,14rem);line-height:.8;color:var(--teal);letter-spacing:-.04em}
+.specimen .glyphs{font-size:clamp(1.2rem,2vw,1.7rem);line-height:1.4;color:var(--ink);overflow-wrap:anywhere}
+@media (max-width:700px){.specimen{grid-template-columns:1fr}}
+.tester{margin-top:30px;border:1px solid var(--rule);border-radius:24px;padding:24px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.tabs button{font:inherit;font-size:.85rem;font-weight:500;border:1px solid var(--rule);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--teal);color:#fff;border-color:var(--teal)}
+.live{font-size:clamp(2rem,5vw,4.6rem);line-height:1.06;letter-spacing:-.02em;outline:none;font-family:var(--f-head);min-height:1.1em;overflow-wrap:anywhere}
+.live[data-f="body"]{font-family:var(--f-body);font-weight:500;letter-spacing:-.01em}
+.live[data-f="acc"]{font-family:var(--f-acc);color:var(--teal);letter-spacing:0}
+.hint{font-size:.88rem;color:var(--ink-2);margin:14px 0 0}
+.pairing{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:30px}
+.pairing>div{border-radius:22px;background:var(--soft);padding:34px 18px;display:grid;place-items:center;text-align:center;color:var(--teal);min-height:200px}
+.pairing .h{font-family:var(--f-head);font-size:1.9rem;line-height:1.05;margin:0}
+.pairing .h .acc{font-size:1.4em}
+@media (max-width:700px){.pairing{grid-template-columns:1fr}}
+.order{margin-top:30px;border-top:1px solid var(--rule)}
+.order>div{display:grid;grid-template-columns:140px 1fr;gap:20px;padding:22px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+.order b{font-size:.72rem;font-weight:700;font-stretch:72%;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+/* graphics */
+.leaf-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:30px}
+.leaf-row>div{border-radius:22px;background:var(--soft);aspect-ratio:1.1;display:grid;place-items:center;position:relative;overflow:hidden}
+.leafx{width:62%;aspect-ratio:1.35;background:var(--teal);border-radius:0 72% 0 72%;display:grid;place-items:center;color:#fff;text-align:center;line-height:1}
+.leafx small{display:block;font-size:.72rem;font-weight:600}
+.leafx b{font-family:var(--f-head);font-weight:400;font-size:clamp(2rem,3.6vw,3rem)}
+.leafx sup{font-size:.45em}
+@media (max-width:620px){.leaf-row{grid-template-columns:1fr}.leaf-row>div{aspect-ratio:16/10}}
+.has-motion .leaf-row.in .leafx{animation:pop .9s cubic-bezier(.3,1.6,.5,1) both;animation-delay:var(--d,0s)}
+@keyframes pop{from{transform:scale(0) rotate(-30deg)}to{transform:none}}
+.leaf-row .lbl{position:absolute;left:16px;bottom:12px;font-size:.72rem;font-weight:700;font-stretch:72%;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.kl-photo{position:relative;aspect-ratio:4/5;max-height:80vh;overflow:hidden;border-radius:10px}
+.kl-photo>img{position:absolute;inset:-10% 0;width:100%;height:120%;object-fit:cover}
+.kl-photo svg{position:absolute;inset:0;width:100%;height:100%;z-index:2;overflow:visible}
+.kl-line{fill:none;stroke:#fff;stroke-width:4;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--p,0) * 1.6)}
+.kl-photo .hl{position:absolute;left:12%;top:11%;z-index:3;color:#fff;font-family:var(--f-head);font-size:clamp(2rem,3.4vw,3.2rem);line-height:.95;text-shadow:0 2px 20px rgba(0,0,0,.3)}
+.kl-photo .hl .acc{color:var(--mint);font-size:1.2em}
+.kl-photo .wm{position:absolute;left:50%;bottom:calc(6% - 11px);transform:translateX(-50%);z-index:3;padding:0 14px;height:22px}
+.kl-photo .wm img{height:22px;width:auto}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pills span{background:var(--green);color:var(--deep);border-radius:999px;padding:8px 16px;font-size:.9rem;font-weight:500}
+.has-motion .pills.in span{animation:fade .7s var(--ease) both;animation-delay:calc(var(--i,0) * .08s)}
+/* photo page */
+.grid-photos{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;height:min(70vh,620px);margin-top:30px}
+.grid-photos .media:first-child{grid-row:1/3}
+@media (max-width:760px){.grid-photos{grid-template-columns:1fr 1fr;height:auto}.grid-photos .media{aspect-ratio:1}.grid-photos .media:first-child{grid-column:1/-1;grid-row:auto;aspect-ratio:4/3}}
+.flashbox{position:relative;border-radius:24px;overflow:hidden;aspect-ratio:16/10;cursor:pointer}
+.flashbox img{width:100%;height:100%;object-fit:cover;transition:filter .2s}
+.flashbox:not(.lit) img{filter:brightness(.55) saturate(.7) contrast(.9)}
+.flashbox .tip{position:absolute;left:16px;bottom:14px;background:rgba(0,0,0,.5);color:#fff;border-radius:999px;padding:8px 14px;font-size:.82rem;backdrop-filter:blur(6px)}
+.flashbox .fl{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.flashbox.pop .fl{animation:flash .6s ease-out}
+.princ{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:30px}
+.princ .card{min-height:180px}
+@media (max-width:860px){.princ{grid-template-columns:1fr 1fr}}
 /* product */
-.prod{grid-template-columns:5fr 4fr 3fr;gap:8px;height:min(62vh,540px)}
-.prod .ph{height:100%}
-@media (max-width:760px){.prod{grid-template-columns:1fr 1fr;height:auto}.prod .ph{aspect-ratio:3/4}.prod .ph:first-child{grid-column:1/-1;aspect-ratio:4/3}}
-
+.prod-hero{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(24px,4vw,56px);align-items:center;margin-top:30px}
+.prod-photo{position:relative;aspect-ratio:4/5;border-radius:0 110px 0 110px;overflow:hidden}
+.prod-photo img{position:absolute;inset:-10% 0;width:100%;height:120%;object-fit:cover}
+@media (max-width:860px){.prod-hero{grid-template-columns:1fr}}
 /* icons */
-.icons{grid-template-columns:repeat(5,minmax(0,1fr));gap:22px 14px;margin-top:30px}
-.ic{background:none;border:0;cursor:pointer;font:inherit;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;font-size:.78rem;line-height:1.25;padding:6px;border-radius:12px}
-.ic .g{width:clamp(56px,7vw,84px);aspect-ratio:1;color:#333}
-.ic .g svg{width:100%;height:100%}
-.ic:hover .g,.ic:focus-visible .g{color:var(--teal)}
-.icons-alt{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
-.icons-alt .g{width:38px;color:var(--teal)}
-@media (max-width:640px){.icons{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.icons{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:30px}
+.ic{background:var(--warm);border:0;border-radius:22px;cursor:pointer;font:inherit;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;font-size:.84rem;line-height:1.3;padding:24px 12px;aspect-ratio:1;transition:background .35s,transform .5s var(--ease)}
+.ic:nth-child(3n+2){background:var(--tint)}.ic:nth-child(3n){background:#EEF7F7}
+.ic .g{width:clamp(54px,5.5vw,80px);aspect-ratio:1;color:var(--teal)}
+.ic .g svg{width:100%;height:100%;overflow:visible}
+.ic:hover{background:var(--teal);color:#fff;transform:translateY(-6px) rotate(-1.5deg)}
+.ic:hover .g{color:var(--mint)}
+.has-motion .ic [data-draw]{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.6s var(--ease) var(--d,0s)}
+.has-motion .icons.in [data-draw]{stroke-dashoffset:0}
+@media (max-width:1100px){.icons{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:700px){.icons{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.icon-colour{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;align-items:center}
+.icon-colour button{width:34px;height:34px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--rule);cursor:pointer}
+.icon-colour button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--teal)}
+/* in action */
+.banner{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:16/6;margin-top:12px;color:#fff;background:var(--teal)}
+.banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.banner .txt{position:absolute;left:5%;top:50%;transform:translateY(-50%);max-width:44%}
+.banner .txt h3{font-size:clamp(1.4rem,3.2vw,3rem)}
+.banner .cta{display:inline-block;margin-top:14px;background:var(--mint);color:var(--night);border-radius:999px;padding:10px 20px;font-weight:600;font-size:.9rem}
+.banner .kl{position:absolute;inset:6%;border:3px solid rgba(210,241,196,.9);border-radius:36px}
+@media (max-width:620px){.banner{aspect-ratio:4/3}.banner .txt{max-width:70%}}
+/* assets */
+.asset-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:30px}
+.asset{border:1px solid var(--rule);border-radius:22px;overflow:hidden;display:flex;flex-direction:column}
+.asset .th{aspect-ratio:16/10;display:grid;place-items:center;background:var(--soft);overflow:hidden}
+.asset .th img{width:100%;height:100%;object-fit:cover}
+.asset .bd{padding:18px 20px;display:flex;flex-direction:column;gap:4px}
+.asset h3{font-size:1.35rem}
+.asset p{margin:0;font-size:.9rem;color:var(--ink-2)}
+.asset .tag{align-self:flex-start;margin-top:8px;font-size:.7rem;font-weight:700;font-stretch:72%;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;padding:5px 10px;background:var(--cream);color:var(--brown)}
+@media (max-width:860px){.asset-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.asset-grid{grid-template-columns:1fr}}
+.pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:56px}
+.pager a{border:1px solid var(--rule);border-radius:18px;padding:18px 22px;text-decoration:none;color:var(--ink);transition:.3s}
+.pager a:hover{border-color:var(--teal);background:var(--tint)}
+.pager small{display:block;color:var(--ink-2);font-size:.78rem}
+.pager span{font-family:var(--f-head);font-size:1.4rem}
+.pager .nx{text-align:right;grid-column:2}
 
-/* thank you */
-#thanks .in{text-align:center;display:grid;justify-items:center;gap:22px}
-#thanks img{width:min(220px,50%)}
-#thanks h2{font-size:clamp(3.2rem,8vw,7rem)}
-#thanks h2 .acc{color:var(--mint);font-size:1.1em}
-.note{font-size:.78rem;color:rgba(255,255,255,.75);max-width:52ch}
-
-/* menu */
-.menu{position:fixed;inset:0;z-index:50;background:var(--teal);color:#fff;overflow-y:auto;
-  padding-block:calc(env(safe-area-inset-top,0px) + 80px) 40px;padding-left:var(--gL);padding-right:var(--gR)}
-.menu .in{max-width:1100px}
-.menu ol{list-style:none;margin:20px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;column-gap:48px}
-.menu a{display:flex;gap:16px;align-items:baseline;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.25);color:#fff;text-decoration:none;font-family:var(--f-head);font-size:clamp(1.1rem,2vw,1.5rem)}
-.menu a span{font-family:var(--f-body);font-size:.72rem;font-weight:600;font-stretch:80%;letter-spacing:.1em;width:2.2em;color:var(--mint);font-variant-numeric:tabular-nums}
+/* chapters overlay */
+.menu{position:fixed;inset:0;z-index:100;background:var(--night);color:#fff;overflow-y:auto;padding-block:calc(env(safe-area-inset-top,0px) + 50px) 50px;padding-left:max(28px,env(safe-area-inset-left,0px));padding-right:max(28px,env(safe-area-inset-right,0px))}
+.menu .in{max-width:1300px;margin:0 auto}
+.menu h2{font-size:clamp(3.4rem,8vw,7rem);padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.18)}
+.menu ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;column-gap:56px}
+.menu a{display:flex;gap:18px;align-items:baseline;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.14);color:#fff;text-decoration:none;font-family:var(--f-head);font-size:clamp(1.5rem,3vw,2.5rem);transition:color .25s,padding .35s var(--ease)}
+.menu a span{font-family:var(--f-body);font-size:.75rem;font-weight:600;letter-spacing:.06em;color:var(--mint);width:2em}
 .menu a:hover,.menu a[aria-current="true"]{color:var(--mint)}
-.menu .close{position:fixed;top:calc(env(safe-area-inset-top,0px) + 16px);right:max(24px,env(safe-area-inset-right,0px));background:rgba(0,104,120,.6);color:#fff;border-color:rgba(255,255,255,.4)}
-@media (max-width:640px){.menu ol{grid-template-columns:1fr}}
+.menu a:hover{padding-left:10px}
+.menu .x{position:fixed;top:calc(env(safe-area-inset-top,0px) + 34px);right:max(28px,env(safe-area-inset-right,0px));width:56px;height:56px;border-radius:50%;background:transparent;color:#fff;border:1.5px solid var(--mint);box-shadow:inset 0 0 0 4px var(--night),inset 0 0 0 5px rgba(0,255,183,.4)}
+.menu .x:hover{background:var(--mint);color:var(--night)}
+.has-motion .menu:not([hidden]) li{animation:fade .6s var(--ease) both;animation-delay:calc(var(--i,0) * .035s)}
+@media (max-width:700px){.menu ol{grid-template-columns:1fr}}
 
-.rv{transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
-.has-motion .step:not(.seen) .rv{opacity:.001;transform:translateY(22px)}
-@media (prefers-reduced-motion:reduce){.deck{scroll-behavior:auto}.rv{transition:none}.has-motion .step:not(.seen) .rv{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .has-motion .rv,.has-motion .rv-mask{opacity:1;transform:none;clip-path:none;transition:none}
+  .has-motion .hero h1 .ln>span,.has-motion .hero .meta,.has-motion .hero .bg img{animation:none}
+  .has-motion .hero h1 .stiff{clip-path:none;animation:none}
+  .cue i::after{animation:none}
+}
 </style>
 
-<header class="bar">
-  <a class="logo" href="#cover" aria-label="VitaePro, back to cover"><img src="references/logo/vitaepro-logo-colour.svg" alt="VitaePro" width="116" height="26"><img src="references/logo/vitaepro-logo-white.svg" alt="" width="116" height="26"></a>
-  <div class="actions">
-    <span class="counter" id="counter">01 / 18</span>
-    <button class="ib" type="button" id="fs" aria-label="Enter fullscreen" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5"/></svg></button>
-    <button class="ib" type="button" id="menu-open" aria-label="Open chapter menu" aria-haspopup="dialog"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></button>
+<div class="bar-p" id="barp"></div>
+<header class="top" id="top">
+  <a class="brand" href="#overview" aria-label="VitaePro brand guidelines, overview"><img class="c" src="references/logo/vitaepro-logo-colour.svg" alt="VitaePro" width="116" height="26"><img class="w" src="references/logo/vitaepro-logo-white.svg" alt="" width="116" height="26"></a>
+  <span class="sep"></span><span class="title">Brand guidelines</span>
+  <div class="tools">
+    <div class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="q" type="search" placeholder="Search guidelines" aria-label="Search guidelines" autocomplete="off">
+      <div class="results" id="results" hidden></div>
+    </div>
+    <button class="btn-ic" type="button" id="menu-open" aria-label="Open chapters" aria-haspopup="dialog"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg></button>
   </div>
 </header>
-<div class="progress" id="progress"></div>
 
-<main class="deck" id="deck" aria-label="VitaePro brand presentation">
-
-<section class="step teal" id="cover" data-title="Don’t live stiff">
-  <div class="cover">
-    <div class="copy rv">
-      <img src="references/logo/vitaepro-logo-reversed.svg" alt="VitaePro" width="200" height="45">
-      <h1>Don’t live <span class="acc">stiff</span></h1>
-      <small>Brand guidelines 2026</small>
+<!-- ═════════ OVERVIEW ═════════ -->
+<div class="view ov" data-view="overview">
+  <section class="hero" id="hero">
+    <div class="bg par" data-speed="-0.22"><img src="references/photos/swimmer-mid-stroke.webp" alt="A woman in a swim cap and goggles caught mid-stroke, gasping for air" fetchpriority="high"></div>
+    <div class="copy">
+      <h1><span class="ln"><span style="--d:.25s">Don’t live</span></span><span class="ln"><span style="--d:.45s"><span class="acc stiff">stiff</span></span></span></h1>
+      <div class="meta"><p>The VitaePro visual identity. One attitude for every film, photo, banner and pack: a refusal to sit life out.</p><a class="cue" href="#manifesto" data-scroll><i></i>Scroll to explore</a></div>
     </div>
-    <div class="ph"><img src="references/photos/swimmer-mid-stroke.webp" alt="A swimmer in goggles caught mid-stroke, mouth open for breath" fetchpriority="high"></div>
-  </div>
-</section>
+  </section>
 
-<section class="step" id="manifesto" data-title="The manifesto">
-  <div class="in split">
-    <div class="rv"><span class="label">The manifesto</span><h2>Life happens<br>in motion.</h2><p class="lead">We choose participation over sitting it out. Not because every day is extraordinary, but because ordinary life is worth showing up for.</p><p class="small" style="margin-top:28px">These guidelines turn <b>Don’t live stiff</b> into a consistent and recognisable world across film, photography, digital, product and everyday communications. One system. Many moments.</p></div>
-    <div class="ph rv" style="aspect-ratio:4/5"><img src="references/photos/zipline-forest.webp" alt="A woman in a helmet laughing on a zipline between pine trees" loading="lazy"></div>
-  </div>
-</section>
+  <div class="marquee" aria-hidden="true"><div class="track" data-marquee><span>Human</span><span>Active</span><span>Open</span><span>Confident</span><span>Playful</span><span class="acc">yes</span><span>Human</span><span>Active</span><span>Open</span><span>Confident</span><span>Playful</span><span class="acc">yes</span></div></div>
 
-<section class="step" id="shift" data-title="The shift">
-  <div class="in">
-    <span class="label">The shift</span>
-    <h2 class="rv">From what the product does<br>to what life feels like</h2>
-    <div class="grid shift rv" style="margin-top:36px">
-      <div class="card" style="background:var(--panel)"><span class="k">Before</span><blockquote>“My body works”</blockquote><p class="small">Functional support. Claim-led.</p></div>
-      <div class="card" style="background:var(--aqua)"><span class="k">After</span><blockquote>“Life feels full of opportunity”</blockquote><p class="small" style="color:var(--deep)">Human relevance. Freedom. Participation.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="step" id="purpose" data-title="Purpose, vision & promise">
-  <div class="in split w">
-    <div class="rv">
-      <span class="label">Brand purpose</span>
-      <h2>For bodies that still have things to do</h2>
-      <p class="lead">Our purpose is to keep the possibility of participating in everyday life emotionally present. We sell a product. The brand stands for the life around it.</p>
-      <div class="grid trio">
-        <div><span class="k">Vision</span><p>To become the brand people think of when they choose to keep showing up.</p></div>
-        <div><span class="k">Promise</span><p>The life you want to keep living.</p></div>
-        <div><span class="k">The human · product · brand</span><p>“I’m not done yet.” Support for muscles and joints, relevant to an active, unrestricted life.</p></div>
-      </div>
-    </div>
-    <div class="ph rv" style="aspect-ratio:4/5"><img src="references/photos/ice-bath-ladder.webp" alt="A woman climbing out of an ice-hole bath down a wooden ladder, shouting with the cold" loading="lazy"></div>
-  </div>
-</section>
-
-<section class="step" id="personality" data-title="Brand personality">
-  <div class="in">
-    <span class="label">Brand personality</span>
-    <h2 class="rv">Five behaviours. One attitude.</h2>
-    <div class="grid persona rv" style="margin-top:36px">
-      <div class="card" style="background:var(--cream)"><b>HUMAN</b><p>Real people. Real expressions.</p></div>
-      <div class="card" style="background:var(--aqua)"><b>ACTIVE</b><p>We capture the motion.</p></div>
-      <div class="card" style="background:var(--green)"><b>OPEN</b><p>Freedom, not restriction.</p></div>
-      <div class="card" style="background:var(--aqua)"><b>CONFIDENT</b><p>Assured, never aggressive.</p></div>
-      <div class="card" style="background:var(--cream)"><b>PLAYFUL</b><p>A giggle, not a joke at anyone’s expense.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="step" id="platform" data-title="What “Don’t live stiff” means">
-  <div class="in split">
-    <div class="rv">
-      <span class="label">The communication platform</span>
-      <h2>What “Don’t live <i>stiff</i>” means</h2>
-      <p class="lead" style="color:var(--ink);font-size:1.25rem">It’s an attitude towards life.</p>
-      <p class="small" style="margin-top:14px">Not a promise to eliminate physical stiffness. Not a claim that ageing stops. It is a refusal to let routine, hesitation or the challenges of life define who we are.</p>
-      <div class="grid stages">
-        <div><span class="n">1</span><span class="k">Everyday life</span><p>When ordinary things start requiring more effort.</p></div>
-        <div><span class="n">2</span><span class="k">Participation</span><p>When it’s easier to sit things out than join in.</p></div>
-        <div><span class="n">3</span><span class="k">Mindset</span><p>When “maybe later” slowly becomes “probably not”.</p></div>
-      </div>
-      <p class="small" style="margin-top:10px">Name the enemy: the stages of a life that is getting smaller.</p>
-    </div>
-    <div class="ph rv" style="aspect-ratio:4/5"><img src="references/photos/fly-fishing-splash.webp" alt="A woman in a teal jacket casting a fly-fishing line through sparkling spray" loading="lazy"></div>
-  </div>
-</section>
-
-<section class="step" id="payoff" data-title="The payoff">
-  <div class="in split w">
-    <div class="rv"><span class="label">The payoff</span><h2>Not done yet. The joy of still saying <i>yes.</i></h2><p class="lead">We celebrate the feeling, not the performance. There is no single definition of an active life, no ideal activity level and no one kind of person.</p></div>
-    <div class="ph rv" style="aspect-ratio:4/5"><img src="references/photos/hiker-laughing-rain.webp" alt="A woman in a rain jacket laughing on a hike, hand at her hood" loading="lazy"></div>
-  </div>
-</section>
-
-<section class="step" id="voice" data-title="Tone of voice">
-  <div class="in split">
-    <div class="rv">
-      <span class="label">Tone of voice</span>
-      <h2>Speak like a person with plans: clear, human and full of life</h2>
-      <div class="rows">
-        <div><b>Human</b><span>Use everyday language. Write as people speak, not as brands present themselves.</span></div>
-        <div><b>Grounded</b><span>Respect real life, ageing and physical limitations.</span></div>
-        <div><b>Confident</b><span>Make clear statements. Avoid lecturing or pushiness.</span></div>
-        <div><b>Open</b><span>Invite rather than instruct. Use encouraging language.</span></div>
-        <div><b>Playful</b><span>Surprise and wit are welcome. Never make someone’s age, body or limitations the joke.</span></div>
-      </div>
-    </div>
-    <div class="rv">
-      <span class="label">Writing examples</span>
-      <h3>Clear. Human. Worth reading.</h3>
-      <div class="grid examples">
-        <div><span class="k">Brand storytelling</span><q>Don’t live stiff</q></div>
-        <div><span class="k">Relevance</span><q>Say yes to things you love doing</q></div>
-        <div><span class="k">Product consideration</span><q>Support for muscles and joints</q></div>
-        <div><span class="k">Conversion</span><q>Start with improved VitaePro</q></div>
-      </div>
-      <p class="small" style="margin-top:14px">The message adapts by stage of the funnel. Brand storytelling should not start with a discount. Conversion can.</p>
-    </div>
-  </div>
-</section>
-
-<section class="step" id="campaign" data-title="Campaign architecture">
-  <div class="in">
-    <span class="label">Campaign architecture</span>
-    <div class="split" style="align-items:start">
-      <div class="rv">
-        <h2>One world. Two jobs.</h2>
-        <div class="grid two" style="margin-top:28px">
-          <div class="card" style="background:var(--aqua)"><span class="k" style="color:var(--deep)">Mother campaign</span><h3>Create demand</h3><p class="small" style="color:var(--deep)">Lead with the brand belief. Build an emotional connection. No product claims or price promotions.</p></div>
-          <div class="card" style="background:var(--panel)"><span class="k">Child / conversion</span><h3>Capture demand</h3><p class="small">Turn interest into action. Product benefits, proof and a reason to buy take the lead.</p></div>
-        </div>
-      </div>
-      <div class="rv">
-        <h2>Stay accurate</h2>
-        <p class="lead">Every health-related claim, translation and testimonial must pass local compliance review.</p>
-        <div class="grid dodont">
-          <div class="card" style="background:var(--aqua)"><span class="k" style="color:var(--deep)">Do</span><p class="small" style="color:var(--deep)">“I still have plans.” Only approved statements about what the product supports.</p></div>
-          <div class="card" style="background:var(--cream)"><span class="k" style="color:var(--brown)">Don’t</span><p class="small" style="color:var(--brown)">Reverse ageing. Eliminate stiffness. Get your old body back.</p></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="step" id="logo" data-title="The wordmark">
-  <div class="in">
-    <span class="label">Primary logo</span>
-    <div class="split" style="align-items:start">
-      <div class="rv"><h2>The wordmark stands on its own</h2><p class="lead">The fixed container has been removed. Clear space and sufficient contrast keep the logo clear and legible. Use the version that gives enough contrast. Black and white are for special circumstances only.</p></div>
-      <div class="rv">
-        <div class="grid lv">
-          <div style="background:#fff;outline:1px solid #eee;outline-offset:-1px"><img src="references/logo/vitaepro-logo-colour.svg" alt="Colour wordmark" loading="lazy"></div>
-          <div style="background:var(--teal)"><img src="references/logo/vitaepro-logo-reversed.svg" alt="Reversed wordmark on teal" loading="lazy"></div>
-          <div style="background:#fff;outline:1px solid #eee;outline-offset:-1px"><img src="references/logo/vitaepro-logo-black.svg" alt="Black wordmark" loading="lazy"></div>
-          <div style="background:#000"><img src="references/logo/vitaepro-logo-white.svg" alt="White wordmark on black" loading="lazy"></div>
-        </div>
-        <h3 style="margin-top:30px">Do not make the logo stiff again</h3>
-        <div class="grid misuse">
-          <div><span class="k">No containers</span><p>Don’t place the logo inside containers or borders.</p></div>
-          <div><span class="k">Don’t distort</span><p>Never stretch, skew or rotate it. Vertical use is fine on packaging and merchandise.</p></div>
-          <div><span class="k">Ensure contrast</span><p>Don’t place it on a background where it disappears.</p></div>
-          <div><span class="k">No effects</span><p>No shadow, glow or decorative strokes.</p></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="step" id="safe-space" data-title="Safe space & size">
-  <div class="in split">
-    <div class="rv"><span class="label">Logo safe space</span><h2>Give the wordmark room to breathe</h2><p class="lead">The more the better. Minimum safe space is the width of the registration mark on every side.</p>
-      <div class="grid mins">
-        <div><span class="k">Digital</span><div class="demo"><img src="references/logo/vitaepro-logo-colour.svg" alt="Wordmark at 160 px minimum digital size" width="160" height="36"></div><p class="small" style="margin-top:8px">Minimum 160 × 35 px</p></div>
-        <div><span class="k">Print</span><div class="demo"><img src="references/logo/vitaepro-logo-colour.svg" alt="Wordmark at minimum print size" style="width:12mm;min-width:46px"></div><p class="small" style="margin-top:8px">Minimum 12 mm wide</p></div>
-      </div>
-    </div>
-    <div class="rv" style="display:grid;place-items:center"><div class="safe"><span class="x t">x</span><span class="x b">x</span><span class="x l">x</span><span class="x r">x</span><img src="references/logo/vitaepro-logo-colour.svg" alt="Wordmark inside its safe-space guides" loading="lazy"></div></div>
-  </div>
-</section>
-
-<section class="step" id="colours" data-title="Colours">
-  <div class="in">
-    <span class="label">Colours · select a swatch to copy its HEX</span>
-    <div class="split" style="align-items:end;margin-bottom:22px"><h2 class="rv">Turquoise leads</h2><p class="small rv" style="margin:0">A recognisable primary palette. Supporting tones create range, and accents add controlled energy. Dominance matters more than variety: 60 % primary, 30 % support, one accent at 10 %.</p></div>
-    <div class="rv">
-      <div class="grid pal">
-        <button class="sw dk" style="background:var(--teal)" data-hex="#007D8F"><b>VitaePro Teal</b><code>#007D8F</code></button>
-        <button class="sw dk" style="background:var(--deep)" data-hex="#006878"><b>Deep Teal</b><code>#006878</code></button>
-        <button class="sw" style="background:var(--aqua)" data-hex="#B2DCDD"><b>Light Aqua</b><code>#B2DCDD</code></button>
-        <button class="sw" style="background:#fff;outline:1px solid #e3e3e3;outline-offset:-1px" data-hex="#FFFFFF"><b>Pure White</b><code>#FFFFFF</code></button>
-      </div>
-      <div class="grid sup">
-        <button class="sw" style="background:var(--green)" data-hex="#D2F1C4"><b>Light Green</b><code>#D2F1C4</code></button>
-        <button class="sw" style="background:var(--cream)" data-hex="#F6EAD8"><b>Cream</b><code>#F6EAD8</code></button>
-        <button class="sw dk" style="background:var(--ngreen)" data-hex="#4F925F"><b>Natural Green</b><code>#4F925F</code></button>
-        <button class="sw dk" style="background:var(--brown)" data-hex="#633B37"><b>Brown</b><code>#633B37</code></button>
-        <button class="sw dk" style="background:var(--taupe)" data-hex="#AB8E77"><b>Taupe</b><code>#AB8E77</code></button>
-      </div>
-      <div class="grid accents">
-        <div class="wrapc" style="background:var(--teal)"><button class="sw" style="background:var(--lime);min-height:84px" data-hex="#D2EE00"><b>Lime</b><code>#D2EE00</code></button><p>Use against teal. Signals an offer, price or campaign.</p></div>
-        <div class="wrapc" style="background:#1D4A55"><button class="sw" style="background:var(--mint);min-height:84px" data-hex="#00FFB7"><b>Mint</b><code>#00FFB7</code></button><p>Use against dark backgrounds. Call to action.</p></div>
-      </div>
-      <div class="ratio" aria-label="Colour hierarchy: 60 percent primary, 30 percent support, 10 percent one accent"><div style="background:var(--teal)">60%</div><div style="background:var(--green)">30%</div><div>10%</div></div>
-    </div>
-  </div>
-</section>
-
-<section class="step" id="typography" data-title="Typography">
-  <div class="in">
-    <span class="label">Typography</span>
-    <h2 class="rv">Two core typefaces. One supporting accent.</h2>
-    <div class="grid tspec rv" style="margin-top:30px">
-      <div><span class="k">Magister · headlines</span><p class="mag" style="margin:0">92 % opplever virkning på muskler og ledd*</p><p class="small" style="margin:0">Expressive and emotional. Use it to lead stories, never for functional or technical copy.</p></div>
-      <div><span class="k">Stratos · body</span><p class="str" style="margin:0">VitaePro is now improved with a new formulation for muscles. The supplement has helped hundreds of thousands for over 20 years.</p><p class="small" style="margin:0">Functional clarity for body text, product info, UI and labels.</p></div>
-      <div><span class="k">Jaqartall · accent</span><p class="jaq" style="margin:0">stiff · yes</p><p class="small" style="margin:0">One or two words only. Never for prices, claims, long phrases or essential information.</p></div>
-    </div>
-    <div class="pairing rv">
-      <div><p class="h" style="margin:0">Don’t live <span class="acc">stiff</span></p></div>
-      <div><p class="h" style="margin:0;font-size:1.35rem">A <i>new</i> formula,<br>refined over years</p></div>
-      <div><span class="pill"><span class="acc">+Gift</span><span>Velkomstgave</span></span></div>
-    </div>
-  </div>
-</section>
-
-<section class="step" id="graphics" data-title="Graphic assets">
-  <div class="in">
-    <span class="label">The graphic assets</span>
-    <div class="split" style="align-items:end;margin-bottom:26px"><h2 class="rv">Organic shapes that make the brand feel unstiff</h2><p class="small rv" style="margin:0">The leaf is based on the VitaePro leaf and can frame a price or offer. The keyline is a framing device, not a logo container: never use it only to frame the wordmark. Quotes and fully rounded text containers organise key information.</p></div>
-    <div class="grid assets3 rv">
+  <section class="manifesto pad" id="manifesto">
+    <div class="wrap grid">
       <div>
-        <div class="leaf" style="width:72%"><div><small>First package</small><span class="p">9<sup>90</sup></span></div></div>
-        <span class="k" style="margin-top:14px">Leaf for price and offers</span>
-        <div class="pills"><span>Muscles that keep you moving</span><span>Everyday joint comfort</span><span>A healthy heart</span></div>
+        <p class="eyebrow rv">The manifesto</p>
+        <h2 class="h-xl rv" style="--d:.1s">Life happens in&nbsp;motion.</h2>
+        <p class="words" id="words">We choose <span class="hl">participation</span> over sitting it out. Not because every day is extraordinary, but because <span class="hl">ordinary life is worth showing up for.</span></p>
       </div>
-      <div class="keyline-demo"><img src="references/photos/fishing-catch.webp" alt="A woman holding up a freshly caught fish against blue sky" loading="lazy"><div class="kl"></div><p class="hl" style="margin:0">Don’t live <span class="acc">stiff</span></p><div class="kl-wm"><img src="references/logo/vitaepro-logo-white.svg" alt="VitaePro"></div></div>
-      <div class="keyline-demo"><img src="references/photos/tennis-reach.webp" alt="A man in a cap stretching for a tennis ball on a clay court" loading="lazy"><p class="quote" style="margin:0">Muskler og ledd henger med.</p><div class="kl" style="border-color:var(--green)"></div><div class="kl-wm"><img src="references/logo/vitaepro-logo-white.svg" alt="VitaePro"></div></div>
+      <div class="stack">
+        <figure class="a par" data-speed="0.12"><img src="references/photos/zipline-forest.webp" alt="A woman laughing on a zipline through pine trees" loading="lazy"></figure>
+        <figure class="b par" data-speed="-0.1"><img src="references/photos/fly-fishing-splash.webp" alt="A woman casting a fly-fishing line through glittering spray" loading="lazy"></figure>
+        <span class="tag par" data-speed="0.25">One system. Many moments.</span>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="step" id="photography" data-title="Photography">
-  <div class="in">
-    <span class="label">Photography</span>
-    <div class="split" style="align-items:end;margin-bottom:20px"><h2 class="rv">Not a beautiful pose. A beautiful moment.</h2><p class="small rv" style="margin:0">Catch life in the act: genuine intention, purposeful action, unposed moments. Direct flash, so it looks immediate, candid and unpolished by design. Cast people aged 45+ to 60+, for variety, not stereotypes.</p></div>
-    <div class="mosaic rv">
-      <div class="ph"><img src="references/photos/beach-volleyball-dive.webp" alt="A man diving for a volleyball on a sandy beach in hard flash light" loading="lazy"></div>
-      <div class="ph"><img src="references/photos/tennis-forehand-wide.webp" alt="A man hitting a forehand on a clay court" loading="lazy"></div>
-      <div class="ph"><img src="references/photos/trail-runner-motion.webp" alt="A trail runner blurred with motion" loading="lazy"></div>
-      <div class="ph"><img src="references/photos/fishing-catch.webp" alt="A woman reaching out with a caught fish" loading="lazy"></div>
-      <div class="ph"><img src="references/photos/tennis-run.webp" alt="A man running for a ball on a clay court" loading="lazy"></div>
+  <section class="pin shift" data-pin>
+    <div class="sticky">
+      <p class="eyebrow lbl" style="justify-content:center;display:flex">The shift</p>
+      <div class="inner">
+        <div class="q before">“My body works”</div>
+        <div class="after"><div class="q">“Life feels full of <span class="acc">opportunity</span>”</div><div class="chips"><span>Human relevance</span><span>Freedom</span><span>Participation</span></div></div>
+      </div>
+      <div class="foot">From what the product does → to what life feels like</div>
     </div>
-    <div class="grid principles rv">
-      <div class="card"><span class="k" style="color:var(--deep)">Get close</span>Move in for expressions, gestures and details.</div>
-      <div class="card"><span class="k" style="color:var(--brown)">Natural, not perfect</span>Don’t ask people to hold a smile.</div>
-      <div class="card"><span class="k" style="color:var(--ngreen)">Room for the message</span>Leave clear negative space for copy.</div>
-      <div class="card"><span class="k" style="color:var(--deep)">Capture the action</span>Movement, interaction, transitions.</div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section class="step" id="product" data-title="Product">
-  <div class="in">
-    <span class="label">Product: pack and pills</span>
-    <div class="split" style="align-items:end;margin-bottom:20px"><h2 class="rv">Make the pack the hero. Then show the pill.</h2><p class="small rv" style="margin:0">Keep the pack accurate, recognisable and the sharpest element in the frame. Use simple backgrounds and controlled light. The product belongs in life, not just the studio. Give the pill a visible role and capture interaction.</p></div>
-    <div class="grid prod rv">
-      <div class="ph"><img src="references/photos/pack-tennis-court.webp" alt="A smiling man in tennis whites holding the VitaePro pack towards the camera on a blue court" loading="lazy"></div>
-      <div class="ph"><img src="references/photos/pill-tennis-court.webp" alt="A tennis player holding a VitaePro capsule and pack on court" loading="lazy"></div>
-      <div class="ph"><img src="references/photos/capsules-pattern-mint.webp" alt="Rows of red VitaePro capsules on a mint background" loading="lazy"></div>
+  <section class="dark pad" style="overflow:hidden">
+    <div class="wrap">
+      <p class="eyebrow rv">Brand personality</p>
+      <h2 class="h-l rv" style="--d:.1s">Five behaviours. One attitude.</h2>
+      <ul class="plist" id="plist">
+        <li class="rv" data-img="references/photos/hiker-laughing-rain.webp"><span class="n">01</span><b>Human</b><span class="d">Real people. Real expressions.</span></li>
+        <li class="rv" data-img="references/photos/beach-volleyball-dive.webp"><span class="n">02</span><b>Active</b><span class="d">We capture the motion.</span></li>
+        <li class="rv" data-img="references/photos/zipline-forest.webp"><span class="n">03</span><b>Open</b><span class="d">Freedom, not restriction.</span></li>
+        <li class="rv" data-img="references/photos/tennis-forehand-wide.webp"><span class="n">04</span><b>Confident</b><span class="d">Assured, never aggressive.</span></li>
+        <li class="rv" data-img="references/photos/ice-bath-ladder.webp"><span class="n">05</span><b>Playful</b><span class="d">A giggle, not a joke at anyone’s expense.</span></li>
+      </ul>
     </div>
-  </div>
-</section>
+    <div class="peek" id="peek"><img alt="" id="peek-img"></div>
+  </section>
 
-<section class="step" id="iconography" data-title="Iconography">
-  <div class="in">
-    <span class="label">Iconography · select an icon to copy its SVG</span>
-    <div class="split" style="align-items:end"><h2 class="rv">Hand-drawn simplicity</h2><p class="small rv" style="margin:0">A simple, hand-drawn one-line style with a consistent stroke width and a playful, informal character. Brand colours are allowed, depending on placement and background.</p></div>
-    <div class="grid icons rv" id="icons">
-      <button class="ic" type="button" data-src="references/icons/muscles-moving.svg"><span class="g"></span>Muscles that keep you moving</button>
-      <button class="ic" type="button" data-src="references/icons/immune-system.svg"><span class="g"></span>A strong immune system</button>
-      <button class="ic" type="button" data-src="references/icons/energy.svg"><span class="g"></span>Energy for everyday life</button>
-      <button class="ic" type="button" data-src="references/icons/joint-comfort.svg"><span class="g"></span>Everyday joint comfort</button>
-      <button class="ic" type="button" data-src="references/icons/healthy-heart.svg"><span class="g"></span>A healthy heart</button>
-      <button class="ic" type="button" data-src="references/icons/muscles-joints.svg"><span class="g"></span>Specifically for muscles &amp; joints</button>
-      <button class="ic" type="button" data-src="references/icons/nordic-science.svg"><span class="g"></span>Backed by Nordic science</button>
-      <button class="ic" type="button" data-src="references/icons/trusted-users.svg"><span class="g"></span>Trusted by 200,000+ daily users</button>
-      <button class="ic" type="button" data-src="references/icons/memory.svg"><span class="g"></span>Memory</button>
-      <button class="ic" type="button" data-src="references/icons/antioxidant.svg"><span class="g"></span>Antioxidant</button>
+  <section class="pin enemy" data-pin data-enemy style="height:320vh">
+    <div class="sticky">
+      <div class="orb-wrap"><div class="ring"></div><div class="orb"><span>A life worth showing up for</span></div></div>
+      <div>
+        <p class="eyebrow">Name the enemy</p>
+        <h2 class="h-l">The stages of a life that is getting smaller</h2>
+        <ol class="stages" id="stages">
+          <li><span class="num">1</span><div><h3>Everyday life</h3><p>When ordinary things start requiring more effort.</p></div></li>
+          <li><span class="num">2</span><div><h3>Participation</h3><p>When it’s easier to sit things out than join in.</p></div></li>
+          <li><span class="num">3</span><div><h3>Mindset</h3><p>When “maybe later” slowly becomes “probably not”.</p></div></li>
+        </ol>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="step teal" id="thanks" data-title="Thank you">
-  <div class="in rv">
-    <img src="references/logo/vitaepro-logo-reversed.svg" alt="VitaePro" width="220" height="49">
-    <h2>Thank <span class="acc">you</span></h2>
-    <p class="note">Every health-related claim, translation and testimonial must pass local compliance review. Brand fonts and photography are shown here for reference only.</p>
-  </div>
-</section>
-</main>
+  <section class="pin payoff" data-pin data-payoff>
+    <div class="sticky">
+      <div class="frame"><img src="references/photos/hiker-laughing-rain.webp" alt="A woman in a rain jacket laughing out loud on a hike" loading="lazy"></div>
+      <div class="txt wrap"><p class="eyebrow" style="color:var(--mint)">The payoff</p><h2 class="h-xl" style="max-width:12ch">Not done yet. The joy of still saying <span class="acc">yes</span></h2><p class="lede" style="color:rgba(255,255,255,.85)">We celebrate the feeling, not the performance.</p></div>
+    </div>
+  </section>
+
+  <section class="pin reel" data-pin data-reel>
+    <div class="sticky">
+      <div class="flash" id="flash"></div>
+      <div class="head"><div><p class="eyebrow" style="color:var(--mint)">Photography</p><h2 class="h-l">Catch life in the act</h2></div><p>Not a beautiful pose. A beautiful moment. Direct flash, unposed, people aged 45+ to 60+.</p></div>
+      <div class="track" id="track">
+        <figure><img src="references/photos/beach-volleyball-dive.webp" alt="A man diving into sand for a volleyball, lit by direct flash" loading="lazy"><figcaption>Direct flash. Immediate, candid.</figcaption></figure>
+        <div class="note" style="background:var(--mint)"><h3>Genuine intention</h3><p>People doing something because they want to.</p></div>
+        <figure><img src="references/photos/tennis-reach.webp" alt="A man stretching for a ball on a clay court" loading="lazy"><figcaption>The decisive second</figcaption></figure>
+        <figure><img src="references/photos/fishing-catch.webp" alt="A woman reaching out with a caught fish" loading="lazy"><figcaption>Get close to the subject</figcaption></figure>
+        <div class="note" style="background:var(--aqua)"><h3>Purposeful action</h3><p>Show what it takes to participate.</p></div>
+        <figure><img src="references/photos/trail-runner-motion.webp" alt="A trail runner blurred with motion" loading="lazy"><figcaption>Capture the action</figcaption></figure>
+        <figure><img src="references/photos/tennis-run.webp" alt="A man sprinting for a ball on a clay court" loading="lazy"><figcaption>Room for the message</figcaption></figure>
+        <div class="note" style="background:var(--cream)"><h3>Unposed moments</h3><p>Don’t manufacture happiness.</p></div>
+        <div style="flex:none;width:6vw"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap">
+      <p class="eyebrow rv">The guidelines</p>
+      <h2 class="h-l rv" style="--d:.1s">Everything you need to build the world</h2>
+      <div class="explore">
+        <a class="ex wide rv" href="#logo"><img src="references/photos/pack-studio-wide.webp" alt="" loading="lazy"><span class="arrow">↗</span><small>Identity</small><h3>Logo, colours and type</h3></a>
+        <a class="ex rv" style="--d:.08s" href="#photography"><img src="references/photos/tennis-forehand-wide.webp" alt="" loading="lazy"><span class="arrow">↗</span><small>Identity</small><h3>Photography</h3></a>
+        <a class="ex rv" href="#strategy"><img src="references/photos/ice-bath-ladder.webp" alt="" loading="lazy"><span class="arrow">↗</span><small>Brand</small><h3>Strategy</h3></a>
+        <a class="ex solid rv" style="--d:.08s;background:var(--green)" href="#voice"><span class="arrow" style="background:#fff">↗</span><small>Brand</small><h3>Tone of voice</h3></a>
+        <a class="ex rv" style="--d:.16s" href="#in-action"><img src="references/photos/pill-tennis-court.webp" alt="" loading="lazy"><span class="arrow">↗</span><small>In action</small><h3>Layouts and ads</h3></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="close">
+    <div class="wrap">
+      <img class="logo rv" src="references/logo/vitaepro-logo-reversed.svg" alt="VitaePro" width="220" height="49">
+      <h2 class="big rv" style="--d:.1s">Thank <span class="acc">you</span></h2>
+      <p class="rv" style="--d:.2s">Brand fonts and photography are shown for reference only. Every health-related claim, translation and testimonial must pass local compliance review.</p>
+    </div>
+    <div class="marquee" aria-hidden="true"><div class="track" data-marquee data-dir="-1"><span>Don’t live <i class="acc">stiff</i></span><span>The life you want to keep living</span><span>Don’t live <i class="acc">stiff</i></span><span>The life you want to keep living</span><span>Don’t live <i class="acc">stiff</i></span><span>The life you want to keep living</span></div></div>
+  </section>
+</div>
+
+<!-- ═════════ PORTAL ═════════ -->
+<div class="view shell" data-portal hidden>
+  <nav class="rail" aria-label="Sections">
+    <a href="#overview" data-group="overview"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>Overview</a>
+    <a href="#strategy" data-group="brand"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>Brand</a>
+    <a href="#logo" data-group="identity"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/><path d="M12 8l4 4-4 4-4-4z"/></svg>Identity</a>
+    <a href="#in-action" data-group="action"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.5"/></svg>In action</a>
+    <a href="#assets" data-group="assets"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Assets</a>
+  </nav>
+  <nav class="subnav" id="subnav" aria-label="Pages in this section"></nav>
+  <main class="content" id="content">
+
+  <!-- STRATEGY -->
+  <div class="page" data-view="strategy" data-group="brand" data-title="Brand strategy"><article>
+    <header class="phead"><p class="eyebrow">Brand</p><h1>Brand strategy</h1><p class="lede">Show the joy of staying involved in everyday life. We sell a product. The brand stands for the life around it.</p><span class="ref">Brand book pp. 2–12</span></header>
+    <section class="sec" id="s-manifesto"><h2>The manifesto</h2><div class="split"><div><p class="intro" style="margin:0;font-family:var(--f-head);font-size:1.7rem;line-height:1.2;color:var(--ink)">Life happens in motion.</p><p class="intro">We choose participation over sitting it out. Not because every day is extraordinary, but because ordinary life is worth showing up for.</p></div><div class="media par-wrap rv-mask" style="aspect-ratio:16/11"><img class="par" data-speed="0.08" src="references/photos/zipline-forest.webp" alt="A woman laughing on a zipline" loading="lazy"></div></div></section>
+    <section class="sec" id="s-shift"><h2>The shift</h2><p class="intro">From what the product does to what life feels like.</p><div class="cards c2"><div class="card rv"><span class="k">Before</span><h3>“My body works”</h3><p class="muted">Functional support. Claim-led.</p></div><div class="card rv" style="--d:.1s;background:var(--aqua)"><span class="k" style="color:var(--deep)">After</span><h3 style="color:var(--deep)">“Life feels full of opportunity”</h3><p style="color:var(--deep)">Human relevance. Freedom. Participation.</p></div></div></section>
+    <section class="sec" id="s-purpose"><h2>Purpose, vision and promise</h2><div class="cards c3">
+      <div class="card rv"><span class="k">Purpose</span><h3>For bodies that still have things to do</h3><p class="muted">Keep the possibility of participating in everyday life emotionally present.</p></div>
+      <div class="card rv" style="--d:.08s"><span class="k">Vision</span><h3>The brand people think of when they choose to keep showing up</h3><p class="muted">Relevance, desire and trust, built over time.</p></div>
+      <div class="card rv" style="--d:.16s"><span class="k">Promise</span><h3>The life you want to keep living</h3><p class="muted">The human: “I’m not done yet.” The product: support for muscles and joints.</p></div></div></section>
+    <section class="sec" id="s-personality"><h2>Brand personality</h2><p class="intro">Five behaviours. One attitude.</p><div class="cards c3">
+      <div class="card rv" style="background:var(--cream)"><span class="k" style="color:var(--brown)">Human</span><p>Real people. Real expressions.</p></div>
+      <div class="card rv" style="--d:.06s;background:var(--aqua)"><span class="k" style="color:var(--deep)">Active</span><p>We capture the motion.</p></div>
+      <div class="card rv" style="--d:.12s;background:var(--green)"><span class="k" style="color:var(--ngreen)">Open</span><p>Freedom, not restriction.</p></div>
+      <div class="card rv" style="--d:.18s;background:var(--aqua)"><span class="k" style="color:var(--deep)">Confident</span><p>Assured, never aggressive.</p></div>
+      <div class="card rv" style="--d:.24s;background:var(--cream)"><span class="k" style="color:var(--brown)">Playful</span><p>A giggle, not a joke at anyone’s expense.</p></div></div></section>
+    <section class="sec" id="s-platform"><h2>What “Don’t live stiff” means</h2><p class="intro">It’s an attitude towards life. Not a promise to eliminate physical stiffness. Not a claim that ageing stops. It is a refusal to let routine, hesitation or the challenges of life define who we are.</p>
+      <div class="cards c3"><div class="card rv"><span class="k">1 · Everyday life</span><p>When ordinary things start requiring more effort.</p></div><div class="card rv" style="--d:.08s"><span class="k">2 · Participation</span><p>When it’s easier to sit things out than join in.</p></div><div class="card rv" style="--d:.16s"><span class="k">3 · Mindset</span><p>When “maybe later” slowly becomes “probably not”.</p></div></div></section>
+    <section class="sec" id="s-payoff"><h2>The payoff</h2><div class="split even"><div><p class="intro" style="margin:0;font-family:var(--f-head);font-size:2rem;line-height:1.15;color:var(--ink)">Not done yet. The joy of still saying <span class="acc" style="color:var(--teal)">yes</span>.</p><p class="intro">We celebrate the feeling, not the performance. There is no single definition of an active life, no ideal activity level and no one kind of person.</p></div><div class="media par-wrap rv-mask" style="aspect-ratio:4/5"><img class="par" data-speed="0.08" src="references/photos/hiker-laughing-rain.webp" alt="A woman laughing on a hike in the rain" loading="lazy"></div></div></section>
+  </article><aside class="toc"></aside></div>
+
+  <!-- VOICE -->
+  <div class="page" data-view="voice" data-group="brand" data-title="Tone of voice"><article>
+    <header class="phead"><p class="eyebrow">Brand</p><h1>Tone of voice</h1><p class="lede">Speak like a person with plans: clear, human and full of life.</p><span class="ref">Brand book pp. 13–18</span></header>
+    <section class="sec" id="v-principles"><h2>Five principles</h2><div class="order">
+      <div class="rv"><b>Human</b><span>Use everyday language. Write as people speak, not as brands present themselves.</span></div>
+      <div class="rv"><b>Grounded</b><span>Respect real life, ageing and physical limitations.</span></div>
+      <div class="rv"><b>Confident</b><span>Make clear statements. Avoid lecturing or pushiness.</span></div>
+      <div class="rv"><b>Open</b><span>Invite rather than instruct. Use encouraging language.</span></div>
+      <div class="rv"><b>Playful</b><span>Surprise and wit are welcome. Never make someone’s age, body or limitations the joke.</span></div></div></section>
+    <section class="sec" id="v-hierarchy"><h2>Message hierarchy</h2><p class="intro">Lead with what matters most at each stage of the funnel. Brand storytelling should not start with a discount. Conversion can.</p>
+      <div class="cards c4"><div class="card rv" style="background:var(--teal);color:#fff"><span class="k" style="color:var(--mint)">Brand storytelling</span><h3>“Don’t live <span class="acc" style="color:var(--mint)">stiff</span>”</h3><p>The human perspective.</p></div><div class="card rv" style="--d:.08s;background:var(--deep);color:#fff"><span class="k" style="color:var(--mint)">Relevance</span><h3>“Say yes to things you love doing”</h3><p>Why participation matters.</p></div><div class="card rv" style="--d:.16s;background:var(--aqua)"><span class="k" style="color:var(--deep)">Product consideration</span><h3>“Support for muscles and joints”</h3><p>What VitaePro supports.</p></div><div class="card rv" style="--d:.24s;background:var(--lime)"><span class="k" style="color:var(--deep)">Conversion</span><h3>“Start with improved VitaePro”</h3><p>The offer and a reason to act now.</p></div></div></section>
+    <section class="sec" id="v-campaign"><h2>Campaign architecture</h2><p class="intro">One world. Two jobs.</p><div class="cards c2"><div class="card rv" style="background:var(--aqua)"><span class="k" style="color:var(--deep)">Mother campaign</span><h3>Create demand</h3><p>Lead with the brand belief. Build an emotional connection. No product claims or price promotions.</p></div><div class="card rv" style="--d:.1s;background:var(--night);color:#fff"><span class="k" style="color:var(--mint)">Child / conversion</span><h3>Capture demand</h3><p>Connect the brand idea to product benefits, proof and a reason to buy.</p></div></div></section>
+    <section class="sec" id="v-storytelling"><h2>Different moments, same attitude</h2><div class="cards c3">
+      <div class="rv"><div class="media" style="aspect-ratio:4/3"><img src="references/photos/swimmer-mid-stroke.webp" alt="Swimmer mid-stroke" loading="lazy"></div><p style="margin:12px 0 0"><b>Branding.</b> <span class="muted">The decisive moment: that split second of movement.</span></p></div>
+      <div class="rv" style="--d:.08s"><div class="media" style="aspect-ratio:4/3"><img src="references/photos/hiker-laughing-rain.webp" alt="Hiker laughing" loading="lazy"></div><p style="margin:12px 0 0"><b>Relevance.</b> <span class="muted">The payoff, the afterglow of having done it.</span></p></div>
+      <div class="rv" style="--d:.16s"><div class="media" style="aspect-ratio:4/3"><img src="references/photos/pack-tennis-court.webp" alt="Man holding the VitaePro pack" loading="lazy"></div><p style="margin:12px 0 0"><b>Conversion.</b> <span class="muted">Candid, playful interaction with the pack or pill.</span></p></div></div></section>
+    <section class="sec" id="v-guardrails"><h2>Stay accurate</h2><p class="intro">Every health-related claim, translation and testimonial must pass local compliance review.</p><div class="do-dont"><div class="dd y rv"><b>✓ Do</b><p>“I still have plans.” Only approved statements about what the product supports.</p></div><div class="dd n rv" style="--d:.1s"><b>✕ Don’t</b><p>Reverse ageing. Eliminate stiffness. Get your old body back.</p></div></div></section>
+  </article><aside class="toc"></aside></div>
+
+  <!-- LOGO -->
+  <div class="page" data-view="logo" data-group="identity" data-title="Logo"><article>
+    <header class="phead"><p class="eyebrow">Visual identity</p><h1>Logo</h1><p class="lede">Approved wordmarks, background choices, clear space and minimum size.</p><span class="ref">Brand book pp. 19–26</span></header>
+    <section class="sec" id="l-reversed"><h2>The reversed wordmark</h2><div class="split"><div><p class="intro" style="margin:0">The fixed container is gone; the wordmark stands on its own. Use the reversed wordmark on VitaePro teal. Keep at least one registration-mark width clear on every side.</p><label class="check"><input type="checkbox" id="cs-toggle"> Show clear space</label></div><div class="stage" id="stage"><div class="lg" id="lg"><div class="cs"></div></div></div></div></section>
+    <section class="sec" id="l-approved"><h2>Approved wordmarks</h2><p class="intro">Use the colour wordmark on white and the reversed wordmark on VitaePro teal. Black and white versions are reserved for special circumstances.</p>
+      <div class="lvars"><div class="lvar rv" style="background:#fff;box-shadow:inset 0 0 0 1px var(--rule)"><img src="references/logo/vitaepro-logo-colour.svg" alt="Colour wordmark" loading="lazy"><span>Colour</span></div><div class="lvar rv" style="--d:.08s;background:var(--teal);color:#fff"><img src="references/logo/vitaepro-logo-reversed.svg" alt="Reversed wordmark" loading="lazy"><span>Reversed</span></div><div class="lvar rv" style="background:#fff;box-shadow:inset 0 0 0 1px var(--rule)"><img src="references/logo/vitaepro-logo-black.svg" alt="Black wordmark" loading="lazy"><span>Black · special use</span></div><div class="lvar rv" style="--d:.08s;background:#000;color:#fff"><img src="references/logo/vitaepro-logo-white.svg" alt="White wordmark" loading="lazy"><span>White · special use</span></div></div></section>
+    <section class="sec" id="l-size"><h2>Clear space and size</h2><div class="specs"><div class="spec rv"><b>1 × ®</b><span>Minimum safe space on every side. The more the better.</span></div><div class="spec rv" style="--d:.08s"><b>160 × 35 px</b><span>Minimum size in digital.</span></div><div class="spec rv" style="--d:.16s"><b>12 mm</b><span>Minimum width in print.</span></div></div></section>
+    <section class="sec" id="l-container"><h2>The container as a brand asset</h2><p class="intro">The old logo container becomes a keyline. Corner radius 50–80 px depending on size, 5 px stroke in regular banners, solid or gradient (#D2F1C4 → #FFFFFF), whichever reads best.</p>
+      <div class="cont-demo">
+        <div class="ad rv" style="background:var(--teal)"><img src="references/photos/pack-studio-portrait.webp" alt="VitaePro pack on a teal studio background" loading="lazy"><div class="kl"></div><div class="leaf" style="left:10%;top:9%;background:var(--lime);color:var(--deep)"><div><small>Winter offer</small><b>99<sup>kr</sup></b></div></div><div class="gift"><span class="acc">+Gift</span><span>Velkomstgave</span></div><div class="wm" style="background:#0c6773"><img src="references/logo/vitaepro-logo-white.svg" alt="VitaePro"></div></div>
+        <div class="ad rv" style="--d:.08s"><img src="references/photos/fishing-catch.webp" alt="Woman holding up a fish" loading="lazy"><div class="kl"></div><p class="hl" style="margin:0">Don’t live <span class="acc">stiff</span></p><div class="wm" style="background:#28566a"><img src="references/logo/vitaepro-logo-white.svg" alt="VitaePro"></div></div>
+        <div class="ad rv" style="--d:.16s"><img src="references/photos/hiker-laughing-rain.webp" alt="Woman laughing on a hike" loading="lazy"><div class="kl g"></div><p class="hl" style="margin:0;font-size:clamp(1rem,1.6vw,1.4rem)">for muscles<br>and joints</p><div class="wm" style="background:#3c5b4f"><img src="references/logo/vitaepro-logo-white.svg" alt="VitaePro"></div></div>
+      </div></section>
+    <section class="sec" id="l-mistakes"><h2>Common mistakes</h2><p class="intro">Do not make the logo stiff again.</p>
+      <div class="mistakes"><div class="mis m1 rv"><div class="demo"><img src="references/logo/vitaepro-logo-colour.svg" alt="" loading="lazy"></div><b>No containers</b><p>Never place it inside containers or borders.</p></div><div class="mis m2 rv" style="--d:.06s"><div class="demo"><img src="references/logo/vitaepro-logo-colour.svg" alt="" loading="lazy"></div><b>Don’t distort</b><p>Never stretch, skew or rotate. Vertical is OK on packs.</p></div><div class="mis m3 rv" style="--d:.12s"><div class="demo"><img src="references/logo/vitaepro-logo-colour.svg" alt="" loading="lazy"></div><b>Keep contrast</b><p>Don’t place it where it disappears.</p></div><div class="mis m4 rv" style="--d:.18s"><div class="demo"><img src="references/logo/vitaepro-logo-colour.svg" alt="" loading="lazy"></div><b>No effects</b><p>No shadow, glow or decorative strokes.</p></div></div></section>
+  </article><aside class="toc"></aside></div>
+
+  <!-- COLOURS -->
+  <div class="page" data-view="colours" data-group="identity" data-title="Colours"><article>
+    <header class="phead"><p class="eyebrow">Visual identity</p><h1>Colours</h1><p class="lede">A recognisable primary palette. Accents add controlled energy. Select any swatch to copy its HEX value.</p><span class="ref">Brand book pp. 27–33</span></header>
+    <section class="sec" id="c-primary"><h2>Turquoise leads</h2><div class="sw-big rv"><button class="sw" style="background:var(--teal)" data-hex="#007D8F"><b>VitaePro Teal</b><code>#007D8F</code></button><button class="sw" style="background:var(--deep)" data-hex="#006878"><b>Deep Teal</b><code>#006878</code></button><button class="sw lt" style="background:var(--aqua)" data-hex="#B2DCDD"><b>Light Aqua</b><code>#B2DCDD</code></button><button class="sw lt" style="background:#fff;box-shadow:inset 0 0 0 1px var(--rule)" data-hex="#FFFFFF"><b>Pure White</b><code>#FFFFFF</code></button></div></section>
+    <section class="sec" id="c-support"><h2>Natural warmth</h2><p class="intro">Supporting tones create range. Lighter shades (#F4FBF0, #FFFAF4) give flexibility for backgrounds.</p><div class="sw-row rv"><button class="sw lt" style="background:var(--green)" data-hex="#D2F1C4"><b>Light Green</b><code>#D2F1C4</code></button><button class="sw lt" style="background:var(--cream)" data-hex="#F6EAD8"><b>Cream</b><code>#F6EAD8</code></button><button class="sw" style="background:var(--ngreen)" data-hex="#4F925F"><b>Natural Green</b><code>#4F925F</code></button><button class="sw" style="background:var(--brown)" data-hex="#633B37"><b>Brown</b><code>#633B37</code></button><button class="sw" style="background:var(--taupe)" data-hex="#AB8E77"><b>Taupe</b><code>#AB8E77</code></button></div></section>
+    <section class="sec" id="c-accents"><h2>Two energetic accents</h2><div class="cards c2"><div class="acx rv" style="background:var(--teal)"><button class="dot" style="background:var(--lime)" data-hex="#D2EE00">#D2EE00</button><div><h3>Lime</h3><p>Use on teal. Signals an offer, price or campaign.</p></div></div><div class="acx rv" style="--d:.1s;background:var(--night)"><button class="dot" style="background:var(--mint)" data-hex="#00FFB7">#00FFB7</button><div><h3>Mint</h3><p>Use on dark backgrounds. Call to action.</p></div></div></div></section>
+    <section class="sec" id="c-hierarchy"><h2>Dominance over variety</h2><p class="intro">60 % primary, 30 % support, one accent at 10 %. Always use only one accent colour in a campaign.</p><div class="hier" id="hier"><div style="--g:6;background:var(--teal)">60%</div><div style="--g:3;--d:.15s;background:var(--green);color:var(--deep)">30%</div><div style="--g:1;--d:.3s;background:var(--lime);color:var(--deep);padding:0 12px">10%</div></div></section>
+    <section class="sec" id="c-access"><h2>Accessibility</h2><p class="intro">Design for real reading conditions. Validate text/background pairs, text size and focus areas. These pairs pass WCAG AA.</p><div class="contrast"><div style="background:var(--teal);color:#fff">Read me <small>white on teal</small></div><div style="background:#fff;color:var(--teal);box-shadow:inset 0 0 0 1px var(--rule)">Read me <small>teal on white</small></div><div style="background:var(--lime);color:var(--deep)">Read me <small>deep teal on lime</small></div><div style="background:var(--green);color:var(--deep)">Read me <small>deep teal on green</small></div><div style="background:var(--cream);color:var(--brown)">Read me <small>brown on cream</small></div><div style="background:var(--mint);color:var(--deep)">Read me <small>deep teal on mint</small></div></div></section>
+  </article><aside class="toc"></aside></div>
+
+  <!-- TYPOGRAPHY -->
+  <div class="page" data-view="typography" data-group="identity" data-title="Typography"><article>
+    <header class="phead"><p class="eyebrow">Visual identity</p><h1>Typography</h1><p class="lede">Two core typefaces. One supporting accent.</p><span class="ref">Brand book pp. 34–39</span></header>
+    <section class="sec" id="t-magister"><h2>Magister for headlines</h2><p class="intro">Expressive and emotional. Use Magister to lead stories, never for functional or technical copy.</p><div class="specimen rv"><div class="aa">Aa</div><div class="glyphs">ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ<br>abcdefghijklmnopqrstuvwxyzæøå<br><i>0123456789 % kr “ ” * ®</i></div></div></section>
+    <section class="sec" id="t-tester"><h2>Try the type</h2><div class="tester"><div class="tabs" role="group" aria-label="Choose typeface"><button type="button" data-f="head" aria-pressed="true">Magister</button><button type="button" data-f="body" aria-pressed="false">Stratos</button><button type="button" data-f="acc" aria-pressed="false">Jaqartall</button></div><div class="live" id="live" contenteditable="true" spellcheck="false" data-f="head" aria-label="Editable type specimen">92 % opplever virkning på muskler og ledd*</div><p class="hint" id="hint">Click the line to type your own.</p></div></section>
+    <section class="sec" id="t-stratos"><h2>Stratos for information</h2><p class="intro">Functional clarity for body text, product info, UI and labels. Stratos is a familiar anchor while the identity evolves. <i>(Stratos files aren’t loaded on this page yet, so a stand-in is shown.)</i></p><div class="cards c2"><div class="card rv"><p style="font-size:1.05rem">VitaePro is now improved with a new formulation for muscles. The supplement has helped hundreds of thousands for over 20 years.</p></div><div class="card rv" style="--d:.1s"><p style="font-size:1.05rem">Olemme ylpeitä asiakkaidemme antamasta positiivisesta palautteesta: peräti 91 % kokee saavansa myönteistä vaikutusta lihaksiin ja niveliin.</p></div></div></section>
+    <section class="sec" id="t-jaqartall"><h2>Jaqartall, used sparingly</h2><p class="intro">A little spontaneity. Always only one or two words. Never for prices, claims, long phrases or essential information.</p><div class="pairing"><div class="rv"><p class="h"><span class="acc">+Gift</span></p></div><div class="rv" style="--d:.08s"><p class="h"><span class="acc">stiff</span></p></div><div class="rv" style="--d:.16s"><p class="h"><span class="acc">yes</span></p></div></div></section>
+    <section class="sec" id="t-layout"><h2>One message. One clear reading order.</h2><div class="order"><div class="rv"><b>Headline</b><span style="font-family:var(--f-head);font-size:1.7rem;line-height:1.1">Magister gives the headline its expressive character</span></div><div class="rv"><b>Body</b><span>Stratos delivers information and product proof with clarity.</span></div><div class="rv"><b>Accent</b><span class="acc" style="font-size:2.4rem;color:var(--teal)">Playful</span></div></div></section>
+  </article><aside class="toc"></aside></div>
+
+  <!-- GRAPHICS -->
+  <div class="page" data-view="graphics" data-group="identity" data-title="Graphic elements"><article>
+    <header class="phead"><p class="eyebrow">Visual identity</p><h1>Graphic elements</h1><p class="lede">Organic shapes that make the brand feel unstiff.</p><span class="ref">Brand book pp. 40–45</span></header>
+    <section class="sec" id="g-leaf"><h2>The organic leaf</h2><p class="intro">Based on the VitaePro leaf. The same contour can frame price and offer information. Always use the approved shape.</p><div class="leaf-row" id="leafrow"><div><span class="leafx" style="--d:0s"></span><span class="lbl">Primary leaf</span></div><div><span class="leafx" style="--d:.12s"><span><small>First package</small><b>9<sup>90</sup></b></span></span><span class="lbl">Price and offers</span></div><div style="background:var(--night)"><span class="leafx" style="--d:.24s;background:var(--lime);color:var(--deep)"><span><small>Summer offer</small><b>-50<sup>%</sup></b></span></span><span class="lbl" style="color:#fff">Lime on dark</span></div></div></section>
+    <section class="sec" id="g-keyline"><h2>The keyline</h2><div class="split even"><div><p class="intro" style="margin:0">A framing device, not a logo container. It creates recognition, highlights important messages, builds structure and connects text and image. Use it selectively. It’s not needed in every layout, and never use it only to frame the wordmark.</p></div><div class="kl-photo" id="kl"><img class="par" data-speed="0.08" src="references/photos/fishing-catch.webp" alt="A woman holding up a fish against a blue sky" loading="lazy"><svg viewBox="0 0 100 125" preserveAspectRatio="none" aria-hidden="true"><path class="kl-line" pathLength="1" d="M38 117.5 H12 Q6 117.5 6 111.5 V13.5 Q6 7.5 12 7.5 H88 Q94 7.5 94 13.5 V111.5 Q94 117.5 88 117.5 H62"/></svg><p class="hl" style="margin:0">Don’t live<br><span class="acc">stiff</span></p><div class="wm"><img src="references/logo/vitaepro-logo-white.svg" alt="VitaePro"></div></div></div></section>
+    <section class="sec" id="g-quotes"><h2>Ambassador quotes</h2><p class="intro">Short quotes directly over the image, inside a cropped leaf shape, or longer quotes in a natural speech bubble.</p><div class="cont-demo">
+      <div class="ad rv"><img src="references/photos/tennis-run.webp" alt="Man running on a clay court" loading="lazy"><p class="quote" style="margin:0">Muskler og ledd henger med.</p></div>
+      <div class="ad rv" style="--d:.08s"><img src="references/photos/tennis-reach.webp" alt="Man reaching for a ball" loading="lazy"><div class="leaf" style="left:-6%;bottom:6%;width:62%;background:var(--green);color:var(--deep)"><span style="font-family:var(--f-head);font-style:italic;font-size:clamp(.9rem,1.4vw,1.2rem);padding:0 14% 0 20%;text-align:left">VitaePro har vært med meg i over 20 år.</span></div></div>
+      <div class="ad rv" style="--d:.16s"><img src="references/photos/tennis-forehand-wide.webp" alt="Man hitting a forehand" loading="lazy"><div style="position:absolute;left:8%;right:8%;bottom:8%;background:var(--green);color:var(--deep);border-radius:28px 28px 28px 6px;padding:16px 18px;font-family:var(--f-head);font-style:italic;font-size:clamp(.85rem,1.2vw,1.05rem);line-height:1.25">I’ve always loved the feeling of a good match. Getting older doesn’t change that.<br><small style="font-family:var(--f-body);font-style:normal;font-size:.7rem">VitaePro Ambassador</small></div></div></div></section>
+    <section class="sec" id="g-containers"><h2>Text containers</h2><p class="intro">Fully rounded rectangles group and highlight lists, key points or short information. Fill with a brand colour or use transparency for a softer effect.</p><div class="pills" id="pills"><span style="--i:0">Muscles that keep you moving</span><span style="--i:1">Everyday joint comfort</span><span style="--i:2">A strong immune system</span><span style="--i:3">Energy for everyday life</span><span style="--i:4">A healthy heart</span><span style="--i:5;background:var(--lime)">Summer offer</span><span style="--i:6;background:var(--teal);color:#fff">6 weeks for half price</span><span style="--i:7;background:var(--night);color:var(--mint)">Last chance!</span></div></section>
+  </article><aside class="toc"></aside></div>
+
+  <!-- PHOTOGRAPHY -->
+  <div class="page" data-view="photography" data-group="identity" data-title="Photography"><article>
+    <header class="phead"><p class="eyebrow">Visual identity</p><h1>Photography</h1><p class="lede">The decisive moment: life caught as it happens.</p><span class="ref">Brand book pp. 46–52</span></header>
+    <section class="sec" id="p-idea"><h2>Catch life in the act</h2><div class="grid-photos"><div class="media rv-mask"><img src="references/photos/fishing-catch.webp" alt="Woman reaching out with a caught fish" loading="lazy"></div><div class="media rv-mask" style="--d:.08s"><img src="references/photos/swimmer-mid-stroke.webp" alt="Swimmer mid-stroke" loading="lazy"></div><div class="media rv-mask" style="--d:.16s"><img src="references/photos/zipline-forest.webp" alt="Woman on a zipline" loading="lazy"></div><div class="media rv-mask" style="--d:.24s"><img src="references/photos/ice-bath-ladder.webp" alt="Woman leaving an ice bath" loading="lazy"></div><div class="media rv-mask" style="--d:.32s"><img src="references/photos/tennis-reach.webp" alt="Man reaching for a tennis ball" loading="lazy"></div></div>
+      <div class="cards c3"><div class="card rv"><span class="k">Genuine intention</span><p>People doing something because they want to, with a clear sense of purpose.</p></div><div class="card rv" style="--d:.08s"><span class="k">Purposeful action</span><p>Show the effort, concentration and what it takes to participate.</p></div><div class="card rv" style="--d:.16s"><span class="k">Unposed moments</span><p>Engaged in what they’re doing, not performing for the viewer.</p></div></div></section>
+    <section class="sec" id="p-flash"><h2>Direct flash</h2><div class="split even"><div><p class="intro" style="margin:0">Immediate. Candid. Unpolished by design. Let the flash create defined highlights and shadows. Keep skin texture and natural imperfections. No excessive smoothing or stock-photo polish.</p></div><div class="flashbox" id="flashbox" role="button" tabindex="0" aria-label="Fire the flash"><img src="references/photos/beach-volleyball-dive.webp" alt="A man diving for a volleyball in hard flash light" loading="lazy"><div class="fl"></div><span class="tip">Tap to fire the flash</span></div></div></section>
+    <section class="sec" id="p-composition"><h2>Let the action lead</h2><div class="princ"><div class="card rv" style="background:var(--aqua)"><span class="k" style="color:var(--deep)">Get close</span><p>Tighter framing for expressions, gestures and details.</p></div><div class="card rv" style="--d:.06s;background:var(--cream)"><span class="k" style="color:var(--brown)">Natural, not perfect</span><p>Don’t ask people to hold a smile or repeat a pose.</p></div><div class="card rv" style="--d:.12s;background:var(--green)"><span class="k" style="color:var(--ngreen)">Room for the message</span><p>Almost every image needs clear negative space for copy.</p></div><div class="card rv" style="--d:.18s;background:var(--mint)"><span class="k" style="color:var(--deep)">Capture the action</span><p>Movement, interaction and transitions, not props.</p></div></div><p class="intro">Cast for variety, not stereotypes: people aged 45+ to 60+ in different activities.</p></section>
+    <section class="sec" id="p-principles"><h2>Capture people. Don’t manufacture happiness.</h2><div class="do-dont"><div class="dd y rv"><b>✓ Do</b><p>Action, expressions, gestures, imperfect moments, spontaneous faces and personal stories.</p></div><div class="dd n rv" style="--d:.1s"><b>✕ Don’t</b><p>Generic smiles, forced pack presentation, extreme stunts or over-directed portraits.</p></div></div></section>
+  </article><aside class="toc"></aside></div>
+
+  <!-- PRODUCT -->
+  <div class="page" data-view="product" data-group="identity" data-title="Product imagery"><article>
+    <header class="phead"><p class="eyebrow">Visual identity</p><h1>Product imagery</h1><p class="lede">Make the pack the hero, then show the pill.</p><span class="ref">Brand book pp. 53–57</span></header>
+    <section class="sec" id="pr-pack"><h2>Make the pack the hero</h2><div class="prod-hero"><div class="prod-photo rv-mask"><img class="par" data-speed="0.1" src="references/photos/pack-tennis-court.webp" alt="Man in tennis whites holding the VitaePro pack" loading="lazy"></div><div class="order" style="margin:0"><div class="rv"><b>Pack first</b><span>Keep the branded pack accurate, fully recognisable and visually prominent.</span></div><div class="rv"><b>Focus</b><span>In product-led imagery the pack is the sharpest element.</span></div><div class="rv"><b>Context</b><span>Simple, carefully chosen backgrounds and controlled lighting.</span></div></div></div></section>
+    <section class="sec" id="pr-studio"><h2>Studio backgrounds</h2><div class="cards c2"><div class="media rv-mask" style="aspect-ratio:16/8"><img src="references/photos/pack-studio-wide.webp" alt="VitaePro pack on a teal studio sweep" loading="lazy"></div><div class="media rv-mask" style="--d:.1s;aspect-ratio:16/8"><img src="references/photos/pack-pills-studio-wide.webp" alt="VitaePro pack and capsules on a teal studio sweep" loading="lazy"></div></div></section>
+    <section class="sec" id="pr-pill"><h2>Don’t stop at the packaging</h2><p class="intro">Give the pill a visible role in the imagery. The product belongs in life, not just a studio. Think creative.</p><div class="cards c2"><div class="media par-wrap rv-mask" style="aspect-ratio:4/5"><img class="par" data-speed="0.08" src="references/photos/pill-tennis-court.webp" alt="Tennis player holding a capsule" loading="lazy"></div><div class="media par-wrap rv-mask" style="--d:.1s;aspect-ratio:4/5"><img class="par" data-speed="-0.08" src="references/photos/capsules-pattern-mint.webp" alt="Capsules in rows on mint" loading="lazy"></div></div></section>
+  </article><aside class="toc"></aside></div>
+
+  <!-- ICONS -->
+  <div class="page" data-view="iconography" data-group="identity" data-title="Iconography"><article>
+    <header class="phead"><p class="eyebrow">Visual identity</p><h1>Iconography</h1><p class="lede">Hand-drawn simplicity. Select an icon to copy its SVG.</p><span class="ref">Brand book pp. 58–60</span></header>
+    <section class="sec" id="i-set"><h2>The icon set</h2><p class="intro">A simple, hand-drawn one-line style with a consistent stroke width and a playful, informal character. Brand colours are allowed depending on placement and background.</p>
+      <div class="icon-colour" role="group" aria-label="Preview icon colour"><span class="muted" style="font-size:.85rem;margin-right:6px">Preview colour</span><button type="button" style="background:var(--teal)" data-c="#007D8F" aria-label="Teal" aria-pressed="true"></button><button type="button" style="background:var(--deep)" data-c="#006878" aria-label="Deep teal" aria-pressed="false"></button><button type="button" style="background:#333" data-c="#333333" aria-label="Charcoal" aria-pressed="false"></button><button type="button" style="background:var(--ngreen)" data-c="#4F925F" aria-label="Natural green" aria-pressed="false"></button></div>
+      <div class="icons" id="icons">
+        <button class="ic" type="button" data-src="references/icons/muscles-moving.svg"><span class="g"></span>Muscles that keep you moving</button>
+        <button class="ic" type="button" data-src="references/icons/immune-system.svg"><span class="g"></span>A strong immune system</button>
+        <button class="ic" type="button" data-src="references/icons/energy.svg"><span class="g"></span>Energy for everyday life</button>
+        <button class="ic" type="button" data-src="references/icons/joint-comfort.svg"><span class="g"></span>Everyday joint comfort</button>
+        <button class="ic" type="button" data-src="references/icons/healthy-heart.svg"><span class="g"></span>A healthy heart</button>
+        <button class="ic" type="button" data-src="references/icons/muscles-joints.svg"><span class="g"></span>Specifically for muscles &amp; joints</button>
+        <button class="ic" type="button" data-src="references/icons/nordic-science.svg"><span class="g"></span>Backed by Nordic science</button>
+        <button class="ic" type="button" data-src="references/icons/trusted-users.svg"><span class="g"></span>Trusted by 200,000+ daily users</button>
+        <button class="ic" type="button" data-src="references/icons/muscles.svg"><span class="g"></span>Muscles</button>
+        <button class="ic" type="button" data-src="references/icons/cartilage.svg"><span class="g"></span>Cartilage</button>
+        <button class="ic" type="button" data-src="references/icons/memory.svg"><span class="g"></span>Memory</button>
+        <button class="ic" type="button" data-src="references/icons/mood.svg"><span class="g"></span>Mood</button>
+        <button class="ic" type="button" data-src="references/icons/nervous-system.svg"><span class="g"></span>Nervous system</button>
+        <button class="ic" type="button" data-src="references/icons/antioxidant.svg"><span class="g"></span>Antioxidant</button>
+        <button class="ic" type="button" data-src="references/icons/blood-clotting.svg"><span class="g"></span>Blood clotting</button>
+        <button class="ic" type="button" data-src="references/icons/skin.svg"><span class="g"></span>Skin</button>
+        <button class="ic" type="button" data-src="references/icons/face.svg"><span class="g"></span>Face</button>
+        <button class="ic" type="button" data-src="references/icons/teeth.svg"><span class="g"></span>Teeth</button>
+        <button class="ic" type="button" data-src="references/icons/phone.svg"><span class="g"></span>Phone</button>
+        <button class="ic" type="button" data-src="references/icons/mail.svg"><span class="g"></span>Mail</button>
+      </div></section>
+  </article><aside class="toc"></aside></div>
+
+  <!-- IN ACTION -->
+  <div class="page" data-view="in-action" data-group="action" data-title="Brand in action"><article>
+    <header class="phead"><p class="eyebrow">In action</p><h1>Brand in action</h1><p class="lede">Use a moment of participation to build the brand. In conversion layouts, make the product, proof and offer clear.</p><span class="ref">Brand book pp. 16–17, 26, 45, 60</span></header>
+    <section class="sec" id="a-brand"><h2>Brand storytelling</h2><p class="intro">Mother campaign. The brand idea takes centre stage. No product claims or price.</p><div class="cont-demo">
+      <div class="ad rv"><img src="references/photos/swimmer-mid-stroke.webp" alt="Swimmer mid-stroke" loading="lazy"><div class="kl"></div><p class="hl" style="margin:0">Don’t live <span class="acc">stiff</span></p><div class="wm" style="background:#2b6f86"><img src="references/logo/vitaepro-logo-white.svg" alt="VitaePro"></div></div>
+      <div class="ad rv" style="--d:.08s"><img src="references/photos/zipline-forest.webp" alt="Woman on a zipline" loading="lazy"><p class="hl" style="margin:0;top:12%;bottom:auto">Say <span class="acc">yes</span><br>to things you<br>love doing</p><div class="wm" style="left:auto;right:8%;transform:none;bottom:6%"><img src="references/logo/vitaepro-logo-white.svg" alt="VitaePro"></div></div>
+      <div class="ad rv" style="--d:.16s"><img src="references/photos/ice-bath-ladder.webp" alt="Woman leaving an ice bath" loading="lazy"><div class="kl g"></div><p class="hl" style="margin:0">Not done<br><span class="acc">yet</span></p><div class="wm" style="background:#5d7f8c"><img src="references/logo/vitaepro-logo-white.svg" alt="VitaePro"></div></div>
+    </div></section>
+    <section class="sec" id="a-conversion"><h2>Conversion</h2><p class="intro">Child campaign. Product, proof and offer take the lead. One accent only.</p><div class="cont-demo">
+      <div class="ad rv" style="background:var(--teal)"><img src="references/photos/pack-studio-portrait.webp" alt="VitaePro pack on teal" loading="lazy"><div class="kl"></div><div class="leaf" style="left:10%;top:9%;background:var(--lime);color:var(--deep)"><div><small>First package</small><b>99<sup>kr</sup></b></div></div><div class="gift"><span class="acc">+Gift</span><span>Muskelkrem</span></div><div class="wm" style="background:#0c6773"><img src="references/logo/vitaepro-logo-white.svg" alt="VitaePro"></div></div>
+      <div class="ad rv" style="--d:.08s"><img src="references/photos/pack-tennis-court.webp" alt="Man holding the VitaePro pack" loading="lazy"><div style="position:absolute;left:9%;top:9%;display:flex;flex-direction:column;gap:6px;align-items:flex-start"><span style="background:var(--green);color:var(--deep);border-radius:999px;padding:5px 12px;font-size:.72rem;font-weight:600">Muscles that keep you moving</span><span style="background:var(--green);color:var(--deep);border-radius:999px;padding:5px 12px;font-size:.72rem;font-weight:600">Everyday joint comfort</span></div><div class="wm" style="left:auto;right:8%;transform:none;bottom:6%"><img src="references/logo/vitaepro-logo-white.svg" alt="VitaePro"></div></div>
+      <div class="ad rv" style="--d:.16s;background:var(--night)"><img src="references/photos/capsules-pattern-mint.webp" alt="Capsules on mint" loading="lazy" style="opacity:.9"><div style="position:absolute;left:8%;right:8%;bottom:8%;background:var(--night);color:#fff;border-radius:24px;padding:18px"><p style="margin:0;font-family:var(--f-head);font-size:1.3rem;line-height:1.1">Start with improved VitaePro</p><span style="display:inline-block;margin-top:10px;background:var(--mint);color:var(--night);border-radius:999px;padding:7px 14px;font-size:.78rem;font-weight:600">Try it now</span></div></div>
+    </div>
+    <div class="banner rv"><img src="references/photos/pack-pills-studio-wide.webp" alt="VitaePro pack and capsules on teal" loading="lazy"><div class="kl"></div><div class="txt"><h3>Summer offer: 6 weeks for half price</h3><span class="cta">Start unstiffing</span></div></div></section>
+  </article><aside class="toc"></aside></div>
+
+  <!-- ASSETS -->
+  <div class="page" data-view="assets" data-group="assets" data-title="Brand assets"><article>
+    <header class="phead"><p class="eyebrow">Assets</p><h1>Brand assets</h1><p class="lede">Production files are held by the brand team. This page lists what exists. Files are not downloadable from here.</p></header>
+    <section class="sec" id="as-files"><h2>What’s in the library</h2><div class="asset-grid">
+      <div class="asset rv"><div class="th" style="background:var(--teal);padding:14%"><img src="references/logo/vitaepro-logo-reversed.svg" alt="" style="object-fit:contain"></div><div class="bd"><h3>Wordmark</h3><p>Colour, reversed, black and white. Vector SVG.</p></div></div>
+      <div class="asset rv" style="--d:.06s"><div class="th"><img src="references/photos/tennis-reach.webp" alt="" loading="lazy"></div><div class="bd"><h3>Photography</h3><p>17 campaign and product images.</p><span class="tag">Licensed · internal use</span></div></div>
+      <div class="asset rv" style="--d:.12s"><div class="th" style="background:var(--warm);font-family:var(--f-head);font-size:4rem;color:var(--teal)">Aa<span class="acc" style="color:var(--mint);font-size:.7em">yes</span></div><div class="bd"><h3>Typefaces</h3><p>Magister, Stratos, Jaqartall.</p><span class="tag">Licensed · not for distribution</span></div></div>
+      <div class="asset rv"><div class="th" style="background:var(--tint)"><span class="leafx" style="width:46%"></span></div><div class="bd"><h3>Graphic elements</h3><p>Leaf shape, keyline, text containers.</p></div></div>
+      <div class="asset rv" style="--d:.06s"><div class="th" style="background:#EEF7F7"><img src="references/icons/muscles-moving.svg" alt="" style="width:34%;height:auto;object-fit:contain"></div><div class="bd"><h3>Icons</h3><p>20 one-line icons, SVG.</p></div></div>
+      <div class="asset rv" style="--d:.12s"><div class="th" style="background:var(--teal);color:#fff;font-family:var(--f-head);font-size:2rem">Brand book</div><div class="bd"><h3>Brand book 2026</h3><p>61 pages, the full guidelines.</p></div></div>
+    </div></section>
+  </article><aside class="toc"></aside></div>
+
+  </main>
+</div>
 
 <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Chapters" hidden>
-  <button class="ib close" type="button" id="menu-close" aria-label="Close chapter menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <button class="btn-ic x" type="button" id="menu-close" aria-label="Close chapters"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   <div class="in"><h2>Chapters</h2><ol id="menu-list"></ol></div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 (function(){
-  var deck=document.getElementById('deck'),steps=[].slice.call(document.querySelectorAll('.step'));
-  var counter=document.getElementById('counter'),prog=document.getElementById('progress'),root=document.documentElement;
-  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var root=document.documentElement,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(!reduce)root.classList.add('has-motion');
-  var pad=function(n){return(n<10?'0':'')+n},current=0;
-  function setCur(i){current=i;counter.textContent=pad(i+1)+' / '+pad(steps.length);prog.style.width=((i+1)/steps.length*100)+'%';root.setAttribute('data-tone',steps[i].classList.contains('teal')?'teal':'light')}
-  setCur(0);steps[0].classList.add('seen');
+  var $=function(s,c){return(c||document).querySelector(s)},$$=function(s,c){return[].slice.call((c||document).querySelectorAll(s))};
+  var clamp=function(v){return v<0?0:v>1?1:v},vh=innerHeight;
 
-  var menu=document.getElementById('menu'),list=document.getElementById('menu-list');
-  steps.forEach(function(s,i){var li=document.createElement('li');li.innerHTML='<a href="#'+s.id+'"><span>'+pad(i+1)+'</span>'+s.dataset.title+'</a>';list.appendChild(li)});
-  function openMenu(){menu.hidden=false;[].forEach.call(list.querySelectorAll('a'),function(a,i){a.setAttribute('aria-current',i===current?'true':'false')});var a=list.querySelectorAll('a')[current];a&&a.focus()}
-  function closeMenu(){menu.hidden=true;document.getElementById('menu-open').focus()}
-  document.getElementById('menu-open').addEventListener('click',openMenu);
-  document.getElementById('menu-close').addEventListener('click',closeMenu);
+  /* ── routing ── */
+  var GROUPS={brand:{t:'Brand',pages:['strategy','voice']},identity:{t:'Visual identity',pages:['logo','colours','typography','graphics','photography','product','iconography']},action:{t:'In action',pages:['in-action']},assets:{t:'Assets',pages:['assets']}};
+  var pages=$$('.page'),byId={};pages.forEach(function(p){byId[p.dataset.view]=p});
+  var order=['strategy','voice','logo','colours','typography','graphics','photography','product','iconography','in-action','assets'];
+  var ov=$('[data-view="overview"]'),portal=$('[data-portal]'),subnav=$('#subnav'),current='overview';
 
-  function go(id,smooth){var el=document.getElementById(id);if(!el||!el.classList.contains('step'))return;deck.scrollTo({top:el.offsetTop,behavior:(smooth&&!reduce)?'smooth':'auto'})}
-  document.addEventListener('click',function(e){var a=e.target.closest('a[href^="#"]');if(!a)return;var id=a.getAttribute('href').slice(1);if(document.getElementById(id)){e.preventDefault();menu.hidden=true;go(id,true);try{history.replaceState(null,'','#'+id)}catch(_){}}});
-  window.addEventListener('hashchange',function(){go(location.hash.slice(1),true)});
-  if(location.hash)setTimeout(function(){go(location.hash.slice(1),false)},60);
-
-  var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('seen');if(en.intersectionRatio>.5)setCur(steps.indexOf(en.target))}})},{root:deck,threshold:[.12,.55]});
-  steps.forEach(function(s){io.observe(s)});
-
-  document.addEventListener('keydown',function(e){
-    if(!menu.hidden){if(e.key==='Escape')closeMenu();return}
-    if(['ArrowDown','PageDown',' '].indexOf(e.key)>-1&&current<steps.length-1){e.preventDefault();go(steps[current+1].id,true)}
-    if(['ArrowUp','PageUp'].indexOf(e.key)>-1&&current>0){e.preventDefault();go(steps[current-1].id,true)}
-    if(e.key==='Home'){e.preventDefault();go(steps[0].id,true)}
-    if(e.key==='End'){e.preventDefault();go(steps[steps.length-1].id,true)}
+  // build TOCs + pager
+  pages.forEach(function(p){
+    var toc=$('.toc',p),hs=$$('.sec',p);
+    toc.innerHTML='<b>On this page</b>'+hs.map(function(s){return'<a href="#'+p.dataset.view+'" data-sec="'+s.id+'">'+$('h2',s).textContent+'</a>'}).join('');
+    var i=order.indexOf(p.dataset.view),pv=order[i-1],nx=order[i+1],h='';
+    if(pv)h+='<a href="#'+pv+'"><small>← Previous</small><span>'+byId[pv].dataset.title+'</span></a>';
+    if(nx)h+='<a class="nx" href="#'+nx+'"><small>Next →</small><span>'+byId[nx].dataset.title+'</span></a>';
+    var pg=document.createElement('nav');pg.className='pager';pg.setAttribute('aria-label','Next and previous');pg.innerHTML=h;$('article',p).appendChild(pg);
   });
+  document.addEventListener('click',function(e){var a=e.target.closest('a[data-sec]');if(!a)return;e.preventDefault();var s=document.getElementById(a.dataset.sec);s&&s.scrollIntoView({behavior:reduce?'auto':'smooth'})});
 
-  var t=document.getElementById('toast'),tt;
-  function toast(m){t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},1800)}
-  var fs=document.getElementById('fs');
-  fs.addEventListener('click',function(){try{if(!document.fullscreenElement){var p=root.requestFullscreen();p&&p.catch&&p.catch(function(){toast('Fullscreen isn’t available here')})}else document.exitFullscreen()}catch(_){toast('Fullscreen isn’t available here')}});
-  document.addEventListener('fullscreenchange',function(){var on=!!document.fullscreenElement;fs.setAttribute('aria-pressed',on);fs.setAttribute('aria-label',on?'Exit fullscreen':'Enter fullscreen')});
+  function show(view){
+    if(view!=='overview'&&!byId[view])view='overview';
+    current=view;
+    var isOv=view==='overview';
+    ov.hidden=!isOv;portal.hidden=isOv;
+    pages.forEach(function(p){p.hidden=p.dataset.view!==view});
+    if(!isOv){
+      var g=byId[view].dataset.group;
+      $$('.rail a').forEach(function(a){a.setAttribute('aria-current',a.dataset.group===g?'true':'false')});
+      subnav.innerHTML='<h4>'+GROUPS[g].t+'</h4>'+GROUPS[g].pages.map(function(id){return'<a href="#'+id+'"'+(id===view?' aria-current="true"':'')+'>'+byId[id].dataset.title+'</a>'}).join('');
+      $$('.rv,.rv-mask,[data-io]',byId[view]).forEach(function(el){io.observe(el)});
+      if(view==='logo')buildLogo();
+      if(view==='iconography')loadIcons();
+    }
+    window.scrollTo(0,0);measure();
+    $$('#menu-list a').forEach(function(a){a.setAttribute('aria-current',a.getAttribute('href')==='#'+view?'true':'false')});
+  }
+  function route(){show((location.hash||'#overview').slice(1)||'overview')}
+  addEventListener('hashchange',route);
 
-  function copy(text,ok){try{navigator.clipboard.writeText(text).then(function(){toast(ok)},function(){toast('Copy is blocked here')})}catch(_){toast('Copy is blocked here')}}
-  [].forEach.call(document.querySelectorAll('.sw'),function(b){b.addEventListener('click',function(){copy(b.dataset.hex,'Copied '+b.dataset.hex)})});
+  /* ── reveals ── */
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -10% 0px',threshold:.06});
+  $$('.rv,.rv-mask',ov).forEach(function(el){io.observe(el)});
+  ['#hier','#icons','#leafrow','#pills','#stage'].forEach(function(s){var el=$(s);if(el)el.setAttribute('data-io','')});
 
-  // icons: load the official SVGs, recolour through currentColor
-  [].forEach.call(document.querySelectorAll('.ic'),function(b){
-    fetch(b.dataset.src).then(function(r){return r.text()}).then(function(svg){
-      b._svg=svg;b.querySelector('.g').innerHTML=svg.replace(/#33333\d|#343332/gi,'currentColor').replace(/fill="white"/g,'fill="#fff"');
-      var s=b.querySelector('svg');if(s){s.removeAttribute('width');s.removeAttribute('height');s.setAttribute('aria-hidden','true')}
-    }).catch(function(){});
-    b.addEventListener('click',function(){if(b._svg)copy(b._svg,b.textContent.trim()+' icon copied as SVG')});
-  });
+  /* ── overview words ── */
+  var words=$('#words');(function(){var out=[];words.childNodes.forEach(function(n){var hl=n.nodeType===1;n.textContent.split(/(\s+)/).forEach(function(t){if(!t)return;out.push(/^\s+$/.test(t)?t:'<span class="w'+(hl?' hl':'')+'">'+t+'</span>')})});words.innerHTML=out.join('')})();
+  var wordEls=$$('.w',words);
+
+  /* ── menu ── */
+  var menu=$('#menu'),list=$('#menu-list');
+  var chapters=[['overview','Overview']].concat(order.map(function(id){return[id,byId[id].dataset.title]}));
+  list.innerHTML=chapters.map(function(c,i){return'<li style="--i:'+i+'"><a href="#'+c[0]+'"><span>'+(i<9?'0':'')+(i+1)+'</span>'+c[1]+'</a></li>'}).join('');
+  function openMenu(){menu.hidden=false;var a=$('a[aria-current="true"]',list)||$('a',list);a.focus()}
+  function closeMenu(){menu.hidden=true;$('#menu-open').focus()}
+  $('#menu-open').addEventListener('click',openMenu);$('#menu-close').addEventListener('click',closeMenu);
+  list.addEventListener('click',function(){menu.hidden=true});
+
+  /* ── search ── */
+  var idx=[];pages.forEach(function(p){idx.push({v:p.dataset.view,t:p.dataset.title,g:GROUPS[p.dataset.group].t,txt:p.textContent.toLowerCase()});$$('.sec',p).forEach(function(s){idx.push({v:p.dataset.view,t:$('h2',s).textContent,g:p.dataset.title,sec:s.id,txt:s.textContent.toLowerCase()})})});
+  var q=$('#q'),res=$('#results'),sel=0;
+  function renderRes(){var v=q.value.trim().toLowerCase();if(!v){res.hidden=true;return}
+    var hits=idx.filter(function(e){return e.t.toLowerCase().indexOf(v)>-1||e.txt.indexOf(v)>-1}).sort(function(a,b){return(b.t.toLowerCase().indexOf(v)>-1)-(a.t.toLowerCase().indexOf(v)>-1)}).slice(0,8);
+    res.hidden=false;sel=0;res.innerHTML=hits.length?hits.map(function(h,i){return'<a href="#'+h.v+'" data-go="'+(h.sec||'')+'"'+(i===0?' class="sel"':'')+'><small>'+h.g+'</small>'+h.t+'</a>'}).join(''):'<div class="none">No matches for “'+q.value.replace(/[<&]/g,'')+'”</div>'}
+  q.addEventListener('input',renderRes);
+  q.addEventListener('keydown',function(e){var as=$$('a',res);if(!as.length)return;if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();sel=(sel+(e.key==='ArrowDown'?1:-1)+as.length)%as.length;as.forEach(function(a,i){a.classList.toggle('sel',i===sel)})}if(e.key==='Enter'){e.preventDefault();as[sel].click()}if(e.key==='Escape'){res.hidden=true}});
+  res.addEventListener('click',function(e){var a=e.target.closest('a');if(!a)return;e.preventDefault();var go=a.dataset.go;location.hash=a.getAttribute('href');res.hidden=true;q.value='';q.blur();if(go)setTimeout(function(){var s=document.getElementById(go);s&&s.scrollIntoView({behavior:reduce?'auto':'smooth'})},60)});
+  document.addEventListener('click',function(e){if(!e.target.closest('.search'))res.hidden=true});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!menu.hidden)closeMenu();if(e.key==='/'&&document.activeElement===document.body){e.preventDefault();q.focus()}});
+  $$('[data-scroll]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();$(a.getAttribute('href')).scrollIntoView({behavior:reduce?'auto':'smooth'})})});
+
+  /* ── scroll engine ── */
+  var barp=$('#barp'),hero=$('#hero'),stages=$$('#stages li'),track=$('#track'),flash=$('#flash'),flashed=false,mx=0,lastY=scrollY,vel=0;
+  function measure(){vh=innerHeight;if(track&&!ov.hidden)track.style.setProperty('--dist',Math.max(0,track.scrollWidth-innerWidth)+'px')}
+  addEventListener('resize',measure);
+  function frame(){
+    var y=scrollY,doc=root.scrollHeight-vh;barp.style.transform='scaleX('+(doc>0?y/doc:0)+')';
+    vel+=((y-lastY)-vel)*.1;lastY=y;
+    var scope=current==='overview'?ov:byId[current];
+    if(current==='overview'){
+      root.classList.toggle('on-hero',hero.getBoundingClientRect().bottom>70);
+      $$('[data-pin]',ov).forEach(function(p){var r=p.getBoundingClientRect(),len=r.height-vh,v=len>0?clamp(-r.top/len):0;p.style.setProperty('--p',v.toFixed(4));
+        if(p.hasAttribute('data-enemy')){var k=Math.min(2,Math.floor(v*3.2));stages.forEach(function(li,j){li.classList.toggle('on',j<=k)})}
+        if(p.hasAttribute('data-reel')){if(r.top<vh*.3&&r.bottom>0&&!flashed&&!reduce){flashed=true;flash.classList.add('go')}if(r.top>vh){flashed=false;flash.classList.remove('go')}}});
+      var wr=words.getBoundingClientRect(),wp=clamp((vh*.88-wr.top)/(wr.height+vh*.35)),lit=Math.round(wp*wordEls.length*1.05);
+      for(var j=0;j<wordEls.length;j++)wordEls[j].style.opacity=j<lit?1:.14;
+    } else {
+      root.classList.remove('on-hero');
+      var kl=$('#kl',scope);if(kl){var kr=kl.getBoundingClientRect();kl.style.setProperty('--p',clamp((vh-kr.top)/(vh*.8+kr.height*.3)).toFixed(4))}
+      // toc scrollspy
+      var toc=$$('.toc a',scope),secs=$$('.sec',scope),on=0;secs.forEach(function(s,i){if(s.getBoundingClientRect().top<vh*.35)on=i});toc.forEach(function(a,i){a.classList.toggle('on',i===on)});
+    }
+    if(!reduce){
+      $$('.par',scope).forEach(function(el){var b=el.getBoundingClientRect();if(b.bottom<-200||b.top>vh+200)return;var c=b.top+b.height/2-vh/2;el.style.transform='translate3d(0,'+(c*-parseFloat(el.dataset.speed||0)).toFixed(1)+'px,0)'});
+      mx+=1.1+Math.min(12,Math.abs(vel)*.35);
+      if(current==='overview')$$('[data-marquee]',ov).forEach(function(m){var half=m.scrollWidth/2,x=(mx*(m.dataset.dir==='-1'?-1:1))%half;if(x>0)x-=half;m.style.transform='translate3d('+x.toFixed(1)+'px,0,0)'});
+    }
+    requestAnimationFrame(frame);
+  }
+
+  /* ── personality peek ── */
+  var peek=$('#peek'),pimg=$('#peek-img');
+  $$('#plist li').forEach(function(li){li.addEventListener('mouseenter',function(){pimg.src=li.dataset.img;peek.classList.add('on')});li.addEventListener('mouseleave',function(){peek.classList.remove('on')})});
+  addEventListener('mousemove',function(e){peek.style.left=e.clientX+'px';peek.style.top=e.clientY+'px'});
+
+  /* ── logo stage ── */
+  var logoBuilt=false;
+  function buildLogo(){if(logoBuilt)return;logoBuilt=true;var lg=$('#lg');
+    fetch('references/logo/vitaepro-logo-reversed.svg').then(function(r){return r.text()}).then(function(svg){
+      lg.insertAdjacentHTML('afterbegin',svg);var s=$('svg',lg);s.removeAttribute('width');s.removeAttribute('height');
+      $$('path',s).map(function(p){return{p:p,x:p.getBBox().x}}).sort(function(a,b){return a.x-b.x}).forEach(function(o,i){var leaf=/8DD3D3/i.test(o.p.getAttribute('fill'));o.p.classList.add(leaf?'lf':'lt');o.p.style.transformBox='fill-box';o.p.style.transformOrigin='center';o.p.style.transitionDelay=(leaf?.9:i*.06)+'s'});
+    }).catch(function(){lg.insertAdjacentHTML('afterbegin','<img src="references/logo/vitaepro-logo-reversed.svg" alt="VitaePro">')});
+  }
+  $('#cs-toggle').addEventListener('change',function(){$('#stage').classList.toggle('show',this.checked)});
+
+  /* ── copy ── */
+  var t=$('#toast'),tt;function toast(m){t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},1800)}
+  function copy(x,ok){try{navigator.clipboard.writeText(x).then(function(){toast(ok)},function(){toast('Copy is blocked here')})}catch(_){toast('Copy is blocked here')}}
+  $$('[data-hex]').forEach(function(b){b.addEventListener('click',function(){copy(b.dataset.hex,'Copied '+b.dataset.hex)})});
+
+  /* ── type tester ── */
+  var live=$('#live'),hint=$('#hint'),edited=false;live.addEventListener('input',function(){edited=true});
+  var samples={head:'92 % opplever virkning på muskler og ledd*',body:'VitaePro is now improved with a new formulation for muscles.',acc:'stiff · yes · +Gift'};
+  var hints={head:'Magister: headlines only. Click the line to type your own.',body:'Stratos: body, product info, UI and labels. A stand-in is shown until the Stratos files are added.',acc:'Jaqartall: one or two words only. Never prices, claims or essential information.'};
+  $$('.tabs button').forEach(function(b){b.addEventListener('click',function(){$$('.tabs button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});live.dataset.f=b.dataset.f;if(!edited)live.textContent=samples[b.dataset.f];hint.textContent=hints[b.dataset.f]})});
+
+  /* ── flash ── */
+  var fb=$('#flashbox');function fire(){fb.classList.remove('pop');void fb.offsetWidth;fb.classList.add('pop','lit');$('.tip',fb).textContent='Direct flash: defined highlights and shadows'}
+  fb.addEventListener('click',fire);fb.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fire()}});
+
+  /* ── icons ── */
+  var iconsLoaded=false,iconColour='#007D8F';
+  function loadIcons(){if(iconsLoaded)return;iconsLoaded=true;
+    $$('.ic').forEach(function(b,i){
+      fetch(b.dataset.src).then(function(r){return r.text()}).then(function(svg){b._svg=svg;var g=$('.g',b);g.innerHTML=svg.replace(/#33333\d|#343332/gi,'currentColor');var s=$('svg',g);if(!s)return;s.removeAttribute('width');s.removeAttribute('height');s.setAttribute('aria-hidden','true');
+        $$('path,circle,line,polyline,ellipse,rect',s).forEach(function(p){if(p.getAttribute('stroke')){p.setAttribute('pathLength','1');p.setAttribute('data-draw','');p.style.setProperty('--d',(i*.05)+'s')}})}).catch(function(){});
+      b.addEventListener('click',function(){if(b._svg)copy(b._svg.replace(/#33333\d|#343332/gi,iconColour),b.textContent.trim()+' icon copied as SVG')});
+    });
+  }
+  $$('.icon-colour button').forEach(function(btn){btn.addEventListener('click',function(){iconColour=btn.dataset.c;$$('.icon-colour button').forEach(function(x){x.setAttribute('aria-pressed',x===btn)});$$('.ic .g').forEach(function(g){g.style.color=iconColour})})});
+
+  route();requestAnimationFrame(frame);
 })();
 </script>
