@@ -542,7 +542,6 @@ body::before{background:var(--teal)}
         <li class="rv" data-img="references/photos/ice-bath-ladder.webp"><span class="n">05</span><b>Playful</b><span class="d">A giggle, not a joke at anyone’s expense.</span></li>
       </ul>
     </div>
-    <div class="peek" id="peek"><img alt="" id="peek-img"></div>
   </section>
 
   <section class="pin enemy" data-pin data-enemy style="height:320vh">
@@ -899,9 +898,6 @@ body::before{background:var(--teal)}
   }
 
   /* ── personality peek ── */
-  var peek=$('#peek'),pimg=$('#peek-img');
-  $$('#plist li').forEach(function(li){li.addEventListener('mouseenter',function(){pimg.src=li.dataset.img;peek.classList.add('on')});li.addEventListener('mouseleave',function(){peek.classList.remove('on')})});
-  addEventListener('mousemove',function(e){peek.style.left=e.clientX+'px';peek.style.top=e.clientY+'px'});
 
   /* ── logo stage ── */
   var logoBuilt=false;
