@@ -263,12 +263,21 @@ body::before{background:var(--teal)}
 .ex:hover .arrow{transform:rotate(-45deg);background:var(--mint);color:var(--night)}
 .ex.wide{grid-column:span 2}
 @media (max-width:860px){.explore{grid-template-columns:1fr}.ex.wide{grid-column:auto}}
-.close{background:var(--teal);color:#fff;overflow:hidden;text-align:center;padding-top:clamp(100px,16vh,180px)}
-.close .big{font-size:clamp(4rem,14vw,14rem);line-height:.9;letter-spacing:-.04em}
-.close .big .acc{color:var(--mint);font-size:1.15em}
-.close .logo{width:min(220px,50%);margin:0 auto 40px}
-.close p{max-width:52ch;margin:40px auto 0;color:rgba(255,255,255,.8);font-size:.92rem}
-.close{padding-bottom:clamp(100px,16vh,180px)}
+.foot{background:var(--teal);color:#fff;padding-top:clamp(56px,9vh,96px);padding-bottom:calc(28px + env(safe-area-inset-bottom,0px))}
+.foot .in{max-width:1320px;margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.foot .top-row{display:grid;grid-template-columns:minmax(0,5fr) repeat(3,minmax(0,2fr));gap:clamp(24px,4vw,56px);padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.22)}
+.foot .brandcol img{width:150px;height:auto}
+.foot .brandcol .tag{font-family:var(--f-head);font-size:clamp(1.8rem,3vw,2.6rem);line-height:1;margin:22px 0 14px;color:#fff;max-width:none}
+.foot .tag .acc{color:var(--mint);font-size:1.2em}
+.foot .brandcol p{margin:0;max-width:36ch;font-size:.9rem;color:rgba(255,255,255,.78)}
+.foot h4{margin:4px 0 14px;font-size:.72rem;font-weight:700;font-stretch:72%;letter-spacing:.14em;text-transform:uppercase;color:var(--mint)}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.foot a{color:#fff;text-decoration:none;font-size:.94rem;opacity:.9}
+.foot a:hover{opacity:1;text-decoration:underline;text-underline-offset:3px}
+.foot .linkbtn{font:inherit;font-size:.94rem;background:none;border:0;padding:0;color:#fff;cursor:pointer;text-align:left;opacity:.9}
+.foot .linkbtn:hover{opacity:1;text-decoration:underline;text-underline-offset:3px}
+.foot .bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:22px;font-size:.8rem;color:rgba(255,255,255,.7)}
+@media (max-width:860px){.foot .top-row{grid-template-columns:1fr 1fr}.foot .brandcol{grid-column:1/-1}}
 
 /* ───────── page widgets ───────── */
 /* logo */
@@ -614,13 +623,6 @@ body::before{background:var(--teal)}
     </div>
   </section>
 
-  <section class="close">
-    <div class="wrap">
-      <img class="logo rv" src="references/logo/vitaepro-logo-reversed.svg" alt="VitaePro" width="220" height="49">
-      <h2 class="big rv" style="--d:.1s">Thank <span class="acc">you</span></h2>
-      <p class="rv" style="--d:.2s">Brand fonts and photography are shown for reference only. Every health-related claim, translation and testimonial must pass local compliance review.</p>
-    </div>
-  </section>
 </div>
 
 <!-- ═════════ PORTAL ═════════ -->
@@ -804,6 +806,17 @@ body::before{background:var(--teal)}
   </main>
 </div>
 
+<footer class="foot" id="footer">
+  <div class="in">
+    <div class="top-row">
+      <div class="brandcol"><img src="references/logo/vitaepro-logo-reversed.svg" alt="VitaePro" width="150" height="34"><p class="tag">Don’t live <span class="acc">stiff</span></p><p>Every health-related claim, translation and testimonial must pass local compliance review.</p></div>
+      <div><h4>Brand</h4><ul><li><a href="#overview">Overview</a></li><li><a href="#strategy">Brand strategy</a></li><li><a href="#voice">Tone of voice</a></li></ul></div>
+      <div><h4>Visual identity</h4><ul><li><a href="#logo">Logo</a></li><li><a href="#colours">Colours</a></li><li><a href="#typography">Typography</a></li><li><a href="#graphics">Graphic elements</a></li><li><a href="#photography">Photography</a></li><li><a href="#product">Product imagery</a></li><li><a href="#iconography">Iconography</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="#in-action">Brand in action</a></li><li><a href="#assets">Brand assets</a></li><li><button type="button" class="linkbtn" data-book hidden>Brand book (PDF)</button></li></ul></div>
+    </div>
+    <div class="bottom"><span>VitaePro brand guidelines · 2026 edition</span><span>Brand fonts and photography are licensed for reference only</span></div>
+  </div>
+</footer>
 <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Chapters" hidden>
   <button class="btn-ic x" type="button" id="menu-close" aria-label="Close chapters"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   <div class="in"><h2>Chapters</h2><ol id="menu-list"></ol></div>
