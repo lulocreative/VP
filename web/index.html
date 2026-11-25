@@ -210,7 +210,8 @@ body::before{background:var(--teal)}
 .enemy .sticky{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);align-items:center;gap:clamp(20px,5vw,80px);padding-left:var(--gL);padding-right:var(--gR);max-width:1320px;margin:0 auto}
 .orb-wrap{position:relative;aspect-ratio:1;width:min(100%,62vh);justify-self:center;display:grid;place-items:center}
 .ring{position:absolute;inset:0;border:1.5px dashed var(--aqua);border-radius:50%}
-.orb{width:calc((1 - var(--p,0) * .78) * 100%);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#33a4b3,var(--teal) 55%,var(--deep));display:grid;place-items:center;color:#fff;text-align:center}
+.orb{width:calc((1 - var(--p,0) * .78) * 100%);aspect-ratio:1;border-radius:50%;background:linear-gradient(180deg,rgba(0,104,120,.15),rgba(0,104,120,.65)),url("references/photos/zipline-forest.webp") center/cover no-repeat;display:grid;place-items:center;color:#fff;text-align:center;box-shadow:0 30px 60px -30px rgba(0,40,48,.5);filter:saturate(calc(1 - var(--p,0) * .9))}
+.orb span{text-shadow:0 2px 14px rgba(0,0,0,.45)}
 .orb span{font-family:var(--f-head);font-size:clamp(1rem,2vw,1.6rem);opacity:calc(1 - var(--p,0) * 1.6);padding:10%}
 .stages{list-style:none;margin:36px 0 0;padding:0}
 .stages li{display:grid;grid-template-columns:54px 1fr;gap:16px;padding:18px 0;border-top:1px solid var(--rule);opacity:.28;transition:opacity .5s,transform .6s var(--ease)}
