@@ -1,0 +1,593 @@
+<title>VitaePro Visual Identity</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&display=swap">
+<style>
+/* Layout: full-screen scroll-snapped deck in the brand book's own rhythm — white content chapters with a hairline + small caps label, teal divider chapters, real photography bleeding to one edge. */
+@font-face{font-family:"Magister";src:url("fonts/R41Magister-Regular.otf") format("opentype");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Magister";src:url("fonts/R41Magister-Italic.otf") format("opentype");font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:"Magister";src:url("fonts/R41Magister-Bold.otf") format("opentype");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"Jaqartall";src:url("fonts/Jaqartall.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap}
+:root{
+  --teal:#007D8F; --deep:#006878; --aqua:#B2DCDD; --white:#FFFFFF;
+  --green:#D2F1C4; --cream:#F6EAD8; --ngreen:#4F925F; --brown:#633B37; --taupe:#AB8E77;
+  --tint:#F4FBF0; --warm:#FFFAF4; --lime:#D2EE00; --mint:#00FFB7;
+  --ink:#16302F; --ink-2:#4A5D5D; --rule:#CFCFCF; --paper:#FFFFFF; --panel:#F7F7F5;
+  --f-head:"Magister",Georgia,"Times New Roman",serif;
+  --f-body:"Stratos","Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-acc:"Jaqartall","Brush Script MT",cursive;
+  --gL:max(16px,env(safe-area-inset-left,0px)); --gR:max(16px,env(safe-area-inset-right,0px));
+  color-scheme:light;
+}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--paper)}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:4px}
+img{display:block;max-width:100%}
+.acc{font-family:var(--f-acc);font-style:normal;font-weight:400;letter-spacing:0}
+
+/* bar */
+.bar{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+  padding-block:16px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px));pointer-events:none}
+.bar>*{pointer-events:auto}
+.bar .logo{height:26px;width:auto;position:relative}
+.bar .logo img{height:26px;width:auto;transition:opacity .3s}
+.bar .logo img + img{position:absolute;inset:0;opacity:0}
+[data-tone="teal"] .bar .logo img:first-child{opacity:0}
+[data-tone="teal"] .bar .logo img + img{opacity:1}
+.actions{display:flex;gap:8px;align-items:center}
+.counter{font-size:.75rem;letter-spacing:.14em;font-variant-numeric:tabular-nums;margin-right:6px;color:var(--teal);font-weight:600;font-stretch:80%}
+[data-tone="teal"] .counter{color:var(--white)}
+.ib{width:40px;height:40px;display:grid;place-items:center;border-radius:999px;border:1px solid rgba(0,125,143,.35);background:rgba(255,255,255,.85);color:var(--teal);cursor:pointer;backdrop-filter:blur(6px)}
+.ib:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
+[data-tone="teal"] .ib{background:rgba(0,104,120,.5);color:#fff;border-color:rgba(255,255,255,.4)}
+.progress{position:fixed;left:0;bottom:env(safe-area-inset-bottom,0px);height:3px;width:0;background:var(--teal);z-index:20;transition:width .3s ease}
+[data-tone="teal"] .progress{background:var(--mint)}
+
+/* deck + chapter grammar */
+.deck{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth}
+.step{min-height:100%;scroll-snap-align:start;position:relative;display:flex;align-items:center;box-sizing:border-box;overflow:hidden;
+  padding-block:88px 64px;padding-left:var(--gL);padding-right:var(--gR)}
+.step.teal{background:var(--teal);color:var(--white)}
+.in{width:100%;max-width:1240px;margin:0 auto}
+.in>*{min-width:0}
+.label{display:block;border-top:1px solid var(--rule);padding-top:12px;margin:0 0 28px;font-size:.7rem;font-weight:700;font-stretch:72%;letter-spacing:.06em;text-transform:uppercase;color:var(--teal)}
+.teal .label{border-color:rgba(255,255,255,.35);color:var(--white)}
+h1,h2,h3{font-family:var(--f-head);font-weight:400;letter-spacing:-.01em;text-wrap:balance;margin:0;line-height:1.08}
+h2{font-size:clamp(2rem,4.2vw,3.5rem)}
+h3{font-size:clamp(1.25rem,2vw,1.6rem)}
+.lead{font-size:1.05rem;max-width:58ch;color:var(--ink-2);margin:20px 0 0}
+.teal .lead{color:rgba(255,255,255,.88)}
+.small{font-size:.86rem;color:var(--ink-2);max-width:62ch}
+.k{font-size:.68rem;font-weight:700;font-stretch:72%;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin:0 0 6px;display:block}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,5vw,72px);align-items:center}
+.split.w{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
+@media (max-width:860px){.split,.split.w{grid-template-columns:1fr}.step{padding-block:80px 56px}}
+.ph{border-radius:0;overflow:hidden;background:var(--aqua)}
+.ph img{width:100%;height:100%;object-fit:cover}
+.grid{display:grid;gap:12px}
+.card{padding:20px;min-height:120px;display:flex;flex-direction:column;justify-content:space-between;gap:10px}
+.card p{margin:0}
+.card .k{color:inherit;opacity:.85}
+
+/* cover */
+#cover{padding:0;align-items:stretch}
+.cover{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);width:100%;min-height:100%}
+.cover .copy{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:20px;padding-block:110px 70px;padding-left:var(--gL);padding-right:var(--gR)}
+.cover .copy img{width:min(200px,50%)}
+.cover h1{font-size:clamp(3.2rem,8vw,7.2rem);line-height:1;white-space:nowrap}
+.cover h1 .acc{color:var(--mint);font-size:1.12em;margin-left:.06em}
+.cover small{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;font-stretch:80%}
+.cover .ph{min-height:320px}
+@media (max-width:860px){.cover{grid-template-columns:1fr}.cover .ph{min-height:46vh;order:-1}.cover .copy{padding-block:40px 64px}}
+
+/* chapter specifics */
+.shift{grid-template-columns:1fr 1fr}
+.shift .card{min-height:200px}
+.shift .card blockquote{margin:0;font-family:var(--f-head);font-size:clamp(1.3rem,2.4vw,1.9rem);line-height:1.15}
+.trio{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:36px;gap:24px}
+.trio p{margin:0;font-size:.9rem}
+.persona{grid-template-columns:repeat(3,minmax(0,1fr))}
+.persona .card{min-height:110px}
+.persona b{font-size:.8rem;font-weight:700;font-stretch:72%;letter-spacing:.06em}
+.persona p{font-size:.88rem}
+@media (max-width:640px){.persona{grid-template-columns:1fr 1fr}.trio{grid-template-columns:1fr}.shift{grid-template-columns:1fr}}
+.stages{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:40px}
+.stages .n{font-family:var(--f-head);font-size:1.6rem;color:var(--teal);line-height:1}
+.stages p{margin:4px 0 0;font-size:.9rem}
+@media (max-width:640px){.stages{grid-template-columns:1fr}}
+.rows{display:grid;margin-top:28px}
+.rows>div{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;padding:12px 0;border-top:1px solid #e3e3e3;font-size:.92rem}
+.rows>div:last-child{border-bottom:1px solid #e3e3e3}
+.rows b{font-size:.72rem;font-weight:700;font-stretch:72%;letter-spacing:.06em;color:var(--teal);text-transform:uppercase;padding-top:3px}
+@media (max-width:520px){.rows>div{grid-template-columns:1fr;gap:2px}}
+.examples{grid-template-columns:1fr 1fr;gap:0 28px;margin-top:28px}
+.examples>div{border-top:1px solid #e3e3e3;padding:14px 0}
+.examples q{font-family:var(--f-head);font-size:1.15rem}
+.two{grid-template-columns:1fr 1fr}
+.two .card{min-height:170px}
+.two .card h3{font-size:1.4rem}
+.dodont{grid-template-columns:1fr 1fr;margin-top:18px}
+.dodont .card{min-height:110px}
+@media (max-width:640px){.two,.dodont,.examples{grid-template-columns:1fr}}
+
+/* logo */
+.lv{grid-template-columns:repeat(4,minmax(0,1fr));gap:0}
+.lv div{aspect-ratio:1;display:grid;place-items:center;padding:16%}
+.lv img{width:100%}
+.misuse{grid-template-columns:1fr 1fr;gap:0 28px;margin-top:28px}
+.misuse>div{border-top:1px solid #e3e3e3;padding:14px 0}
+.misuse p{margin:0;font-size:.88rem}
+@media (max-width:640px){.lv{grid-template-columns:1fr 1fr}.misuse{grid-template-columns:1fr}}
+.safe{position:relative;display:inline-block;padding:clamp(18px,3.4vw,40px);outline:1px solid rgba(0,125,143,.55);max-width:100%;box-sizing:border-box}
+.safe img{width:min(460px,62vw);outline:1px dashed rgba(0,125,143,.55)}
+.safe .x{position:absolute;font-family:var(--f-head);font-style:italic;color:var(--teal);font-size:.9rem}
+.safe .x.t{top:4px;left:50%}.safe .x.b{bottom:4px;left:50%}.safe .x.l{left:8px;top:45%}.safe .x.r{right:8px;top:45%}
+.mins{grid-template-columns:1fr 1fr;margin-top:32px;gap:24px}
+.mins .demo{border-top:1px solid #e3e3e3;border-bottom:1px solid #e3e3e3;padding:18px 0;display:grid;place-items:center}
+
+/* colour */
+.sw{border:0;font:inherit;text-align:left;cursor:pointer;padding:12px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;min-height:120px;color:var(--ink);transition:transform .2s ease}
+.sw:hover{transform:translateY(-3px)}
+.sw b{font-size:.82rem;font-weight:600}
+.sw code{font-family:var(--f-body);font-size:.72rem;font-weight:500;font-stretch:80%;letter-spacing:.04em;opacity:.9}
+.sw.dk{color:#fff}
+.pal{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.pal .sw{min-height:clamp(120px,22vh,200px)}
+.sup{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:10px}
+.accents{grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.accents .wrapc{display:grid;grid-template-columns:110px 1fr;gap:14px;padding:10px;align-items:stretch;color:#fff;font-size:.82rem}
+.accents .wrapc p{margin:0;align-self:center}
+.ratio{display:grid;grid-template-columns:6fr 3fr 1fr;margin-top:18px;height:58px}
+.ratio div{display:flex;align-items:center;padding:0 12px;font-family:var(--f-head);font-size:1.3rem;color:#fff}
+.ratio div:nth-child(2){color:var(--deep)}
+.ratio div:nth-child(3){background:linear-gradient(var(--lime) 50%,var(--mint) 50%);color:var(--deep);padding:0 6px;font-size:1rem}
+@media (max-width:760px){.pal{grid-template-columns:1fr 1fr}.sup{grid-template-columns:repeat(3,minmax(0,1fr))}.accents{grid-template-columns:1fr}}
+.toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:.88rem;opacity:0;transition:.25s ease;z-index:40;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* type */
+.tspec{grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
+.tspec>div{border-top:1px solid #e3e3e3;padding:18px 18px 18px 0;display:flex;flex-direction:column;gap:12px}
+.tspec .mag{font-family:var(--f-head);font-size:clamp(1.6rem,2.8vw,2.3rem);line-height:1.1}
+.tspec .str{font-size:.95rem;max-width:36ch}
+.tspec .jaq{font-family:var(--f-acc);font-size:clamp(2.6rem,5vw,3.8rem);color:var(--teal);line-height:1}
+@media (max-width:760px){.tspec{grid-template-columns:1fr}}
+.pairing{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:26px;border-top:1px solid #e3e3e3;border-bottom:1px solid #e3e3e3}
+.pairing>div{padding:26px 14px;display:grid;place-items:center;text-align:center;color:var(--teal);border-left:1px solid #e3e3e3}
+.pairing>div:first-child{border-left:0}
+.pairing .h{font-family:var(--f-head);font-size:1.6rem;line-height:1.1}
+.pairing .h i{font-weight:700}
+.pairing .h .acc{font-size:1.5em}
+.pairing .pill{display:inline-flex;align-items:center;gap:8px}
+.pairing .pill .acc{font-size:2rem}
+.pairing .pill span:last-child{background:var(--teal);color:#fff;border-radius:999px;padding:4px 12px;font-size:.75rem}
+@media (max-width:640px){.pairing{grid-template-columns:1fr}.pairing>div{border-left:0;border-top:1px solid #e3e3e3}.pairing>div:first-child{border-top:0}}
+
+/* graphic assets */
+.leaf{background:var(--teal);color:#fff;border-radius:0 72% 0 72%;aspect-ratio:1.45;display:grid;place-items:center;text-align:center}
+.leaf small{display:block;font-size:.72rem}
+.leaf .p{font-family:var(--f-head);font-size:clamp(2.4rem,4vw,3.4rem);line-height:1}
+.leaf .p sup{font-size:.45em}
+.assets3{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:end}
+.assets3 .ph{aspect-ratio:3/4;position:relative}
+.assets3 .ph .leaf{position:absolute;left:-6%;top:-4%;width:46%;background:var(--teal)}
+.keyline-demo{position:relative;height:min(54vh,470px);min-height:300px;overflow:hidden}
+.keyline-demo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.keyline-demo .kl{position:absolute;inset:6%;border:4px solid rgba(255,255,255,.95);border-radius:clamp(22px,4vw,48px)}
+.keyline-demo .kl-wm{position:absolute;left:50%;bottom:calc(6% - 9px);transform:translateX(-50%);background:var(--teal);padding:0 10px}
+.keyline-demo .kl-wm img{height:16px;width:auto}
+.keyline-demo .hl{position:absolute;left:12%;bottom:15%;font-family:var(--f-head);color:#fff;font-size:clamp(1.3rem,2.4vw,1.9rem);line-height:1;text-shadow:0 2px 14px rgba(0,0,0,.35)}
+.keyline-demo .hl .acc{color:var(--mint)}
+.quote{position:absolute;left:8%;top:8%;font-family:var(--f-head);font-style:italic;color:#fff;font-size:clamp(1rem,1.8vw,1.35rem);line-height:1.1;max-width:8ch;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.pills{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.pills span{align-self:flex-start;border-radius:999px;background:var(--green);color:var(--deep);font-size:.8rem;padding:6px 14px}
+@media (max-width:760px){.assets3{grid-template-columns:1fr 1fr}.assets3>:last-child{grid-column:1/-1}}
+
+/* photography */
+.mosaic{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;height:min(64vh,560px)}
+.mosaic .ph:first-child{grid-row:1/3}
+.principles{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:22px}
+.principles .card{min-height:140px;font-size:.82rem}
+.principles .card:nth-child(1){background:var(--aqua)}.principles .card:nth-child(2){background:var(--cream)}.principles .card:nth-child(3){background:var(--green)}.principles .card:nth-child(4){background:var(--mint)}
+@media (max-width:760px){.mosaic{grid-template-columns:1fr 1fr;height:auto}.mosaic .ph{aspect-ratio:1}.mosaic .ph:first-child{grid-column:1/-1;grid-row:auto;aspect-ratio:4/3}.principles{grid-template-columns:1fr 1fr}}
+
+/* product */
+.prod{grid-template-columns:5fr 4fr 3fr;gap:8px;height:min(62vh,540px)}
+.prod .ph{height:100%}
+@media (max-width:760px){.prod{grid-template-columns:1fr 1fr;height:auto}.prod .ph{aspect-ratio:3/4}.prod .ph:first-child{grid-column:1/-1;aspect-ratio:4/3}}
+
+/* icons */
+.icons{grid-template-columns:repeat(5,minmax(0,1fr));gap:22px 14px;margin-top:30px}
+.ic{background:none;border:0;cursor:pointer;font:inherit;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;font-size:.78rem;line-height:1.25;padding:6px;border-radius:12px}
+.ic .g{width:clamp(56px,7vw,84px);aspect-ratio:1;color:#333}
+.ic .g svg{width:100%;height:100%}
+.ic:hover .g,.ic:focus-visible .g{color:var(--teal)}
+.icons-alt{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.icons-alt .g{width:38px;color:var(--teal)}
+@media (max-width:640px){.icons{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* thank you */
+#thanks .in{text-align:center;display:grid;justify-items:center;gap:22px}
+#thanks img{width:min(220px,50%)}
+#thanks h2{font-size:clamp(3.2rem,8vw,7rem)}
+#thanks h2 .acc{color:var(--mint);font-size:1.1em}
+.note{font-size:.78rem;color:rgba(255,255,255,.75);max-width:52ch}
+
+/* menu */
+.menu{position:fixed;inset:0;z-index:50;background:var(--teal);color:#fff;overflow-y:auto;
+  padding-block:calc(env(safe-area-inset-top,0px) + 80px) 40px;padding-left:var(--gL);padding-right:var(--gR)}
+.menu .in{max-width:1100px}
+.menu ol{list-style:none;margin:20px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;column-gap:48px}
+.menu a{display:flex;gap:16px;align-items:baseline;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.25);color:#fff;text-decoration:none;font-family:var(--f-head);font-size:clamp(1.1rem,2vw,1.5rem)}
+.menu a span{font-family:var(--f-body);font-size:.72rem;font-weight:600;font-stretch:80%;letter-spacing:.1em;width:2.2em;color:var(--mint);font-variant-numeric:tabular-nums}
+.menu a:hover,.menu a[aria-current="true"]{color:var(--mint)}
+.menu .close{position:fixed;top:calc(env(safe-area-inset-top,0px) + 16px);right:max(24px,env(safe-area-inset-right,0px));background:rgba(0,104,120,.6);color:#fff;border-color:rgba(255,255,255,.4)}
+@media (max-width:640px){.menu ol{grid-template-columns:1fr}}
+
+.rv{transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.has-motion .step:not(.seen) .rv{opacity:.001;transform:translateY(22px)}
+@media (prefers-reduced-motion:reduce){.deck{scroll-behavior:auto}.rv{transition:none}.has-motion .step:not(.seen) .rv{opacity:1;transform:none}}
+</style>
+
+<header class="bar">
+  <a class="logo" href="#cover" aria-label="VitaePro, back to cover"><img src="references/logo/vitaepro-logo-colour.svg" alt="VitaePro" width="116" height="26"><img src="references/logo/vitaepro-logo-white.svg" alt="" width="116" height="26"></a>
+  <div class="actions">
+    <span class="counter" id="counter">01 / 18</span>
+    <button class="ib" type="button" id="fs" aria-label="Enter fullscreen" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5"/></svg></button>
+    <button class="ib" type="button" id="menu-open" aria-label="Open chapter menu" aria-haspopup="dialog"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></button>
+  </div>
+</header>
+<div class="progress" id="progress"></div>
+
+<main class="deck" id="deck" aria-label="VitaePro brand presentation">
+
+<section class="step teal" id="cover" data-title="Don’t live stiff">
+  <div class="cover">
+    <div class="copy rv">
+      <img src="references/logo/vitaepro-logo-reversed.svg" alt="VitaePro" width="200" height="45">
+      <h1>Don’t live <span class="acc">stiff</span></h1>
+      <small>Brand guidelines 2026</small>
+    </div>
+    <div class="ph"><img src="references/photos/swimmer-mid-stroke.webp" alt="A swimmer in goggles caught mid-stroke, mouth open for breath" fetchpriority="high"></div>
+  </div>
+</section>
+
+<section class="step" id="manifesto" data-title="The manifesto">
+  <div class="in split">
+    <div class="rv"><span class="label">The manifesto</span><h2>Life happens<br>in motion.</h2><p class="lead">We choose participation over sitting it out. Not because every day is extraordinary, but because ordinary life is worth showing up for.</p><p class="small" style="margin-top:28px">These guidelines turn <b>Don’t live stiff</b> into a consistent and recognisable world across film, photography, digital, product and everyday communications. One system. Many moments.</p></div>
+    <div class="ph rv" style="aspect-ratio:4/5"><img src="references/photos/zipline-forest.webp" alt="A woman in a helmet laughing on a zipline between pine trees" loading="lazy"></div>
+  </div>
+</section>
+
+<section class="step" id="shift" data-title="The shift">
+  <div class="in">
+    <span class="label">The shift</span>
+    <h2 class="rv">From what the product does<br>to what life feels like</h2>
+    <div class="grid shift rv" style="margin-top:36px">
+      <div class="card" style="background:var(--panel)"><span class="k">Before</span><blockquote>“My body works”</blockquote><p class="small">Functional support. Claim-led.</p></div>
+      <div class="card" style="background:var(--aqua)"><span class="k">After</span><blockquote>“Life feels full of opportunity”</blockquote><p class="small" style="color:var(--deep)">Human relevance. Freedom. Participation.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="purpose" data-title="Purpose, vision & promise">
+  <div class="in split w">
+    <div class="rv">
+      <span class="label">Brand purpose</span>
+      <h2>For bodies that still have things to do</h2>
+      <p class="lead">Our purpose is to keep the possibility of participating in everyday life emotionally present. We sell a product. The brand stands for the life around it.</p>
+      <div class="grid trio">
+        <div><span class="k">Vision</span><p>To become the brand people think of when they choose to keep showing up.</p></div>
+        <div><span class="k">Promise</span><p>The life you want to keep living.</p></div>
+        <div><span class="k">The human · product · brand</span><p>“I’m not done yet.” Support for muscles and joints, relevant to an active, unrestricted life.</p></div>
+      </div>
+    </div>
+    <div class="ph rv" style="aspect-ratio:4/5"><img src="references/photos/ice-bath-ladder.webp" alt="A woman climbing out of an ice-hole bath down a wooden ladder, shouting with the cold" loading="lazy"></div>
+  </div>
+</section>
+
+<section class="step" id="personality" data-title="Brand personality">
+  <div class="in">
+    <span class="label">Brand personality</span>
+    <h2 class="rv">Five behaviours. One attitude.</h2>
+    <div class="grid persona rv" style="margin-top:36px">
+      <div class="card" style="background:var(--cream)"><b>HUMAN</b><p>Real people. Real expressions.</p></div>
+      <div class="card" style="background:var(--aqua)"><b>ACTIVE</b><p>We capture the motion.</p></div>
+      <div class="card" style="background:var(--green)"><b>OPEN</b><p>Freedom, not restriction.</p></div>
+      <div class="card" style="background:var(--aqua)"><b>CONFIDENT</b><p>Assured, never aggressive.</p></div>
+      <div class="card" style="background:var(--cream)"><b>PLAYFUL</b><p>A giggle, not a joke at anyone’s expense.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="platform" data-title="What “Don’t live stiff” means">
+  <div class="in split">
+    <div class="rv">
+      <span class="label">The communication platform</span>
+      <h2>What “Don’t live <i>stiff</i>” means</h2>
+      <p class="lead" style="color:var(--ink);font-size:1.25rem">It’s an attitude towards life.</p>
+      <p class="small" style="margin-top:14px">Not a promise to eliminate physical stiffness. Not a claim that ageing stops. It is a refusal to let routine, hesitation or the challenges of life define who we are.</p>
+      <div class="grid stages">
+        <div><span class="n">1</span><span class="k">Everyday life</span><p>When ordinary things start requiring more effort.</p></div>
+        <div><span class="n">2</span><span class="k">Participation</span><p>When it’s easier to sit things out than join in.</p></div>
+        <div><span class="n">3</span><span class="k">Mindset</span><p>When “maybe later” slowly becomes “probably not”.</p></div>
+      </div>
+      <p class="small" style="margin-top:10px">Name the enemy: the stages of a life that is getting smaller.</p>
+    </div>
+    <div class="ph rv" style="aspect-ratio:4/5"><img src="references/photos/fly-fishing-splash.webp" alt="A woman in a teal jacket casting a fly-fishing line through sparkling spray" loading="lazy"></div>
+  </div>
+</section>
+
+<section class="step" id="payoff" data-title="The payoff">
+  <div class="in split w">
+    <div class="rv"><span class="label">The payoff</span><h2>Not done yet. The joy of still saying <i>yes.</i></h2><p class="lead">We celebrate the feeling, not the performance. There is no single definition of an active life, no ideal activity level and no one kind of person.</p></div>
+    <div class="ph rv" style="aspect-ratio:4/5"><img src="references/photos/hiker-laughing-rain.webp" alt="A woman in a rain jacket laughing on a hike, hand at her hood" loading="lazy"></div>
+  </div>
+</section>
+
+<section class="step" id="voice" data-title="Tone of voice">
+  <div class="in split">
+    <div class="rv">
+      <span class="label">Tone of voice</span>
+      <h2>Speak like a person with plans: clear, human and full of life</h2>
+      <div class="rows">
+        <div><b>Human</b><span>Use everyday language. Write as people speak, not as brands present themselves.</span></div>
+        <div><b>Grounded</b><span>Respect real life, ageing and physical limitations.</span></div>
+        <div><b>Confident</b><span>Make clear statements. Avoid lecturing or pushiness.</span></div>
+        <div><b>Open</b><span>Invite rather than instruct. Use encouraging language.</span></div>
+        <div><b>Playful</b><span>Surprise and wit are welcome. Never make someone’s age, body or limitations the joke.</span></div>
+      </div>
+    </div>
+    <div class="rv">
+      <span class="label">Writing examples</span>
+      <h3>Clear. Human. Worth reading.</h3>
+      <div class="grid examples">
+        <div><span class="k">Brand storytelling</span><q>Don’t live stiff</q></div>
+        <div><span class="k">Relevance</span><q>Say yes to things you love doing</q></div>
+        <div><span class="k">Product consideration</span><q>Support for muscles and joints</q></div>
+        <div><span class="k">Conversion</span><q>Start with improved VitaePro</q></div>
+      </div>
+      <p class="small" style="margin-top:14px">The message adapts by stage of the funnel. Brand storytelling should not start with a discount. Conversion can.</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="campaign" data-title="Campaign architecture">
+  <div class="in">
+    <span class="label">Campaign architecture</span>
+    <div class="split" style="align-items:start">
+      <div class="rv">
+        <h2>One world. Two jobs.</h2>
+        <div class="grid two" style="margin-top:28px">
+          <div class="card" style="background:var(--aqua)"><span class="k" style="color:var(--deep)">Mother campaign</span><h3>Create demand</h3><p class="small" style="color:var(--deep)">Lead with the brand belief. Build an emotional connection. No product claims or price promotions.</p></div>
+          <div class="card" style="background:var(--panel)"><span class="k">Child / conversion</span><h3>Capture demand</h3><p class="small">Turn interest into action. Product benefits, proof and a reason to buy take the lead.</p></div>
+        </div>
+      </div>
+      <div class="rv">
+        <h2>Stay accurate</h2>
+        <p class="lead">Every health-related claim, translation and testimonial must pass local compliance review.</p>
+        <div class="grid dodont">
+          <div class="card" style="background:var(--aqua)"><span class="k" style="color:var(--deep)">Do</span><p class="small" style="color:var(--deep)">“I still have plans.” Only approved statements about what the product supports.</p></div>
+          <div class="card" style="background:var(--cream)"><span class="k" style="color:var(--brown)">Don’t</span><p class="small" style="color:var(--brown)">Reverse ageing. Eliminate stiffness. Get your old body back.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="logo" data-title="The wordmark">
+  <div class="in">
+    <span class="label">Primary logo</span>
+    <div class="split" style="align-items:start">
+      <div class="rv"><h2>The wordmark stands on its own</h2><p class="lead">The fixed container has been removed. Clear space and sufficient contrast keep the logo clear and legible. Use the version that gives enough contrast. Black and white are for special circumstances only.</p></div>
+      <div class="rv">
+        <div class="grid lv">
+          <div style="background:#fff;outline:1px solid #eee;outline-offset:-1px"><img src="references/logo/vitaepro-logo-colour.svg" alt="Colour wordmark" loading="lazy"></div>
+          <div style="background:var(--teal)"><img src="references/logo/vitaepro-logo-reversed.svg" alt="Reversed wordmark on teal" loading="lazy"></div>
+          <div style="background:#fff;outline:1px solid #eee;outline-offset:-1px"><img src="references/logo/vitaepro-logo-black.svg" alt="Black wordmark" loading="lazy"></div>
+          <div style="background:#000"><img src="references/logo/vitaepro-logo-white.svg" alt="White wordmark on black" loading="lazy"></div>
+        </div>
+        <h3 style="margin-top:30px">Do not make the logo stiff again</h3>
+        <div class="grid misuse">
+          <div><span class="k">No containers</span><p>Don’t place the logo inside containers or borders.</p></div>
+          <div><span class="k">Don’t distort</span><p>Never stretch, skew or rotate it. Vertical use is fine on packaging and merchandise.</p></div>
+          <div><span class="k">Ensure contrast</span><p>Don’t place it on a background where it disappears.</p></div>
+          <div><span class="k">No effects</span><p>No shadow, glow or decorative strokes.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="safe-space" data-title="Safe space & size">
+  <div class="in split">
+    <div class="rv"><span class="label">Logo safe space</span><h2>Give the wordmark room to breathe</h2><p class="lead">The more the better. Minimum safe space is the width of the registration mark on every side.</p>
+      <div class="grid mins">
+        <div><span class="k">Digital</span><div class="demo"><img src="references/logo/vitaepro-logo-colour.svg" alt="Wordmark at 160 px minimum digital size" width="160" height="36"></div><p class="small" style="margin-top:8px">Minimum 160 × 35 px</p></div>
+        <div><span class="k">Print</span><div class="demo"><img src="references/logo/vitaepro-logo-colour.svg" alt="Wordmark at minimum print size" style="width:12mm;min-width:46px"></div><p class="small" style="margin-top:8px">Minimum 12 mm wide</p></div>
+      </div>
+    </div>
+    <div class="rv" style="display:grid;place-items:center"><div class="safe"><span class="x t">x</span><span class="x b">x</span><span class="x l">x</span><span class="x r">x</span><img src="references/logo/vitaepro-logo-colour.svg" alt="Wordmark inside its safe-space guides" loading="lazy"></div></div>
+  </div>
+</section>
+
+<section class="step" id="colours" data-title="Colours">
+  <div class="in">
+    <span class="label">Colours · select a swatch to copy its HEX</span>
+    <div class="split" style="align-items:end;margin-bottom:22px"><h2 class="rv">Turquoise leads</h2><p class="small rv" style="margin:0">A recognisable primary palette. Supporting tones create range, and accents add controlled energy. Dominance matters more than variety: 60 % primary, 30 % support, one accent at 10 %.</p></div>
+    <div class="rv">
+      <div class="grid pal">
+        <button class="sw dk" style="background:var(--teal)" data-hex="#007D8F"><b>VitaePro Teal</b><code>#007D8F</code></button>
+        <button class="sw dk" style="background:var(--deep)" data-hex="#006878"><b>Deep Teal</b><code>#006878</code></button>
+        <button class="sw" style="background:var(--aqua)" data-hex="#B2DCDD"><b>Light Aqua</b><code>#B2DCDD</code></button>
+        <button class="sw" style="background:#fff;outline:1px solid #e3e3e3;outline-offset:-1px" data-hex="#FFFFFF"><b>Pure White</b><code>#FFFFFF</code></button>
+      </div>
+      <div class="grid sup">
+        <button class="sw" style="background:var(--green)" data-hex="#D2F1C4"><b>Light Green</b><code>#D2F1C4</code></button>
+        <button class="sw" style="background:var(--cream)" data-hex="#F6EAD8"><b>Cream</b><code>#F6EAD8</code></button>
+        <button class="sw dk" style="background:var(--ngreen)" data-hex="#4F925F"><b>Natural Green</b><code>#4F925F</code></button>
+        <button class="sw dk" style="background:var(--brown)" data-hex="#633B37"><b>Brown</b><code>#633B37</code></button>
+        <button class="sw dk" style="background:var(--taupe)" data-hex="#AB8E77"><b>Taupe</b><code>#AB8E77</code></button>
+      </div>
+      <div class="grid accents">
+        <div class="wrapc" style="background:var(--teal)"><button class="sw" style="background:var(--lime);min-height:84px" data-hex="#D2EE00"><b>Lime</b><code>#D2EE00</code></button><p>Use against teal. Signals an offer, price or campaign.</p></div>
+        <div class="wrapc" style="background:#1D4A55"><button class="sw" style="background:var(--mint);min-height:84px" data-hex="#00FFB7"><b>Mint</b><code>#00FFB7</code></button><p>Use against dark backgrounds. Call to action.</p></div>
+      </div>
+      <div class="ratio" aria-label="Colour hierarchy: 60 percent primary, 30 percent support, 10 percent one accent"><div style="background:var(--teal)">60%</div><div style="background:var(--green)">30%</div><div>10%</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="typography" data-title="Typography">
+  <div class="in">
+    <span class="label">Typography</span>
+    <h2 class="rv">Two core typefaces. One supporting accent.</h2>
+    <div class="grid tspec rv" style="margin-top:30px">
+      <div><span class="k">Magister · headlines</span><p class="mag" style="margin:0">92 % opplever virkning på muskler og ledd*</p><p class="small" style="margin:0">Expressive and emotional. Use it to lead stories, never for functional or technical copy.</p></div>
+      <div><span class="k">Stratos · body</span><p class="str" style="margin:0">VitaePro is now improved with a new formulation for muscles. The supplement has helped hundreds of thousands for over 20 years.</p><p class="small" style="margin:0">Functional clarity for body text, product info, UI and labels.</p></div>
+      <div><span class="k">Jaqartall · accent</span><p class="jaq" style="margin:0">stiff · yes</p><p class="small" style="margin:0">One or two words only. Never for prices, claims, long phrases or essential information.</p></div>
+    </div>
+    <div class="pairing rv">
+      <div><p class="h" style="margin:0">Don’t live <span class="acc">stiff</span></p></div>
+      <div><p class="h" style="margin:0;font-size:1.35rem">A <i>new</i> formula,<br>refined over years</p></div>
+      <div><span class="pill"><span class="acc">+Gift</span><span>Velkomstgave</span></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="graphics" data-title="Graphic assets">
+  <div class="in">
+    <span class="label">The graphic assets</span>
+    <div class="split" style="align-items:end;margin-bottom:26px"><h2 class="rv">Organic shapes that make the brand feel unstiff</h2><p class="small rv" style="margin:0">The leaf is based on the VitaePro leaf and can frame a price or offer. The keyline is a framing device, not a logo container: never use it only to frame the wordmark. Quotes and fully rounded text containers organise key information.</p></div>
+    <div class="grid assets3 rv">
+      <div>
+        <div class="leaf" style="width:72%"><div><small>First package</small><span class="p">9<sup>90</sup></span></div></div>
+        <span class="k" style="margin-top:14px">Leaf for price and offers</span>
+        <div class="pills"><span>Muscles that keep you moving</span><span>Everyday joint comfort</span><span>A healthy heart</span></div>
+      </div>
+      <div class="keyline-demo"><img src="references/photos/fishing-catch.webp" alt="A woman holding up a freshly caught fish against blue sky" loading="lazy"><div class="kl"></div><p class="hl" style="margin:0">Don’t live <span class="acc">stiff</span></p><div class="kl-wm"><img src="references/logo/vitaepro-logo-white.svg" alt="VitaePro"></div></div>
+      <div class="keyline-demo"><img src="references/photos/tennis-reach.webp" alt="A man in a cap stretching for a tennis ball on a clay court" loading="lazy"><p class="quote" style="margin:0">Muskler og ledd henger med.</p><div class="kl" style="border-color:var(--green)"></div><div class="kl-wm"><img src="references/logo/vitaepro-logo-white.svg" alt="VitaePro"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="photography" data-title="Photography">
+  <div class="in">
+    <span class="label">Photography</span>
+    <div class="split" style="align-items:end;margin-bottom:20px"><h2 class="rv">Not a beautiful pose. A beautiful moment.</h2><p class="small rv" style="margin:0">Catch life in the act: genuine intention, purposeful action, unposed moments. Direct flash, so it looks immediate, candid and unpolished by design. Cast people aged 45+ to 60+, for variety, not stereotypes.</p></div>
+    <div class="mosaic rv">
+      <div class="ph"><img src="references/photos/beach-volleyball-dive.webp" alt="A man diving for a volleyball on a sandy beach in hard flash light" loading="lazy"></div>
+      <div class="ph"><img src="references/photos/tennis-forehand-wide.webp" alt="A man hitting a forehand on a clay court" loading="lazy"></div>
+      <div class="ph"><img src="references/photos/trail-runner-motion.webp" alt="A trail runner blurred with motion" loading="lazy"></div>
+      <div class="ph"><img src="references/photos/fishing-catch.webp" alt="A woman reaching out with a caught fish" loading="lazy"></div>
+      <div class="ph"><img src="references/photos/tennis-run.webp" alt="A man running for a ball on a clay court" loading="lazy"></div>
+    </div>
+    <div class="grid principles rv">
+      <div class="card"><span class="k" style="color:var(--deep)">Get close</span>Move in for expressions, gestures and details.</div>
+      <div class="card"><span class="k" style="color:var(--brown)">Natural, not perfect</span>Don’t ask people to hold a smile.</div>
+      <div class="card"><span class="k" style="color:var(--ngreen)">Room for the message</span>Leave clear negative space for copy.</div>
+      <div class="card"><span class="k" style="color:var(--deep)">Capture the action</span>Movement, interaction, transitions.</div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="product" data-title="Product">
+  <div class="in">
+    <span class="label">Product: pack and pills</span>
+    <div class="split" style="align-items:end;margin-bottom:20px"><h2 class="rv">Make the pack the hero. Then show the pill.</h2><p class="small rv" style="margin:0">Keep the pack accurate, recognisable and the sharpest element in the frame. Use simple backgrounds and controlled light. The product belongs in life, not just the studio. Give the pill a visible role and capture interaction.</p></div>
+    <div class="grid prod rv">
+      <div class="ph"><img src="references/photos/pack-tennis-court.webp" alt="A smiling man in tennis whites holding the VitaePro pack towards the camera on a blue court" loading="lazy"></div>
+      <div class="ph"><img src="references/photos/pill-tennis-court.webp" alt="A tennis player holding a VitaePro capsule and pack on court" loading="lazy"></div>
+      <div class="ph"><img src="references/photos/capsules-pattern-mint.webp" alt="Rows of red VitaePro capsules on a mint background" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="iconography" data-title="Iconography">
+  <div class="in">
+    <span class="label">Iconography · select an icon to copy its SVG</span>
+    <div class="split" style="align-items:end"><h2 class="rv">Hand-drawn simplicity</h2><p class="small rv" style="margin:0">A simple, hand-drawn one-line style with a consistent stroke width and a playful, informal character. Brand colours are allowed, depending on placement and background.</p></div>
+    <div class="grid icons rv" id="icons">
+      <button class="ic" type="button" data-src="references/icons/muscles-moving.svg"><span class="g"></span>Muscles that keep you moving</button>
+      <button class="ic" type="button" data-src="references/icons/immune-system.svg"><span class="g"></span>A strong immune system</button>
+      <button class="ic" type="button" data-src="references/icons/energy.svg"><span class="g"></span>Energy for everyday life</button>
+      <button class="ic" type="button" data-src="references/icons/joint-comfort.svg"><span class="g"></span>Everyday joint comfort</button>
+      <button class="ic" type="button" data-src="references/icons/healthy-heart.svg"><span class="g"></span>A healthy heart</button>
+      <button class="ic" type="button" data-src="references/icons/muscles-joints.svg"><span class="g"></span>Specifically for muscles &amp; joints</button>
+      <button class="ic" type="button" data-src="references/icons/nordic-science.svg"><span class="g"></span>Backed by Nordic science</button>
+      <button class="ic" type="button" data-src="references/icons/trusted-users.svg"><span class="g"></span>Trusted by 200,000+ daily users</button>
+      <button class="ic" type="button" data-src="references/icons/memory.svg"><span class="g"></span>Memory</button>
+      <button class="ic" type="button" data-src="references/icons/antioxidant.svg"><span class="g"></span>Antioxidant</button>
+    </div>
+  </div>
+</section>
+
+<section class="step teal" id="thanks" data-title="Thank you">
+  <div class="in rv">
+    <img src="references/logo/vitaepro-logo-reversed.svg" alt="VitaePro" width="220" height="49">
+    <h2>Thank <span class="acc">you</span></h2>
+    <p class="note">Every health-related claim, translation and testimonial must pass local compliance review. Brand fonts and photography are shown here for reference only.</p>
+  </div>
+</section>
+</main>
+
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Chapters" hidden>
+  <button class="ib close" type="button" id="menu-close" aria-label="Close chapter menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <div class="in"><h2>Chapters</h2><ol id="menu-list"></ol></div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var deck=document.getElementById('deck'),steps=[].slice.call(document.querySelectorAll('.step'));
+  var counter=document.getElementById('counter'),prog=document.getElementById('progress'),root=document.documentElement;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduce)root.classList.add('has-motion');
+  var pad=function(n){return(n<10?'0':'')+n},current=0;
+  function setCur(i){current=i;counter.textContent=pad(i+1)+' / '+pad(steps.length);prog.style.width=((i+1)/steps.length*100)+'%';root.setAttribute('data-tone',steps[i].classList.contains('teal')?'teal':'light')}
+  setCur(0);steps[0].classList.add('seen');
+
+  var menu=document.getElementById('menu'),list=document.getElementById('menu-list');
+  steps.forEach(function(s,i){var li=document.createElement('li');li.innerHTML='<a href="#'+s.id+'"><span>'+pad(i+1)+'</span>'+s.dataset.title+'</a>';list.appendChild(li)});
+  function openMenu(){menu.hidden=false;[].forEach.call(list.querySelectorAll('a'),function(a,i){a.setAttribute('aria-current',i===current?'true':'false')});var a=list.querySelectorAll('a')[current];a&&a.focus()}
+  function closeMenu(){menu.hidden=true;document.getElementById('menu-open').focus()}
+  document.getElementById('menu-open').addEventListener('click',openMenu);
+  document.getElementById('menu-close').addEventListener('click',closeMenu);
+
+  function go(id,smooth){var el=document.getElementById(id);if(!el||!el.classList.contains('step'))return;deck.scrollTo({top:el.offsetTop,behavior:(smooth&&!reduce)?'smooth':'auto'})}
+  document.addEventListener('click',function(e){var a=e.target.closest('a[href^="#"]');if(!a)return;var id=a.getAttribute('href').slice(1);if(document.getElementById(id)){e.preventDefault();menu.hidden=true;go(id,true);try{history.replaceState(null,'','#'+id)}catch(_){}}});
+  window.addEventListener('hashchange',function(){go(location.hash.slice(1),true)});
+  if(location.hash)setTimeout(function(){go(location.hash.slice(1),false)},60);
+
+  var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('seen');if(en.intersectionRatio>.5)setCur(steps.indexOf(en.target))}})},{root:deck,threshold:[.12,.55]});
+  steps.forEach(function(s){io.observe(s)});
+
+  document.addEventListener('keydown',function(e){
+    if(!menu.hidden){if(e.key==='Escape')closeMenu();return}
+    if(['ArrowDown','PageDown',' '].indexOf(e.key)>-1&&current<steps.length-1){e.preventDefault();go(steps[current+1].id,true)}
+    if(['ArrowUp','PageUp'].indexOf(e.key)>-1&&current>0){e.preventDefault();go(steps[current-1].id,true)}
+    if(e.key==='Home'){e.preventDefault();go(steps[0].id,true)}
+    if(e.key==='End'){e.preventDefault();go(steps[steps.length-1].id,true)}
+  });
+
+  var t=document.getElementById('toast'),tt;
+  function toast(m){t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},1800)}
+  var fs=document.getElementById('fs');
+  fs.addEventListener('click',function(){try{if(!document.fullscreenElement){var p=root.requestFullscreen();p&&p.catch&&p.catch(function(){toast('Fullscreen isn’t available here')})}else document.exitFullscreen()}catch(_){toast('Fullscreen isn’t available here')}});
+  document.addEventListener('fullscreenchange',function(){var on=!!document.fullscreenElement;fs.setAttribute('aria-pressed',on);fs.setAttribute('aria-label',on?'Exit fullscreen':'Enter fullscreen')});
+
+  function copy(text,ok){try{navigator.clipboard.writeText(text).then(function(){toast(ok)},function(){toast('Copy is blocked here')})}catch(_){toast('Copy is blocked here')}}
+  [].forEach.call(document.querySelectorAll('.sw'),function(b){b.addEventListener('click',function(){copy(b.dataset.hex,'Copied '+b.dataset.hex)})});
+
+  // icons: load the official SVGs, recolour through currentColor
+  [].forEach.call(document.querySelectorAll('.ic'),function(b){
+    fetch(b.dataset.src).then(function(r){return r.text()}).then(function(svg){
+      b._svg=svg;b.querySelector('.g').innerHTML=svg.replace(/#33333\d|#343332/gi,'currentColor').replace(/fill="white"/g,'fill="#fff"');
+      var s=b.querySelector('svg');if(s){s.removeAttribute('width');s.removeAttribute('height');s.setAttribute('aria-hidden','true')}
+    }).catch(function(){});
+    b.addEventListener('click',function(){if(b._svg)copy(b._svg,b.textContent.trim()+' icon copied as SVG')});
+  });
+})();
+</script>
