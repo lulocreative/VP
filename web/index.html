@@ -65,7 +65,7 @@ h1,h2,h3{font-family:var(--f-head);font-weight:400;letter-spacing:-.02em;text-wr
 .on-hero .top{background:transparent;border-color:transparent;backdrop-filter:none}
 .on-hero .top .brand .w{opacity:1}.on-hero .top .brand .c{opacity:0}
 .on-hero .top .sep,.on-hero .top .title,.on-hero .top .tools,.on-hero .bar-p{opacity:0;pointer-events:none}
-.top .sep,.top .title,.top .tools{transition:opacity .35s}
+.top .sep,.top .title,.top .tools{transition:opacity .35s,transform .6s var(--ease)}
 /* turquoise main bar */
 .top{background:var(--teal);border-bottom-color:var(--teal);color:#fff;backdrop-filter:none}
 .top .brand .w{opacity:1}.top .brand .c{opacity:0}
@@ -78,7 +78,14 @@ h1,h2,h3{font-family:var(--f-head);font-weight:400;letter-spacing:-.02em;text-wr
 .top .btn-ic:hover{background:var(--mint);border-color:var(--mint);color:var(--night)}
 .bar-p{background:var(--mint)}
 body::before{background:var(--teal)}
+.top{background:transparent;isolation:isolate}
+.top::before{content:"";position:absolute;inset:0;background:var(--teal);transform-origin:50% 0;transition:transform .6s var(--ease);z-index:-1}
+.on-hero .top::before{transform:scaleY(0)}
+.top .title{transition-delay:.12s}.top .tools{transition-delay:.2s}.top .sep{transition-delay:.08s}
+.on-hero .top .sep,.on-hero .top .title,.on-hero .top .tools{transform:translateY(-16px);transition-delay:0s}
+.on-hero .top .sep{transform:scaleY(0)}
 .on-hero .top{background:transparent;border-color:transparent}
+@media (prefers-reduced-motion:reduce){.top::before,.top .sep,.top .title,.top .tools{transition:none}}
 @media (max-width:760px){.top .title,.top .sep,.search{display:none}}
 
 /* ───────── portal layout ───────── */
@@ -323,6 +330,44 @@ body::before{background:var(--teal)}
 .pack-dl{align-self:flex-start;margin-top:12px;display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:.85rem;font-weight:600;border-radius:999px;padding:10px 18px;cursor:pointer;border:0;background:var(--teal);color:#fff;transition:.2s}
 .pack-dl:hover{background:var(--mint);color:var(--night)}
 .pack-dl[disabled]{opacity:.6;cursor:progress}
+/* identity system anatomy */
+.sys{background:var(--warm)}
+.sys-grid{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(30px,5vw,80px);align-items:center;margin-top:50px}
+.anat{position:relative;aspect-ratio:4/5;max-height:86vh;border-radius:10px;overflow:hidden;color:#fff;isolation:isolate;box-shadow:0 40px 80px -40px rgba(0,40,48,.5)}
+.anat>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;z-index:-1}
+.anat::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,40,48,0) 45%,rgba(0,40,48,.55));z-index:-1}
+.anat .kl{position:absolute;inset:5.5%;border:3px solid rgba(255,255,255,.95);border-radius:clamp(26px,4vw,48px)}
+.anat .hl{position:absolute;left:12%;bottom:22%;font-family:var(--f-head);font-size:clamp(1.8rem,3.6vw,3.2rem);line-height:.92;margin:0}
+.anat .hl .acc{color:var(--mint);font-size:1.2em;display:inline-block;padding:0 .1em .05em 0}
+.anat .leaf{position:absolute;right:9%;top:9%;width:34%;aspect-ratio:1.35;border-radius:0 72% 0 72%;background:var(--lime);color:var(--deep);display:grid;place-items:center;text-align:center;line-height:1}
+.anat .leaf small{display:block;font-size:.66rem;font-weight:600}
+.anat .leaf b{font-family:var(--f-head);font-weight:400;font-size:clamp(1.8rem,3vw,2.6rem)}
+.anat .leaf sup{font-size:.45em}
+.anat .chip{position:absolute;left:12%;bottom:13%;background:var(--green);color:var(--deep);border-radius:999px;padding:6px 14px;font-size:.78rem;font-weight:600}
+.anat .wm{position:absolute;left:50%;bottom:calc(5.5% - 9px);transform:translateX(-50%);background:#4d7c86;padding:0 12px;height:18px}
+.anat .wm img{height:18px;width:auto}
+.anat .ic{position:absolute;left:12%;top:11%;width:clamp(44px,6vw,64px);aspect-ratio:1;background:none;padding:0;color:#fff}
+.anat .ic img{width:100%;height:100%;border-radius:50%;background:#fff}
+.mk{position:absolute;z-index:5;width:30px;height:30px;border-radius:50%;background:var(--mint);color:var(--night);font-size:.8rem;font-weight:700;display:grid;place-items:center;box-shadow:0 0 0 4px rgba(0,255,183,.25);transition:transform .35s var(--ease),opacity .3s,box-shadow .3s;cursor:default}
+.has-motion .sys-grid .mk{transform:scale(0)}
+.has-motion .sys-grid.in .mk{transform:scale(1);transition-delay:calc(.6s + var(--i) * .12s)}
+.sys-grid.focus .mk{opacity:.35}
+.sys-grid.focus .mk.on{opacity:1;transform:scale(1.25);box-shadow:0 0 0 8px rgba(0,255,183,.35);transition-delay:0s}
+.legend-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+.legend-list li{border-bottom:1px solid var(--rule)}
+.legend-list a{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:14px;align-items:baseline;padding:14px 4px;text-decoration:none;color:var(--ink);transition:background .25s,padding .35s var(--ease)}
+.legend-list a:hover,.legend-list a:focus-visible,.legend-list a.on{background:#fff;padding-left:12px}
+.legend-list .n{width:26px;height:26px;border-radius:50%;background:var(--teal);color:#fff;font-size:.75rem;font-weight:700;display:grid;place-items:center;align-self:center}
+.legend-list b{font-family:var(--f-head);font-weight:400;font-size:1.3rem;display:block;line-height:1.15}
+.legend-list span.r{display:block;font-size:.88rem;color:var(--ink-2);margin-top:2px}
+.legend-list .go{font-size:.78rem;font-weight:600;color:var(--teal);white-space:nowrap}
+.princ4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:clamp(50px,8vh,90px)}
+.princ4 div{border-radius:22px;padding:24px;background:#fff;display:flex;flex-direction:column;gap:10px;min-height:170px}
+.princ4 .num{font-family:var(--f-head);font-size:2.2rem;color:var(--teal);line-height:1}
+.princ4 h3{font-size:1.35rem}
+.princ4 p{margin:0;font-size:.92rem;color:var(--ink-2)}
+@media (max-width:900px){.sys-grid{grid-template-columns:1fr}.princ4{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.princ4{grid-template-columns:1fr}}
 .mistakes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:30px}
 .mis{display:flex;flex-direction:column;gap:12px}
 .mis .demo{aspect-ratio:4/3;border-radius:18px;background:var(--soft);display:grid;place-items:center;position:relative;overflow:hidden}
@@ -594,6 +639,33 @@ body::before{background:var(--teal)}
     </div>
   </section>
 
+  <section class="sys pad" id="vis-system">
+    <div class="wrap">
+      <p class="eyebrow rv">The visual identity system</p>
+      <h2 class="h-xl rv" style="--d:.1s;max-width:13ch">One system. Many moments.</h2>
+      <p class="lede rv" style="--d:.2s">Every piece of VitaePro communication is built from the same nine parts. Photography carries the feeling, teal frames it, type speaks, and a single accent punctuates. Hover a part to find it in the layout.</p>
+      <div class="sys-grid" id="sysgrid" data-io>
+        <div class="anat rv-mask">
+          <img src="references/photos/fishing-catch.webp" alt="Example layout: a woman holding up a fish, framed by a white keyline, with headline, offer leaf, benefit pill, icon and wordmark" loading="lazy">
+          <div class="kl"></div>
+          <span class="ic"><img src="references/icons/muscles-moving.svg" alt=""></span>
+          <div class="leaf"><div><small>First package</small><b>99<sup>kr</sup></b></div></div>
+          <p class="hl">Don’t live<br><span class="acc">stiff</span></p>
+          <span class="chip">Muscles that keep you moving</span>
+          <div class="wm"><img src="references/logo/vitaepro-logo-white.svg" alt="VitaePro"></div>
+          <span class="mk" data-k="0" style="--i:0;left:46%;top:38%" aria-hidden="true">1</span><span class="mk" data-k="1" style="--i:1;left:3%;top:46%" aria-hidden="true">2</span><span class="mk" data-k="2" style="--i:2;left:5%;bottom:30%" aria-hidden="true">3</span><span class="mk" data-k="3" style="--i:3;left:40%;bottom:23%" aria-hidden="true">4</span><span class="mk" data-k="4" style="--i:4;right:5%;top:5%" aria-hidden="true">5</span><span class="mk" data-k="5" style="--i:5;right:40%;top:16%" aria-hidden="true">6</span><span class="mk" data-k="6" style="--i:6;left:5%;bottom:11%" aria-hidden="true">7</span><span class="mk" data-k="7" style="--i:7;left:5%;top:7%" aria-hidden="true">8</span><span class="mk" data-k="8" style="--i:8;left:calc(50% - 15px);bottom:6.5%" aria-hidden="true">9</span>
+        </div>
+        <ol class="legend-list" id="legend"><li><a href="#photography" data-k="0"><span class="n">1</span><span><b>Photography</b><span class="r">The decisive moment leads. Real people 45+, direct flash, room for copy.</span></span><span class="go">See page →</span></a></li><li><a href="#graphics" data-k="1"><span class="n">2</span><span><b>Keyline</b><span class="r">Frames image and message. Radius 50–80 px, 5 px stroke, never just around the logo.</span></span><span class="go">See page →</span></a></li><li><a href="#typography" data-k="2"><span class="n">3</span><span><b>Magister headline</b><span class="r">One expressive line that leads the story.</span></span><span class="go">See page →</span></a></li><li><a href="#typography" data-k="3"><span class="n">4</span><span><b>Jaqartall accent</b><span class="r">One or two words of spontaneity. Never prices or claims.</span></span><span class="go">See page →</span></a></li><li><a href="#graphics" data-k="4"><span class="n">5</span><span><b>Organic leaf</b><span class="r">The leaf-derived shape frames price and offers.</span></span><span class="go">See page →</span></a></li><li><a href="#colours" data-k="5"><span class="n">6</span><span><b>Lime accent</b><span class="r">One accent per campaign. Lime on teal signals the offer.</span></span><span class="go">See page →</span></a></li><li><a href="#graphics" data-k="6"><span class="n">7</span><span><b>Text container</b><span class="r">Rounded pills group short benefits and key points.</span></span><span class="go">See page →</span></a></li><li><a href="#iconography" data-k="7"><span class="n">8</span><span><b>Icon</b><span class="r">Hand-drawn one-line icons at a consistent stroke.</span></span><span class="go">See page →</span></a></li><li><a href="#logo" data-k="8"><span class="n">9</span><span><b>Wordmark</b><span class="r">Stands on its own in the keyline gap, with ® clear space.</span></span><span class="go">See page →</span></a></li></ol>
+      </div>
+      <div class="princ4">
+        <div class="rv"><span class="num">60</span><h3>Turquoise leads</h3><p>60 % primary teal and white, 30 % natural support tones, 10 % one accent.</p></div>
+        <div class="rv" style="--d:.08s"><span class="num">1</span><h3>One accent per campaign</h3><p>Lime on teal for offers, or mint on dark for calls to action. Never both.</p></div>
+        <div class="rv" style="--d:.16s"><span class="num">2+1</span><h3>Two typefaces, one accent</h3><p>Magister leads, Stratos informs, Jaqartall adds one or two words.</p></div>
+        <div class="rv" style="--d:.24s"><span class="num">45+</span><h3>Real participation</h3><p>Unposed people mid-action. The product belongs in life, not just the studio.</p></div>
+      </div>
+    </div>
+  </section>
+
   <section class="pin reel" data-pin data-reel>
     <div class="sticky">
       <div class="flash" id="flash"></div>
@@ -860,7 +932,7 @@ body::before{background:var(--teal)}
       var g=byId[view].dataset.group;
       $$('.rail a').forEach(function(a){a.setAttribute('aria-current',a.dataset.group===g?'true':'false')});
       subnav.innerHTML='<h4>'+GROUPS[g].t+'</h4>'+GROUPS[g].pages.map(function(id){return'<a href="#'+id+'"'+(id===view?' aria-current="true"':'')+'>'+byId[id].dataset.title+'</a>'}).join('');
-      $$('.rv,.rv-mask,[data-io]',byId[view]).forEach(function(el){io.observe(el)});
+      $$('.rv,.rv-mask,[data-io]',byId[view]).forEach(watch);
       if(view==='logo')buildLogo();
       if(view==='iconography')loadIcons();
     }
@@ -871,8 +943,10 @@ body::before{background:var(--teal)}
   addEventListener('hashchange',route);
 
   /* ── reveals ── */
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -10% 0px',threshold:.06});
-  $$('.rv,.rv-mask',ov).forEach(function(el){io.observe(el)});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var t=e.target;(t._masks||[]).forEach(function(m){m.classList.add('in')});if(!t._masks||t.hasAttribute('data-io'))t.classList.add('in');io.unobserve(t)}})},{rootMargin:'0px 0px -10% 0px',threshold:.06});
+  /* a fully masked element has no visible area, so watch its parent and reveal the masks inside it */
+  function watch(el){if(el.classList.contains('rv-mask')){var par=el.parentElement;(par._masks=par._masks||[]).push(el);io.observe(par)}else io.observe(el)}
+  $$('.rv,.rv-mask',ov).forEach(watch);
   ['#hier','#icons','#leafrow','#pills','#stage'].forEach(function(s){var el=$(s);if(el)el.setAttribute('data-io','')});
 
   /* ── overview words ── */
@@ -1029,6 +1103,13 @@ body::before{background:var(--teal)}
           .then(function(){b.disabled=false})});
     });
   });
+
+
+  /* identity system: link legend to markers */
+  var sg=$('#sysgrid');if(sg){var lg=$$('#legend a'),mks=$$('.mk',sg);
+    function hi(k){sg.classList.toggle('focus',k!=null);mks.forEach(function(m){m.classList.toggle('on',m.dataset.k===k)});lg.forEach(function(a){a.classList.toggle('on',a.dataset.k===k)})}
+    lg.forEach(function(a){a.addEventListener('mouseenter',function(){hi(a.dataset.k)});a.addEventListener('focus',function(){hi(a.dataset.k)});a.addEventListener('mouseleave',function(){hi(null)});a.addEventListener('blur',function(){hi(null)})});
+    io.observe(sg);}
 
   route();requestAnimationFrame(frame);
 })();
