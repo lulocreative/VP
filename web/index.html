@@ -212,7 +212,17 @@ body::before{background:var(--teal)}
 .enemy .sticky{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);align-items:center;gap:clamp(20px,5vw,80px);padding-left:var(--gL);padding-right:var(--gR);max-width:1320px;margin:0 auto}
 .orb-wrap{position:relative;aspect-ratio:1;width:min(100%,62vh);justify-self:center;display:grid;place-items:center}
 .ring{position:absolute;inset:0;border:1.5px dashed var(--aqua);border-radius:50%}
-.orb{width:calc((1 - var(--p,0) * .78) * 100%);aspect-ratio:1;border-radius:50%;background:linear-gradient(180deg,rgba(0,104,120,.15),rgba(0,104,120,.65)),url("references/photos/zipline-forest.webp") center/cover no-repeat;display:grid;place-items:center;color:#fff;text-align:center;box-shadow:0 30px 60px -30px rgba(0,40,48,.5);filter:saturate(calc(1 - var(--p,0) * .9))}
+.orb{width:calc((1 - var(--p,0) * .78) * 100%);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;color:#fff;text-align:center;box-shadow:0 30px 60px -30px rgba(0,40,48,.5);}
+.orb::before{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(180deg,rgba(0,104,120,.15),rgba(0,104,120,.65)),url("references/photos/zipline-forest.webp") center/cover no-repeat;filter:saturate(calc(1 - var(--p,0) * .9))}
+.orb{position:relative;overflow:hidden;aspect-ratio:calc(1 - max(0, var(--p,0) - .55) * 1.04);transform:rotate(calc(max(0, var(--p,0) - .55) * -30deg))}
+.orb .pill{position:absolute;inset:0;z-index:1;border-radius:50%;opacity:calc((var(--p,0) - .55) * 3);
+  background:
+   radial-gradient(ellipse 22% 12% at 30% 14%,rgba(255,255,255,.75),rgba(255,255,255,0) 70%),
+   radial-gradient(ellipse 8% 5% at 24% 64%,rgba(255,255,255,.35),rgba(255,255,255,0) 70%),
+   radial-gradient(ellipse 55% 60% at 72% 55%,rgba(122,24,30,.9),rgba(122,24,30,0) 70%),
+   linear-gradient(100deg,#2a0608 0%,#4d0f13 38%,#5e1418 62%,#36090c 100%);
+  box-shadow:inset -6px -10px 18px rgba(0,0,0,.45),inset 4px 6px 12px rgba(255,255,255,.12)}
+.orb span{position:relative;z-index:2}
 .orb span{text-shadow:0 2px 14px rgba(0,0,0,.45)}
 .orb span{font-family:var(--f-head);font-size:clamp(1rem,2vw,1.6rem);opacity:calc(1 - var(--p,0) * 1.6);padding:10%}
 .stages{list-style:none;margin:36px 0 0;padding:0}
@@ -552,7 +562,7 @@ body::before{background:var(--teal)}
 
   <section class="pin enemy" data-pin data-enemy style="height:320vh">
     <div class="sticky">
-      <div class="orb-wrap"><div class="ring"></div><div class="orb"><span>A life worth showing up for</span></div></div>
+      <div class="orb-wrap"><div class="ring"></div><div class="orb"><i class="pill" aria-hidden="true"></i><span>A life worth showing up for</span></div></div>
       <div>
         <p class="eyebrow">Name the enemy</p>
         <h2 class="h-l">The stages of a life that is getting smaller</h2>
@@ -787,7 +797,7 @@ body::before{background:var(--teal)}
       <div class="asset rv" style="--d:.12s"><div class="th" style="background:var(--warm);font-family:var(--f-head);font-size:4rem;color:var(--teal)">Aa<span class="acc" style="color:var(--mint);font-size:.7em">yes</span></div><div class="bd"><h3>Typefaces</h3><p>Magister, Stratos, Jaqartall.</p><span class="tag">Licensed · not for distribution</span></div></div>
       <div class="asset rv"><div class="th" style="background:var(--tint)"><span class="leafx" style="width:46%"></span></div><div class="bd"><h3>Graphic elements</h3><p>Leaf shape, keyline, text containers.</p></div></div>
       <div class="asset rv" style="--d:.06s"><div class="th" style="background:#EEF7F7"><img src="references/icons/muscles-moving.svg" alt="" style="width:34%;height:auto;object-fit:contain"></div><div class="bd"><h3>Icons</h3><p>20 one-line icons, SVG.</p><button type="button" class="pack-dl" data-pack hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m-5-5l5 5 5-5M5 20h14"/></svg>Download icon pack (ZIP)</button></div></div>
-      <div class="asset rv" style="--d:.12s"><div class="th" style="background:var(--teal);color:#fff;font-family:var(--f-head);font-size:2rem">Brand book</div><div class="bd"><h3>Brand book 2026</h3><p>61 pages, the full guidelines.</p></div></div>
+      <div class="asset rv" style="--d:.12s"><div class="th" style="background:var(--teal);color:#fff;font-family:var(--f-head);font-size:2rem">Brand book</div><div class="bd"><h3>Brand book 2026</h3><p>61 pages, the full guidelines.</p><button type="button" class="pack-dl" data-book hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m-5-5l5 5 5-5M5 20h14"/></svg>Download brand book (PDF, 8 MB)</button></div></div>
     </div></section>
   </article><aside class="toc"></aside></div>
 
@@ -986,6 +996,19 @@ body::before{background:var(--teal)}
         buildPack()
           .then(function(blob){return dl.save({filename:'vitaepro-icons.zip',data:blob})})
           .then(function(r){if(r&&r.status==='saved')toast('Saved vitaepro-icons.zip')})
+          .catch(function(err){var c=err&&err.code;if(c==='declined')return;if(c==='rate_limited')toast('A save is already open. Try again in a moment');else if(c==='host_unavailable')toast('Open the page in a browser to save files');else toast('Download isn\u2019t available here')})
+          .then(function(){b.disabled=false})});
+    });
+  });
+
+
+  /* brand book download */
+  dlP.then(function(dl){if(!dl)return;
+    $$('[data-book]').forEach(function(b){b.hidden=false;
+      b.addEventListener('click',function(){b.disabled=true;
+        fetch('references/vitaepro-brand-book-2026.pdf').then(function(r){if(!r.ok)throw{code:'unavailable'};return r.blob()})
+          .then(function(blob){return dl.save({filename:'VitaePro Brand Book 2026.pdf',data:blob})})
+          .then(function(r){if(r&&r.status==='saved')toast('Saved the brand book')})
           .catch(function(err){var c=err&&err.code;if(c==='declined')return;if(c==='rate_limited')toast('A save is already open. Try again in a moment');else if(c==='host_unavailable')toast('Open the page in a browser to save files');else toast('Download isn\u2019t available here')})
           .then(function(){b.disabled=false})});
     });
