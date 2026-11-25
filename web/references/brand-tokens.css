@@ -1,0 +1,48 @@
+/* VitaePro brand tokens — extracted from "VitaePro Brand Book 2026_v2.pdf" (web/brandguides). */
+
+@font-face { font-family: "Magister"; src: url("../fonts/R41Magister-Regular.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Magister"; src: url("../fonts/R41Magister-Italic.otf") format("opentype"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "Magister"; src: url("../fonts/R41Magister-Bold.otf") format("opentype"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Magister"; src: url("../fonts/R41Magister-BoldItalic.otf") format("opentype"); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: "Jaqartall"; src: url("../fonts/Jaqartall.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+/* Stratos: font files not in the repo yet. */
+
+:root {
+  /* Primary palette — "Turquoise leads" (60 %) */
+  --vp-teal: #007D8F;        /* VitaePro Teal */
+  --vp-deep-teal: #006878;   /* Deep Teal */
+  --vp-light-aqua: #B2DCDD;  /* Light Aqua (the PDF label says #006878, a typo; the swatch is #B2DCDD) */
+  --vp-white: #FFFFFF;       /* Pure White */
+  --vp-leaf: #8DD3D3;        /* leaf in the wordmark */
+
+  /* Supporting palette — "Natural warmth" (30 %) */
+  --vp-light-green: #D2F1C4;
+  --vp-cream: #F6EAD8;
+  --vp-natural-green: #4F925F;
+  --vp-brown: #633B37;
+  --vp-taupe: #AB8E77;
+
+  /* Supporting shades — "Shades for flexibility" */
+  --vp-green-tint: #F4FBF0;
+  --vp-warm-white: #FFFAF4;
+
+  /* Accents (10 %) — only ONE accent per campaign */
+  --vp-lime: #D2EE00;  /* on teal backgrounds: offer, price or campaign */
+  --vp-mint: #00FFB7;  /* on dark backgrounds: call to action */
+
+  /* Typography */
+  --vp-font-headline: "Magister", Georgia, serif;      /* lead stories; never functional/technical copy */
+  --vp-font-body: "Stratos", system-ui, sans-serif;    /* body, product info, UI, labels */
+  --vp-font-accent: "Jaqartall", cursive;              /* 1–2 words only; never prices, claims or key info */
+
+  /* Container / keyline */
+  --vp-container-radius-min: 50px;   /* 50–80 px depending on container size */
+  --vp-container-radius-max: 80px;
+  --vp-keyline-width: 5px;           /* regular banner sizes; solid or gradient (#D2F1C4 → #FFFFFF) */
+  --vp-pill-radius: 9999px;          /* text containers: fully rounded rectangles */
+
+  /* Logo */
+  --vp-logo-min-digital: 160px;      /* min 160 × 35 px */
+  --vp-logo-min-print: 12mm;         /* min width in print */
+  /* Safe space: at least the width of the ® mark on every side. */
+}

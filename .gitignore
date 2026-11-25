@@ -1,0 +1,5 @@
+# Licensed brand fonts: keep out of this public repo
+web/fonts/*.otf
+web/fonts/*.ttf
+web/fonts/*.woff
+web/fonts/*.woff2
