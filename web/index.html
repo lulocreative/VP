@@ -213,7 +213,7 @@ body::before{background:var(--teal)}
 .orb-wrap{position:relative;aspect-ratio:1;width:min(100%,62vh);justify-self:center;display:grid;place-items:center}
 .ring{position:absolute;inset:0;border:1.5px dashed var(--aqua);border-radius:50%}
 .orb{width:calc((1 - var(--p,0) * .78) * 100%);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;color:#fff;text-align:center;box-shadow:0 30px 60px -30px rgba(0,40,48,.5);}
-.orb::before{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(180deg,rgba(0,104,120,.15),rgba(0,104,120,.65)),url("references/photos/zipline-forest.webp") center/cover no-repeat;filter:saturate(calc(1 - var(--p,0) * .9))}
+.orb::before{content:"";position:absolute;inset:0;border-radius:50%;background:url("references/photos/zipline-forest.webp") center/cover no-repeat}
 .orb{position:relative;overflow:hidden;aspect-ratio:calc(1 - max(0, var(--p,0) - .55) * 1.04);transform:rotate(calc(max(0, var(--p,0) - .55) * -30deg))}
 .orb .pill{position:absolute;inset:0;z-index:1;border-radius:50%;opacity:calc((var(--p,0) - .55) * 3);
   background:
@@ -562,7 +562,7 @@ body::before{background:var(--teal)}
 
   <section class="pin enemy" data-pin data-enemy style="height:320vh">
     <div class="sticky">
-      <div class="orb-wrap"><div class="ring"></div><div class="orb"><i class="pill" aria-hidden="true"></i><span>A life worth showing up for</span></div></div>
+      <div class="orb-wrap"><div class="ring"></div><div class="orb"><i class="pill" aria-hidden="true"></i></div></div>
       <div>
         <p class="eyebrow">Name the enemy</p>
         <h2 class="h-l">The stages of a life that is getting smaller</h2>
